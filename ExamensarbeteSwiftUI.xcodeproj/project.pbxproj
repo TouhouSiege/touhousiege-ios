@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9CD117C72D6F0F6C0037D28D /* Markdownosaur in Frameworks */ = {isa = PBXBuildFile; productRef = 9CD117C62D6F0F6C0037D28D /* Markdownosaur */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9C886E512D2D2CFD00A24878 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CD117C72D6F0F6C0037D28D /* Markdownosaur in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = ExamensarbeteSwiftUI;
 			packageProductDependencies = (
+				9CD117C62D6F0F6C0037D28D /* Markdownosaur */,
 			);
 			productName = ExamensarbeteSwiftUI;
 			productReference = 9C886E402D2D2CFC00A24878 /* ExamensarbeteSwiftUI.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 9C886E372D2D2CFC00A24878;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9CD117C52D6F0F6B0037D28D /* XCRemoteSwiftPackageReference "Markdownosaur" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9C886E412D2D2CFC00A24878 /* Products */;
 			projectDirPath = "";
@@ -558,6 +567,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9CD117C52D6F0F6B0037D28D /* XCRemoteSwiftPackageReference "Markdownosaur" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/christianselig/Markdownosaur";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9CD117C62D6F0F6C0037D28D /* Markdownosaur */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9CD117C52D6F0F6B0037D28D /* XCRemoteSwiftPackageReference "Markdownosaur" */;
+			productName = Markdownosaur;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9C886E382D2D2CFC00A24878 /* Project object */;
 }
