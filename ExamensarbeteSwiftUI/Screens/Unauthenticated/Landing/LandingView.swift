@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct HomeScreen: View {
+struct LandingView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    let vm = HomeViewModel()
+    let vm = LandingViewModel()
     
     var body: some View {
         ZStack {
@@ -11,7 +11,7 @@ struct HomeScreen: View {
             VStack {
                 ButtonMainMenu(function: {
                     navigationManager.navigate(to: .game)
-                }, text: "TestButton")
+                }, text: "Game")
                 
                 ButtonMainMenu(function: {
                     navigationManager.navigate(to: .login)
@@ -33,5 +33,5 @@ func checkForLetters(comment: String) -> Bool {
 }
 
 #Preview {
-    HomeScreen().environmentObject(NavigationManager())
+    LandingView().environmentObject(NavigationManager())
 }

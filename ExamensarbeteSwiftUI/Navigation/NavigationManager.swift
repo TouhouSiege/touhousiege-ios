@@ -10,6 +10,7 @@ import SwiftUI
 /// Enum conditions to handle the different navigation paths.
 enum Screen {
     case home
+    case landing
     case login
     case game
     case markdownsaur
@@ -17,7 +18,7 @@ enum Screen {
 
 /// Handles navigation state.
 class NavigationManager: ObservableObject {
-    @Published var currentScreen: Screen = .home
+    @Published var currentScreen: Screen = .landing
 
     /// Enables navigation to other screens.
     func navigate(to screen: Screen) {
@@ -31,16 +32,19 @@ class NavigationManager: ObservableObject {
         switch currentScreen {
         case .home:
             print("TO HOMESCREEN")
-            return AnyView(HomeScreen())
+            return AnyView(HomeView())
         case .game:
             print("TO LOGGEDINLANDINGPAGE")
-            return AnyView(LoggedInLandingPage())
+            return AnyView(GameView())
         case .login:
             print("TO LOGINSCREEN")
             return AnyView(LoginView())
         case .markdownsaur:
             print("TO MARKDOWNTEST")
             return AnyView(MarkdownView())
+        case .landing:
+            print("TO LANDING PAGE")
+            return AnyView(LandingView())
         }
     }
 }

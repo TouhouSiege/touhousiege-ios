@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HomeViewModel: ObservableObject {
+class LandingViewModel: ObservableObject {
     @Published var text = "I MIGHT CHANGE KEEP TRACK ON ME"
     
     func printTest() {
