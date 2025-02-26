@@ -19,7 +19,7 @@ struct ButtonMainMenu: View {
             Text(text)
                 .font(.title2)
                 .foregroundStyle(.thinMaterial)
-                .frame(maxWidth: .infinity, maxHeight: 50)
+                .frame(maxWidth: 300, maxHeight: 50)
                 .background {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(red: 0.5, green: 0.4, blue: 0.5))
