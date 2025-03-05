@@ -14,6 +14,10 @@ enum Screen {
     case login
     case game
     case markdownsaur
+    case gacha
+    case purchaseCrystal
+    case about
+    case characters
 }
 
 /// Handles navigation state.
@@ -45,6 +49,18 @@ class NavigationManager: ObservableObject {
         case .landing:
             print("TO LANDING PAGE")
             return AnyView(LandingView())
+        case .gacha:
+            print("TO GACHA PAGE")
+            return AnyView(GachaView())
+        case .purchaseCrystal:
+            print("TO PURCHASE CRYSTAL PAGE")
+            return AnyView(PurchaseCrystalView())
+        case .about:
+            print("TO ABOUT US PAGE")
+            return AnyView(AboutView())
+        case .characters:
+            print("TO CHARACTERS PAGE")
+            return AnyView(CharactersView())
         }
     }
 }
