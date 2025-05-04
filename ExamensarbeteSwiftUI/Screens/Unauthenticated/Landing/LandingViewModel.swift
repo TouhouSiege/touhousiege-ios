@@ -8,6 +8,7 @@
 import Foundation
 
 class LandingViewModel: ObservableObject {
+    
     @Published var text = "I MIGHT CHANGE KEEP TRACK ON ME"
     
     func printTest() {

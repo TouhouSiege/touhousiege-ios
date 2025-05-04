@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct ExamensarbeteSwiftUIApp: App {
     /// Global init of the navigation
-    @StateObject var navigationManager = NavigationManager()
+    @StateObject private var navigationManager = NavigationManager()
     
     var body: some Scene {
         WindowGroup {

@@ -2,34 +2,26 @@ import SwiftUI
 
 struct LandingView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    let vm = LandingViewModel()
-    
+
     var body: some View {
         ZStack {
             BackgroundMain()
             
             VStack {
-                ButtonMainMenu(function: {
-                    navigationManager.navigate(to: .game)
-                }, text: "Game")
+                ButtonBig(function: {
+                    navigationManager.navigateTo(screen: .login)
+                }, text: "Login")
                 
-                ButtonMainMenu(function: {
-                    navigationManager.navigate(to: .login)
-                }, text: "LoginScreen")
+                ButtonBig(function: {
+                    navigationManager.navigateTo(screen: .register)
+                }, text: "Register")
                 
-                ButtonMainMenu(function: {
-                    navigationManager.navigate(to: .markdownsaur)
-                }, text: "Markdownsaur")
+                ButtonBig(function: {
+                    navigationManager.navigateTo(screen: .about)
+                }, text: "About")
             }
         }
     }
-}
-
-func checkForLetters(comment: String) -> Bool {
-    let regex = try! NSRegularExpression(pattern: "^[A-Za-z ]*$", options: [])
-    let boolCheck = regex.firstMatch(in: comment, options: [], range: NSMakeRange(0, comment.utf16.count)) != nil
-    
-    return boolCheck
 }
 
 #Preview {

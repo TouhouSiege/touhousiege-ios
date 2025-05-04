@@ -12,9 +12,7 @@ struct MainView: View {
     @EnvironmentObject var navigationManager: NavigationManager
 
     var body: some View {
-        ZStack {
-            navigationManager.getCurrentView()
-        }
+        NavigationScreenManager.viewForScreen(navigationManager.currentScreen)
     }
 }
 
