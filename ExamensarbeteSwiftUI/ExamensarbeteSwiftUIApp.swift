@@ -9,12 +9,15 @@ import SwiftUI
 
 @main
 struct ExamensarbeteSwiftUIApp: App {
-    /// Global init of the navigation
+    /// Global init of the navigation and ApiViewmodel
     @StateObject private var navigationManager = NavigationManager()
+    @StateObject private var apiViewModel = ApiViewModel()
     
     var body: some Scene {
         WindowGroup {
-            MainView().environmentObject(navigationManager)
+            MainView()
+                .environmentObject(navigationManager)
+                .environmentObject(apiViewModel)
         }
     }
 }

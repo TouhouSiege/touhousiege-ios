@@ -9,7 +9,7 @@ import Foundation
 
 /// POST, login
 struct LoginRequest: Encodable {
-    var username: String
+    var email: String
     var password: String
 }
 

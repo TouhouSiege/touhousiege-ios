@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RegisterView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var apiViewModel: ApiViewModel
     @State var email: String = ""
     @State var username: String = ""
     @State var password: String = ""
@@ -33,10 +34,10 @@ struct RegisterView: View {
                 
                 VStack {
                     ButtonBig(function: {
-                        //navigationManager.navigateTo(screen: .home)
                         Task {
                             do {
-                                try await vm.createUser(email: "Apitest@test.com", username: "Michanapitest", password: "123")
+                                try await apiViewModel.createUser(email: email, username: username, password: password)
+                                navigationManager.navigateTo(screen: .landing)
                             } catch let error {
                                 print("Error on apitestPOST: \(error)")
                             }

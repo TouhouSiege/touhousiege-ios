@@ -9,8 +9,10 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var apiViewModel: ApiViewModel
     @State var email: String = ""
     @State var password: String = ""
+    @State var isLoading = false
     
     var body: some View {
         ZStack {
@@ -25,9 +27,17 @@ struct LoginView: View {
                 
                 VStack {
                     ButtonBig(function: {
-                        navigationManager.navigateTo(screen: .home)
-                    }, text: "Confirm")
-                    
+                        Task {
+                            isLoading = true
+                            do {
+                                try await apiViewModel.loginUser(email: email, password: password)
+                                navigationManager.navigateTo(screen: .landing)
+                            } catch let error {
+                                print("Error on login: \(error)")
+                            }
+                            isLoading = false
+                        }
+                    }, text: isLoading ? "Logging in..." : "Confirm")
                     ButtonBig(function: {
                         navigationManager.navigateTo(screen: .landing)
                     }, text: "Cancel")

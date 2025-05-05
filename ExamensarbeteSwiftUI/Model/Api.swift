@@ -37,6 +37,10 @@ class Api {
         
         let decoder = JSONDecoder()
         
+        let responseString = String(data: data, encoding: .utf8)
+        print("Raw Response: \(responseString ?? "No response data")")
+
+        
         do {
             let decodedResponse = try decoder.decode(R.self, from: data)
             
