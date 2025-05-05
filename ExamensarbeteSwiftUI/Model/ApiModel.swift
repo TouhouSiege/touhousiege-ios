@@ -31,4 +31,5 @@ struct AuthResponse: Decodable {
     var success: Bool
     var message: String
     var token: String
+    var username: String
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    @EnvironmentObject var apiViewModel: ApiViewModel
+    @EnvironmentObject var apiAuthManager: ApiAuthManager
     @State var email: String = ""
     @State var password: String = ""
     @State var isLoading = false
@@ -30,7 +30,7 @@ struct LoginView: View {
                         Task {
                             isLoading = true
                             do {
-                                try await apiViewModel.loginUser(email: email, password: password)
+                                let _ = try await apiAuthManager.loginUser(email: email, password: password)
                                 navigationManager.navigateTo(screen: .landing)
                             } catch let error {
                                 print("Error on login: \(error)")

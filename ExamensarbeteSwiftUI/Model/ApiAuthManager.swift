@@ -8,8 +8,9 @@
 import Foundation
 import KeychainSwift
 
-class ApiViewModel: ObservableObject {
+class ApiAuthManager: ObservableObject {
     @Published var token: String? = nil
+    @Published var username: String? = nil
     
     let api = Api()
     let keychain = KeychainSwift()
@@ -18,18 +19,20 @@ class ApiViewModel: ObservableObject {
     
     init() {
         self.token = keychain.get("token")
+        self.username = keychain.get("username")
     }
     
-    func createUser(email: String, username: String, password: String) async throws -> AuthResponse {
+    func register(email: String, username: String, password: String) async throws {
         let registerPayload = RegisterRequest(email: email, username: username, password: password)
         
-        let response: AuthResponse = try await api.post(url: "\(BASE_URL)", body: registerPayload, token: nil)
+        let response: AuthResponse = try await api.post(url: "\(BASE_URL)/register", body: registerPayload, token: nil)
         
         DispatchQueue.main.async {
             self.token = response.token
+            self.username = response.username
+            self.keychain.set(response.token, forKey: "token")
+            self.keychain.set(response.username, forKey: "username")
         }
-        
-        return response
     }
     
     func loginUser(email: String, password: String) async throws -> AuthResponse {
@@ -39,9 +42,18 @@ class ApiViewModel: ObservableObject {
         
         DispatchQueue.main.async {
             self.token = response.token
+            self.username = response.username
             self.keychain.set(response.token, forKey: "token")
+            self.keychain.set(response.username, forKey: "username")
         }
         
         return response
+    }
+    
+    func logoutUser() {
+        keychain.delete("token")
+        keychain.delete("username")
+        self.token = nil
+        self.username = nil
     }
 }

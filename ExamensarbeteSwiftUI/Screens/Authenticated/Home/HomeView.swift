@@ -9,13 +9,22 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var apiAuthManager: ApiAuthManager
+    @EnvironmentObject var userManager: UserManager
     
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    @State var testText = "Not loaded yet..."
+    
     var body: some View {
         ZStack {
             BackgroundMain()
+            
+            VStack {
+                Text("\(String(describing: apiAuthManager.username))")
+                Text("\(String(describing: userManager.user))")
+            }
             
             VStack {
                 ButtonBig(function: {
@@ -37,6 +46,17 @@ struct HomeView: View {
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .about)
                 }, text: "About").offset(x: width * 0.18)
+                
+                ButtonBig(function: {
+                    apiAuthManager.logoutUser()
+                    navigationManager.navigateTo(screen: .landing)
+                }, text: "Log Out")
+            }
+        }.task {
+            do {
+                try await userManager.getUser()
+            } catch let error {
+                print("Error loading user: \(error)")
             }
         }
     }

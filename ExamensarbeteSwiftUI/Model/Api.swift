@@ -21,14 +21,14 @@ class Api {
         
         if let body = body {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        }
-        
-        let encoder = JSONEncoder()
-        
-        do {
-            request.httpBody = try encoder.encode(body)
-        } catch {
-            throw APIErrors.invalidRequest
+            
+            let encoder = JSONEncoder()
+            
+            do {
+                request.httpBody = try encoder.encode(body)
+            } catch {
+                throw APIErrors.invalidRequest
+            }
         }
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -63,14 +63,14 @@ class Api {
         
         if let body = body {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        }
-        
-        let encoder = JSONEncoder()
-        
-        do {
-            request.httpBody = try encoder.encode(body)
-        } catch {
-            throw APIErrors.invalidRequest
+            
+            let encoder = JSONEncoder()
+            
+            do {
+                request.httpBody = try encoder.encode(body)
+            } catch {
+                throw APIErrors.invalidRequest
+            }
         }
         
         let (data, response) = try await URLSession.shared.data(for: request)

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LandingView: View {
     @EnvironmentObject var navigationManager: NavigationManager
-    @EnvironmentObject var apiViewModel: ApiViewModel
+    @EnvironmentObject var apiAuthManager: ApiAuthManager
 
     var body: some View {
         ZStack {
@@ -22,7 +22,7 @@ struct LandingView: View {
                 }, text: "About")
             }
         }.onAppear {
-            if apiViewModel.token != nil {
+            if apiAuthManager.token != nil {
                 navigationManager.navigateTo(screen: .home)
             }
         }
