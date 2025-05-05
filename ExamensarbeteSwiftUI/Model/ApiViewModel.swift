@@ -6,13 +6,19 @@
 //
 
 import Foundation
+import KeychainSwift
 
 class ApiViewModel: ObservableObject {
     @Published var token: String? = nil
     
     let api = Api()
+    let keychain = KeychainSwift()
     
     let BASE_URL = "http://localhost:8080/api/v1/user"
+    
+    init() {
+        self.token = keychain.get("token")
+    }
     
     func createUser(email: String, username: String, password: String) async throws -> AuthResponse {
         let registerPayload = RegisterRequest(email: email, username: username, password: password)
@@ -33,6 +39,7 @@ class ApiViewModel: ObservableObject {
         
         DispatchQueue.main.async {
             self.token = response.token
+            self.keychain.set(response.token, forKey: "token")
         }
         
         return response
