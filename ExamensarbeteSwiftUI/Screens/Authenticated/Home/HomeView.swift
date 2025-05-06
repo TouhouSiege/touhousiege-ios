@@ -53,10 +53,21 @@ struct HomeView: View {
                 }, text: "Log Out")
             }
         }.task {
-            do {
-                try await userManager.getUser()
-            } catch let error {
-                print("Error loading user: \(error)")
+            if apiAuthManager.token != nil && apiAuthManager.username != nil {
+                do {
+                    try await userManager.getUser()
+                } catch let error {
+                    print("Error loading user: \(error)")
+                    apiAuthManager.token = nil
+                    apiAuthManager.username = nil
+                    userManager.user = nil
+                    navigationManager.navigateTo(screen: .landing)
+                }
+            } else {
+                apiAuthManager.token = nil
+                apiAuthManager.username = nil
+                userManager.user = nil
+                navigationManager.navigateTo(screen: .landing)
             }
         }
     }

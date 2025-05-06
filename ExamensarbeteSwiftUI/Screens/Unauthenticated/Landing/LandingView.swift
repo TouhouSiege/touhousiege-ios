@@ -22,7 +22,7 @@ struct LandingView: View {
                 }, text: "About")
             }
         }.onAppear {
-            if apiAuthManager.token != nil {
+            if apiAuthManager.token != nil && apiAuthManager.username != nil {
                 navigationManager.navigateTo(screen: .home)
             }
         }

@@ -35,6 +35,11 @@ class Api {
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200 && httpResponse.statusCode < 205 else { throw APIErrors.invalidResponse}
         
+        print("Response Data: \(data)")
+        let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
+        print("JSON Object: \(jsonObject ?? "Invalid JSON")")
+
+        
         let decoder = JSONDecoder()
         
         let responseString = String(data: data, encoding: .utf8)
