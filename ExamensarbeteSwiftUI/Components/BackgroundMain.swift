@@ -17,7 +17,6 @@ struct BackgroundMain: View {
         }
         .frame(maxWidth: width, maxHeight: height)
         .scaledToFill()
-        .opacity(0.1)
         .background(Color.red.opacity(0.2))
         .edgesIgnoringSafeArea(.all)
     }

@@ -20,13 +20,13 @@ struct ButtonBig: View {
             function()
         }, label: {
             Text(text)
-                .font(SiegefallStyle.FontSize.large)
+                .font(TouhouSiegeStyle.FontSize.large)
                 .foregroundStyle(.thinMaterial)
                 .frame(maxWidth: width * 0.2, maxHeight: height * 0.1)
                 .background {
-                    RoundedRectangle(cornerRadius: SiegefallStyle.CornerRadius.large)
-                        .fill(Color(SiegefallStyle.Color.peachRed))
-                        .stroke(.thinMaterial, lineWidth: SiegefallStyle.StrokeWidth.small)
+                    RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
+                        .fill(Color(TouhouSiegeStyle.Colors.peachRed))
+                        .stroke(.thinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.small)
                 }
         })
     }

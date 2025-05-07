@@ -20,6 +20,7 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             BackgroundMain()
+            TopNavBar()
             
             VStack {
                 Text("\(String(describing: apiAuthManager.username))")
@@ -74,5 +75,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView().environmentObject(NavigationManager())
+    HomeView()
+        .environmentObject(NavigationManager())
+        .environmentObject(UserManager(apiAuthManager: ApiAuthManager()))
+        .environmentObject(ApiAuthManager())
 }

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-public class SiegefallStyle {
-    struct FontSize {
+public class TouhouSiegeStyle {
+    enum FontSize {
         static let xSmall = Font.system(size: 10)
         static let small = Font.system(size: 12)
         static let medium = Font.system(size: 14)
@@ -35,8 +35,23 @@ public class SiegefallStyle {
         static let xLarge = CGFloat(6)
     }
     
-    struct Color {
-        static let peachRed = SwiftUI.Color("PeachRed")
+    struct Colors {
+        static let peachRed = Color("PeachRed")
+    }
+    
+    struct Images {
+        static let stamina01 = "stamina_01"
+        
+        static let diamond01 = "diamond_01"
+        static let diamond02 = "diamond_02"
+        static let diamond03 = "diamond_03"
+        
+        static let gold01 = "goldcoin_01"
+        static let gold02 = "goldcoin_02"
+        static let gold03 = "goldcoin_03"
+        static let gold04 = "goldcoin_04"
+        static let gold05 = "goldcoin_05"
     }
 }
+
 
