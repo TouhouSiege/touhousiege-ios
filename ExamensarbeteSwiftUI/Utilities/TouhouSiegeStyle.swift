@@ -51,6 +51,16 @@ public class TouhouSiegeStyle {
         static let gold03 = "goldcoin_03"
         static let gold04 = "goldcoin_04"
         static let gold05 = "goldcoin_05"
+        
+        static let reimuHakureiProfile = "reimu_hakurei_profile"
+        static let reimuHakureiIdle: [String] = (1...14).map { "reimu_hakurei_idle_\($0)" }
+        
+        static let hijiriByakurenProfile = "hijiri_byakuren_profile"
+        static let hijiriByakurenIdle: [String] = (1...14).map { "hijiri_byakuren_idle_\($0)" }
+        
+        static let tenshiHinanawiProfile = "tenshi_hinanawi_profile"
+        static let tenshiHinanawiIdle: [String] = (1...10).map { "tenshi_hinanawi_idle_\($0)" }
+        
     }
 }
 
