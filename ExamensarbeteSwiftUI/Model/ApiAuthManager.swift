@@ -50,6 +50,18 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
+    func tempGetCharacters(userId: Int, characters: [Int]) async throws -> CharacterUpdateResponse {
+        let updateCharacterRequest = UpdateCharactersRequest(characters: characters)
+
+        let response: CharacterUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-characters?id=\(userId)",
+            body: updateCharacterRequest,
+            token: token
+        )
+
+        return response
+    }
+
     func logoutUser() {
         keychain.delete("token")
         keychain.delete("username")
