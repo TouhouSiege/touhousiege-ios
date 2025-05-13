@@ -6,134 +6,340 @@
 //
 
 import SpriteKit
+import SwiftUI
 
 class GameScene: SKScene {
     /// In SpriteKit screen doesnt start at 0 it starts in the middle so this is needed to be able to make use of the whole width easier dynamically
-    let middleScreen = UIScreen.main.bounds.width / 2
-    let width = UIScreen.main.bounds.width
+    let middleScreen: CGFloat = UIScreen.main.bounds.width / 2
+    let width: CGFloat = UIScreen.main.bounds.width
     
+    var user: User?
+    
+    let vm = GameViewModel()
+    
+    var placedCharacters: [String: SKSpriteNode] = [:]
+    var disabledProfiles: [String: SKSpriteNode] = [:]
+    var enemyPositions: [Int: Character] = [:]
+
+    var startButton: SKSpriteNode?
+    
+    override func update(_ currentTime: TimeInterval) {
+        if vm.observableBoolGameStatus {
+            self.removeAllActions()
+            self.removeAllChildren()
+        }
+    }
     
     override func didMove(to view: SKView) {
-        print("Scene Loaded!")
+        vm.gameScene = self
         
-        self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -1.0)
+        print("GameScene Loaded!")
+        guard let user = user else { return print("No characters found!") }
         
-        createAlien(xy: CGPoint(x: 500, y: 250), color: .red)
-        generateAliens()
+        print("Loaded Characters: \(user.characters)")
+        
+        createStartButton()
+        createHexagonPlatforms()
+        createEnemyHexagonPlatforms()
+        createCharacterProfileSelection(characterIds: user.characters)
+        placeEnemyCharacters()
     }
     
-    func createPlatform() {
-        let platform = SKSpriteNode()
-        platform.size = CGSize(width: width, height: 50)
-        platform.color = .blue
-        platform.position = CGPoint(x: middleScreen, y: 150)
-        
-        platform.physicsBody = SKPhysicsBody(rectangleOf: platform.size)
-        
-        platform.physicsBody?.isDynamic = false
-        platform.physicsBody?.affectedByGravity = false
-        
-        self.addChild(platform)
-    }
+    var currentSelectedCharacter: SKSpriteNode?
     
-    func generateAliens() {
-        let startY = 300
-        var startX = 200
-        
-        for _ in 1...5 {
-            createAlien(xy: CGPoint(x: startX, y: startY), color: .green)
-            startX += 50
-        }
-        
-        startX = 200
-        
-        for _ in 1...5 {
-            createAlien(xy: CGPoint(x: startX, y: startY - 50), color: .green)
-            startX += 50
-        }
-        
-        startX = 200
-        
-        for _ in 1...5 {
-            createAlien(xy: CGPoint(x: startX, y: startY - 100), color: .green)
-            startX += 50
-        }
-    }
-    
-    func createAlien(xy: CGPoint, color: UIColor) {
-        let alien = SKSpriteNode()
-        
-        alien.size = CGSize(width: 25, height: 25)
-        alien.color = color
-        alien.position = xy
-        alien.name = "alien"
-        
-        alien.physicsBody = SKPhysicsBody(rectangleOf: alien.frame.size)
-        alien.physicsBody?.isDynamic = false
-        alien.physicsBody?.affectedByGravity = false
-        alien.physicsBody?.usesPreciseCollisionDetection = true
-        
-        self.addChild(alien)
-        
-        let moveRight = SKAction.move(by: CGVector(dx: 110, dy: 0), duration: 1.0)
-        let moveLeft = SKAction.move(by: CGVector(dx: -110, dy: 0), duration: 1.0)
-        let moveDown = SKAction.move(by: CGVector(dx: 0, dy: -50), duration: 0.5)
-        let wait = SKAction.wait(forDuration: 0.5)
-        
-        let sequence = SKAction.sequence([moveRight, moveLeft, moveDown, wait])
-        
-        let repeatSequence = SKAction.repeatForever(sequence)
-        
-        alien.run(repeatSequence)
-    }
-    
-    /*
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let square = SKSpriteNode()
-            
-            square.size = CGSize(width: 30, height: 30)
-            
-            let location = touch.location(in: self)
-            square.position = location
-            square.color = .green
-            
-            square.physicsBody = SKPhysicsBody(rectangleOf: square.size)
-            
-            square.physicsBody?.isDynamic = true
-            square.physicsBody?.affectedByGravity = true
-            
-            
-            addChild(square)
-        }
-    }*/
-    
-    /*
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            //square.position = location
+            let nodes = self.nodes(at: location)
             
-            let move = SKAction.move(to: location, duration: 1.0)
-            let rotate = SKAction.rotate(byAngle: 90.0, duration: 1.0)
+            if nodes.first(where: { $0.name == "startButton" }) != nil {
+                vm.startGame()
+                return
+            }
             
-            let sequence = SKAction.sequence([move, rotate])
-            square.run(sequence)
+            /// Check for existing character on hexagon
+            if let selectedNode = nodes.first(where: { placedCharacters[$0.name ?? ""] != nil }) {
+                currentSelectedCharacter = selectedNode as? SKSpriteNode
+                return
+            }
+            
+            /// Check if profile picture was tapped and gets the corresponding character for it
+            if let selectedNode = nodes.first(where: { node in node.name?.starts(with: "profile_") == true }) {
+                let realCharacterName = selectedNode.name!.replacingOccurrences(of: "profile_", with: "")
+                
+                /// Creates a new sprite for the first click on profile
+                if let characterData = Characters.allCharacters.first(where: { $0.name == realCharacterName }) {
+                    let newCharacterSpriteBase = SKSpriteNode(imageNamed: characterData.animations.idle[0])
+                    newCharacterSpriteBase.position = location
+                    
+                    /// Calculates width depending on height - Did this becuase I messed up with some pixel cutting of sprites so was easier to not redo everything
+                    if let texture = newCharacterSpriteBase.texture {
+                        newCharacterSpriteBase.size = CGSize(width: (width * TouhouSiegeStyle.Decimals.xxLarge) * (texture.size().width / texture.size().height), height: width * TouhouSiegeStyle.Decimals.xxLarge)
+                    } else {
+                        newCharacterSpriteBase.size = CGSize(width: width * TouhouSiegeStyle.Decimals.xxLarge, height: width * TouhouSiegeStyle.Decimals.xxLarge)
+                    }
+
+                    newCharacterSpriteBase.name = realCharacterName
+                    
+                    self.addChild(newCharacterSpriteBase)
+                    
+                    placedCharacters[realCharacterName] = newCharacterSpriteBase
+                    currentSelectedCharacter = newCharacterSpriteBase
+                    disableCharacterProfileSelection(characterName: realCharacterName)
+                }
+            }
         }
-    }*/
-    
-    /*
+    }
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let move = SKAction.move(to: location, duration: .zero)
-            square.run(move)
+        if let character = currentSelectedCharacter {
+            for touch in touches {
+                character.position = touch.location(in: self)
+            }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let move = SKAction.move(to: CGPoint(x: 0, y: 0), duration: .zero)
-        square.run(move)
+        let areaToPlacePlayerCharacter = self.children.filter { $0.name == "areatoplacecharacter" }
+        
+        if let character = currentSelectedCharacter {
+            for touch in touches {
+                let location = touch.location(in: self)
+                
+                if let validAreaToPlaceCharacter = areaToPlacePlayerCharacter.first(where: { ($0 as? SKSpriteNode)?.contains(location) ?? false }) {
+                    
+                    character.position = CGPoint(x: validAreaToPlaceCharacter.position.x, y: validAreaToPlaceCharacter.position.y + (width * TouhouSiegeStyle.Decimals.medium))
+                    
+                    guard let placedCharacterName = character.name else { return }
+                    
+                    if let placedCharacterData = Characters.allCharacters.first(where: { $0.name == placedCharacterName }),
+                       let placedCharacterIndex = areaToPlacePlayerCharacter.firstIndex(of: validAreaToPlaceCharacter) {
+                        let previousIndex = vm.playerPlacementArray.firstIndex(where: { $0 == placedCharacterData.id })
+                        
+                        /// Makes sure if a placed character sprite is moved the index in the array gets removed so no duplicates are made
+                        if previousIndex != nil && previousIndex != placedCharacterIndex {
+                            guard let previousIndex else { return }
+                            
+                            vm.playerPlacementArray[previousIndex] = 0
+                        }
+                        
+                        /// Removes sprite and re enables picking of that character if a sprite was already placed
+                        if vm.playerPlacementArray[placedCharacterIndex] != 0 {
+                            let replacedCharacterId = vm.playerPlacementArray[placedCharacterIndex]
+                            if let replacedCharacterName = Characters.allCharacters.first(where: { $0.id == replacedCharacterId })?.name,
+                               let replacedCharacter = placedCharacters[replacedCharacterName] {
+                                
+                                placedCharacters.removeValue(forKey: replacedCharacterName)
+                                replacedCharacter.removeFromParent()
+                                reEnableCharacterProfileSelection(characterName: replacedCharacterName)
+                            }
+                            vm.playerPlacementArray[placedCharacterIndex] = 0
+                        }
+                        
+                        /// Add placed character to the board and saves id, character and index
+                        vm.playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
+                        placedCharacters[placedCharacterName] = character
+                        vm.playerSpritesHexaCoord[placedCharacterIndex] = character
+                    }
+                    
+                    startIdleAnimation(character: character, characterName: character.name ?? "")
+                    disableCharacterProfileSelection(characterName: character.name ?? "")
+                    
+                } else {
+                    /// If dragged outside valid position, resets character
+                    if let characterId = Characters.allCharacters.first(where: { $0.name == character.name })?.id {
+                        if let index = vm.playerPlacementArray.firstIndex(where: { $0 == characterId }) {
+                            vm.playerPlacementArray[index] = 0
+                        }
+                    }
+                    
+                    placedCharacters.removeValue(forKey: character.name ?? "")
+                    character.removeFromParent()
+                    reEnableCharacterProfileSelection(characterName: character.name ?? "")
+                }
+            }
+            
+            currentSelectedCharacter = nil
+        }
     }
-     */
+    
+    /// Mini profiles to drag out the sprites from
+    func createCharacterProfileSelection(characterIds: [Int]) {
+        let smallProfileSize: CGFloat = width * TouhouSiegeStyle.Decimals.large
+        let spacing: CGFloat = width * TouhouSiegeStyle.Decimals.xxSmall
+        let startX: CGFloat = middleScreen
+        
+        for (index, characterId) in characterIds.enumerated() {
+            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
+                icon.position = CGPoint(x: startX + (CGFloat(index) * (smallProfileSize + spacing)), y: spacing * 6)
+                icon.size = CGSize(width: smallProfileSize, height: smallProfileSize)
+                icon.name = "profile_" + characterData.name
+                
+                self.addChild(icon)
+            }
+        }
+    }
+    
+    /// Disables profile pics if character has been placed and track it
+    func disableCharacterProfileSelection(characterName: String) {
+        let name: String = "profile_" + characterName
+        
+        if let icon = self.children.first(where: { $0.name == name }) as? SKSpriteNode {
+            icon.color = UIColor.gray
+            icon.colorBlendFactor = TouhouSiegeStyle.Decimals.xLarge
+            icon.name = nil
+            
+            disabledProfiles[characterName] = icon
+        }
+    }
+    
+    /// Enables profile again if characters profile is in the disabledProfiles array
+    func reEnableCharacterProfileSelection(characterName: String) {
+        if let icon = disabledProfiles[characterName] {
+            icon.colorBlendFactor = 0
+            icon.name = "profile_" + characterName
+            
+            disabledProfiles.removeValue(forKey: characterName)
+        }
+    }
+
+    /// Start the idle animation of a character and loops it
+    func startIdleAnimation(character: SKSpriteNode, characterName: String) {
+        var textures: [SKTexture] = []
+        
+        if let characterData = Characters.allCharacters.first(where: { $0.name == characterName }) {
+            for imageName in characterData.animations.idle {
+                textures.append(SKTexture(imageNamed: imageName))
+            }
+        }
+  
+        let repeatAnimationIdle = SKAction.repeatForever(SKAction.animate(with: textures, timePerFrame: TouhouSiegeStyle.BigDecimals.xxSmall))
+        
+        character.run(repeatAnimationIdle)
+    }
+    
+    /// Create the start button
+    func createStartButton() {
+        startButton = SKSpriteNode(color: .green, size: CGSize(width: 150, height: 50))
+        startButton?.position = CGPoint(x: 150, y: 100)
+        startButton?.name = "startButton"
+        
+        let buttonLabel = SKLabelNode(text: "Start")
+        buttonLabel.fontSize = 20
+        buttonLabel.fontColor = .black
+        buttonLabel.position = CGPoint(x: 0, y: -10)
+        
+        startButton?.addChild(buttonLabel)
+        
+        self.addChild(startButton!)
+    }
+
+    /// Creates the player side hexagon platforms
+    func createHexagonPlatforms() {
+        let hexagonSize = CGSize(width: width * TouhouSiegeStyle.Decimals.xMedium, height: width * TouhouSiegeStyle.Decimals.xMedium)
+        let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
+        let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
+        let hexagonStartX: CGFloat = width * 0.15
+        let hexagonStartY: CGFloat = width * 0.35
+        
+        let columns = 5
+        let rows = 3
+        let rowOffset: CGFloat = hexagonSpaceBetweenX / -3
+        
+        var currentStartX = hexagonStartX
+        
+        for row in 0..<rows {
+            if row > 0 {
+                currentStartX += rowOffset
+            }
+            
+            for col in 0..<columns {
+                let posX = currentStartX + CGFloat(col) * hexagonSpaceBetweenX
+                let posY = hexagonStartY - CGFloat(row) * hexagonSpaceBetweenY
+                
+                let hexagon = SKSpriteNode(imageNamed: "hexagonplatform")
+                hexagon.size = hexagonSize
+                hexagon.xScale = -1
+                hexagon.position = CGPoint(x: posX, y: posY)
+                hexagon.name = "hexagonPlatform"
+                vm.playerHexagonCoordinates.append(hexagon.position)
+                
+                let areaToPlaceCharacter = SKSpriteNode(color: UIColor.systemPink, size: CGSize(width: hexagonSize.width, height: hexagonSize.height))
+                areaToPlaceCharacter.position = hexagon.position
+                areaToPlaceCharacter.alpha = 0
+                areaToPlaceCharacter.name = "areatoplacecharacter"
+                
+                self.addChild(hexagon)
+                self.addChild(areaToPlaceCharacter)
+            }
+        }
+    }
+    
+    /// Creates the enemy side hexagon platforms
+    func createEnemyHexagonPlatforms() {
+        let hexagonSize = CGSize(width: width * TouhouSiegeStyle.Decimals.xMedium, height: width * TouhouSiegeStyle.Decimals.xMedium)
+        let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
+        let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
+        let hexagonStartX: CGFloat = -width * 0.5
+        let hexagonStartY: CGFloat = width * 0.35
+        
+        let columns = 5
+        let rows = 3
+        let rowOffset: CGFloat = hexagonSpaceBetweenX / -3
+        
+        var currentStartX = hexagonStartX
+        
+        for row in 0..<rows {
+            if row > 0 {
+                currentStartX += rowOffset
+            }
+            
+            for col in 0..<columns {
+                let posX = currentStartX - CGFloat(col) * hexagonSpaceBetweenX
+                let posY = hexagonStartY - CGFloat(row) * hexagonSpaceBetweenY
+                
+                let hexagon = SKSpriteNode(imageNamed: "hexagonplatform")
+                hexagon.size = hexagonSize
+                hexagon.position = CGPoint(x: -posX, y: posY)
+                hexagon.name = "enemyHexagonPlatform"
+                vm.enemyHexagonCoordinates.append(hexagon.position)
+                
+                let interactionArea = SKSpriteNode(color: UIColor.systemPink, size: CGSize(width: hexagonSize.width, height: hexagonSize.height))
+                interactionArea.position = hexagon.position
+                interactionArea.alpha = 0
+                
+                self.addChild(hexagon)
+                self.addChild(interactionArea)
+            }
+        }
+    }
+    
+    /// Places enemy characters based on an aray of character ids
+    func placeEnemyCharacters() {
+        let enemyHexagons = self.children.filter { $0.name == "enemyHexagonPlatform" }
+        
+        for (index, characterId) in vm.enemyPlacementArray.enumerated() {
+            
+            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                let enemySprite = SKSpriteNode(imageNamed: characterData.animations.idle[0])
+                
+                if let texture = enemySprite.texture {
+                    let aspectRatio = texture.size().width / texture.size().height
+                    enemySprite.size = CGSize(width: (width * TouhouSiegeStyle.Decimals.xxLarge) * aspectRatio, height: width * TouhouSiegeStyle.Decimals.xxLarge)
+                }
+                
+                enemySprite.name = "enemy_" + characterData.name
+                enemySprite.xScale = -1 /// To mirror it
+                
+                let hexagonPosition = CGPoint(x: enemyHexagons[index].frame.midX, y: enemyHexagons[index].frame.midY + (width * TouhouSiegeStyle.Decimals.medium))
+                enemySprite.position = hexagonPosition
+                vm.enemyHexagonCoordinates.append(hexagonPosition)
+                vm.enemySpritesHexaCoord[index] = enemySprite
+                startIdleAnimation(character: enemySprite, characterName: characterData.name)
+                
+                self.addChild(enemySprite)
+            }
+        }
+    }
 }

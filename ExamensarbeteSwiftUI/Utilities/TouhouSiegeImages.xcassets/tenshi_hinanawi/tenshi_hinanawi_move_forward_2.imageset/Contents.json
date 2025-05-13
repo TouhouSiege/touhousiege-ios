@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "tenshi_hinanawi_move_forward_2.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

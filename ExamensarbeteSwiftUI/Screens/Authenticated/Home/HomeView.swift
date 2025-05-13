@@ -16,6 +16,7 @@ struct HomeView: View {
     let height: CGFloat = UIScreen.main.bounds.height
     
     @State var testText = "Not loaded yet..."
+    @State var hasCharacters = false
     
     var body: some View {
         ZStack {
@@ -31,10 +32,30 @@ struct HomeView: View {
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .game)
                 }, text: "Play").offset(x: width * 0.15)
+                    .disabled(!hasCharacters)
+                    .opacity(hasCharacters ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .gacha)
+                    Task {
+                        do {
+                            guard let userId = userManager.user?.id else {
+                                print("No user id found.")
+                                return
+                            }
+                            let response = try await apiAuthManager.tempGetCharacters(userId: userId, characters: [
+                                Characters.allCharacters[0].id,
+                                Characters.allCharacters[1].id,
+                                Characters.allCharacters[2].id
+                            ])
+                            print("Characters updated successfully: \(response)")
+                            hasCharacters = true
+                        } catch let error {
+                            print("Error updating characters: \(error)")
+                        }
+                    }
                 }, text: "Gacha").offset(x: width * 0.12)
+
+
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .shop)
@@ -57,6 +78,10 @@ struct HomeView: View {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
                 do {
                     try await userManager.getUser()
+                    
+                    if let user = userManager.user {
+                        hasCharacters = !user.characters.isEmpty
+                    }
                 } catch let error {
                     print("Error loading user: \(error)")
                     apiAuthManager.token = nil

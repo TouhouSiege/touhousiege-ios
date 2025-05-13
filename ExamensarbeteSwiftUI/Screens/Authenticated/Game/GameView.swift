@@ -10,12 +10,14 @@ import SpriteKit
 
 struct GameView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var userManager: UserManager
     
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
     var gameScene: SKScene {
         let gameScene = GameScene()
+        gameScene.user = userManager.user
         
         /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
          *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)

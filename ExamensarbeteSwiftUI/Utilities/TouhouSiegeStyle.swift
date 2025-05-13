@@ -35,6 +35,28 @@ public class TouhouSiegeStyle {
         static let xLarge = CGFloat(6)
     }
     
+    struct Decimals {
+        static let xxSmall = CGFloat(0.01)
+        static let xSmall = CGFloat(0.02)
+        static let small = CGFloat(0.03)
+        static let medium = CGFloat(0.04)
+        static let xMedium = CGFloat(0.05)
+        static let large = CGFloat(0.06)
+        static let xLarge = CGFloat(0.07)
+        static let xxLarge = CGFloat(0.08)
+    }
+    
+    struct BigDecimals {
+        static let xxSmall = CGFloat(0.1)
+        static let xSmall = CGFloat(0.2)
+        static let small = CGFloat(0.3)
+        static let medium = CGFloat(0.4)
+        static let xMedium = CGFloat(0.5)
+        static let Large = CGFloat(0.6)
+        static let xLarge = CGFloat(0.7)
+        static let xxLarge = CGFloat(0.8)
+    }
+    
     struct Colors {
         static let peachRed = Color("PeachRed")
     }
@@ -52,14 +74,32 @@ public class TouhouSiegeStyle {
         static let gold04 = "goldcoin_04"
         static let gold05 = "goldcoin_05"
         
-        static let reimuHakureiProfile = "reimu_hakurei_profile"
+        static let reimuHakureiProfileSmall = "reimu_hakurei_profile"
+        static let reimuHakureiProfileLarge = "reimu_hakurei_profile_big"
         static let reimuHakureiIdle: [String] = (1...14).map { "reimu_hakurei_idle_\($0)" }
+        static let reimuHakureiAttack: [String] = (1...11).map { "reimu_hakurei_attack_\($0)"}
+        static let reimuHakureiFaint: [String] = (1...9).map { "reimu_hakurei_faint_\($0)"}
+        static let reimuHakureiMoveForward: [String] = (1...10).map { "reimu_hakurei_move_forward_\($0)"}
+        static let reimuHakureiMoveBackwards: [String] = (1...10).map { "reimu_hakurei_move_backwards_\($0)"}
+        static let reimuHakureiGetHit: [String] = (1...8).map { "reimu_hakurei_get_hit_\($0)"}
         
-        static let hijiriByakurenProfile = "hijiri_byakuren_profile"
+        static let hijiriByakurenProfileSmall = "hijiri_byakuren_profile"
+        static let hijiriByakurenProfileLarge = "hijiri_byakuren_profile_big"
         static let hijiriByakurenIdle: [String] = (1...14).map { "hijiri_byakuren_idle_\($0)" }
+        static let hijiriByakurenAttack: [String] = (1...10).map { "hijiri_byakuren_attack_\($0)"}
+        static let hijiriByakurenFaint: [String] = (1...8).map { "hijiri_byakuren_faint_\($0)"}
+        static let hijiriByakurenMoveForward: [String] = (1...13).map { "hijiri_byakuren_move_forward_\($0)"}
+        static let hijiriByakurenMoveBackwards: [String] = (1...10).map { "hijiri_byakuren_move_backwards_\($0)"}
+        static let hijiriByakurenGetHit: [String] = (1...5).map { "hijiri_byakuren_get_hit_\($0)"}
         
-        static let tenshiHinanawiProfile = "tenshi_hinanawi_profile"
+        static let tenshiHinanawiProfileSmall = "tenshi_hinanawi_profile"
+        static let tenshiHinanawiProfileLarge = "tenshi_hinanawi_profile_big"
         static let tenshiHinanawiIdle: [String] = (1...10).map { "tenshi_hinanawi_idle_\($0)" }
+        static let tenshiHinanawiAttack: [String] = (1...10).map { "tenshi_hinanawi_attack_\($0)"}
+        static let tenshiHinanawiFaint: [String] = (1...11).map { "tenshi_hinanawi_faint_\($0)"}
+        static let tenshiHinanawiMoveForward: [String] = (1...13).map { "tenshi_hinanawi_move_forward_\($0)"}
+        static let tenshiHinanawiMoveBackwards: [String] = (1...9).map { "tenshi_hinanawi_move_backwards_\($0)"}
+        static let tenshiHinanawiGetHit: [String] = (1...4).map { "tenshi_hinanawi_get_hit_\($0)"}
         
     }
 }
