@@ -96,6 +96,13 @@ class GameViewModel {
             return
         }
         
+        /// Checks if a character has fainted during the round and skips if that characters turn comes up
+        if turnQueueArray[turnQueueIndexOfWhosTurn].character.stats.hp <= 0 {
+            turnQueueIndexOfWhosTurn += 1
+            characterPreTurnProcess()
+            return
+        }
+        
         let characterToAct = turnQueueArray[turnQueueIndexOfWhosTurn]
         
         if characterToAct.isEnemy {
@@ -243,7 +250,6 @@ class GameViewModel {
         let characterToAttackRemovalAction = SKAction.run {
             if characterToAttackData.stats.hp <= 0 {
                 self.removeFaintedCharacterVisual(characterToAttackData, targetSprite: characterToAttackSprite)
-                characterToAttackSprite.removeFromParent()
             }
         }
         
@@ -305,10 +311,6 @@ class GameViewModel {
                     break
                 }
             }
-        }
-        
-        turnQueueArray.removeAll { characterOnBoard in
-            characterOnBoard.character.id == target.id
         }
     }
     
