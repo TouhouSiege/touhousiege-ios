@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "touhou_siege_profile_big.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

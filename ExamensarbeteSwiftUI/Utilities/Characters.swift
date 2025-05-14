@@ -169,6 +169,56 @@ struct Characters {
                 )
         ),
         
+        Character(
+            id: 4,
+            name: "Koishi Komeiji",
+            team: .player,
+            stats: Character.Stats(
+                attack: 24,
+                defense: 10,
+                hp: 200,
+                speed: 60,
+                classType: .mage,
+                attackType: .back
+            ),
+            profilePicture: Character.ProfilePicture(
+                small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
+                big: TouhouSiegeStyle.Images.koishiKomeijiProfileLarge),
+            animations: Character.Animations(
+                idle: TouhouSiegeStyle.Images.koishiKomeijiIdle,
+                attack: TouhouSiegeStyle.Images.koishiKomeijiAttack,
+                faint: TouhouSiegeStyle.Images.koishiKomeijiFaint,
+                moveForward: TouhouSiegeStyle.Images.koishiKomeijiMoveForward,
+                moveBackward: TouhouSiegeStyle.Images.koishiKomeijiMoveBackwards,
+                getHit: TouhouSiegeStyle.Images.koishiKomeijiGetHit
+                )
+            ),
+        
+        Character(
+            id: 5,
+            name: "Reisen Udongein Inaba",
+            team: .player,
+            stats: Character.Stats(
+                attack: 40,
+                defense: 2,
+                hp: 76,
+                speed: 130,
+                classType: .mage,
+                attackType: .back
+            ),
+            profilePicture: Character.ProfilePicture(
+                small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,
+                big: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileLarge),
+            animations: Character.Animations(
+                idle: TouhouSiegeStyle.Images.reisenUdongeinInabaIdle,
+                attack: TouhouSiegeStyle.Images.reisenUdongeinInabaAttack,
+                faint: TouhouSiegeStyle.Images.reisenUdongeinInabaFaint,
+                moveForward: TouhouSiegeStyle.Images.reisenUdongeinInabaMoveForward,
+                moveBackward: TouhouSiegeStyle.Images.reisenUdongeinInabaMoveBackwards,
+                getHit: TouhouSiegeStyle.Images.reisenUdongeinInabaGetHit
+                )
+            ),
+        
         /// ENEMY Characters
         Character(
             id: 101,
@@ -243,6 +293,56 @@ struct Characters {
                 moveBackward: TouhouSiegeStyle.Images.hijiriByakurenMoveBackwards,
                 getHit: TouhouSiegeStyle.Images.hijiriByakurenGetHit
                 )
-        )
+        ),
+        
+        Character(
+            id: 104,
+            name: "Koishi Komeiji",
+            team: .enemy,
+            stats: Character.Stats(
+                attack: 24,
+                defense: 10,
+                hp: 200,
+                speed: 60,
+                classType: .mage,
+                attackType: .back
+            ),
+            profilePicture: Character.ProfilePicture(
+                small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
+                big: TouhouSiegeStyle.Images.koishiKomeijiProfileLarge),
+            animations: Character.Animations(
+                idle: TouhouSiegeStyle.Images.koishiKomeijiIdle,
+                attack: TouhouSiegeStyle.Images.koishiKomeijiAttack,
+                faint: TouhouSiegeStyle.Images.koishiKomeijiFaint,
+                moveForward: TouhouSiegeStyle.Images.koishiKomeijiMoveForward,
+                moveBackward: TouhouSiegeStyle.Images.koishiKomeijiMoveBackwards,
+                getHit: TouhouSiegeStyle.Images.koishiKomeijiGetHit
+                )
+            ),
+        
+        Character(
+            id: 105,
+            name: "Reisen Udongein Inaba",
+            team: .enemy,
+            stats: Character.Stats(
+                attack: 40,
+                defense: 2,
+                hp: 76,
+                speed: 130,
+                classType: .mage,
+                attackType: .back
+            ),
+            profilePicture: Character.ProfilePicture(
+                small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,
+                big: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileLarge),
+            animations: Character.Animations(
+                idle: TouhouSiegeStyle.Images.reisenUdongeinInabaIdle,
+                attack: TouhouSiegeStyle.Images.reisenUdongeinInabaAttack,
+                faint: TouhouSiegeStyle.Images.reisenUdongeinInabaFaint,
+                moveForward: TouhouSiegeStyle.Images.reisenUdongeinInabaMoveForward,
+                moveBackward: TouhouSiegeStyle.Images.reisenUdongeinInabaMoveBackwards,
+                getHit: TouhouSiegeStyle.Images.reisenUdongeinInabaGetHit
+                )
+            )
     ]
 }

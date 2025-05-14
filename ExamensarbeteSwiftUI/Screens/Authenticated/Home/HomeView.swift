@@ -45,7 +45,9 @@ struct HomeView: View {
                             let response = try await apiAuthManager.tempGetCharacters(userId: userId, characters: [
                                 Characters.allCharacters[0].id,
                                 Characters.allCharacters[1].id,
-                                Characters.allCharacters[2].id
+                                Characters.allCharacters[2].id,
+                                Characters.allCharacters[3].id,
+                                Characters.allCharacters[4].id
                             ])
                             print("Characters updated successfully: \(response)")
                             hasCharacters = true

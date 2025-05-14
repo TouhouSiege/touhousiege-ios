@@ -106,15 +106,15 @@ class GameViewModel {
         let characterToAct = turnQueueArray[turnQueueIndexOfWhosTurn]
         
         if characterToAct.isEnemy {
-            enemyCharacterTurnProcess(battleCharacter: characterToAct)
+            enemyCharacterTurnProcess(characterOnBoard: characterToAct)
         } else {
-            playerCharacterTurnProcess(battleCharacter: characterToAct)
+            playerCharacterTurnProcess(characterOnBoard: characterToAct)
         }
     }
     
     /// Players turn
-    func playerCharacterTurnProcess(battleCharacter: CharacterOnBoard) {
-        let characterToAct = battleCharacter.character
+    func playerCharacterTurnProcess(characterOnBoard: CharacterOnBoard) {
+        let characterToAct = characterOnBoard.character
         
         guard let characterToActIndex = getPlayerHexagonIndex(characterId: characterToAct.id) else { return }
         guard let characterToActSprite = playerSpritesHexaCoord[characterToActIndex] else { return }
@@ -128,8 +128,8 @@ class GameViewModel {
     }
     
     /// Enemy turn
-    private func enemyCharacterTurnProcess(battleCharacter: CharacterOnBoard) {
-        let characterToAct = battleCharacter.character
+    private func enemyCharacterTurnProcess(characterOnBoard: CharacterOnBoard) {
+        let characterToAct = characterOnBoard.character
         
         guard let characterToActIndex = getEnemyHexagonIndex(characterID: characterToAct.id) else { return }
         guard let characterToActSprite = enemySpritesHexaCoord[characterToActIndex] else { return }

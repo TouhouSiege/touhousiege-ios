@@ -101,6 +101,23 @@ public class TouhouSiegeStyle {
         static let tenshiHinanawiMoveBackwards: [String] = (1...9).map { "tenshi_hinanawi_move_backwards_\($0)"}
         static let tenshiHinanawiGetHit: [String] = (1...4).map { "tenshi_hinanawi_get_hit_\($0)"}
         
+        static let koishiKomeijiProfileSmall = "koishi_komeiji_profile"
+        static let koishiKomeijiProfileLarge = "koishi_komeiji_profile_big"
+        static let koishiKomeijiIdle: [String] = (1...12).map { "koishi_komeiji_idle_\($0)" }
+        static let koishiKomeijiAttack: [String] = (1...7).map { "koishi_komeiji_attack_\($0)"}
+        static let koishiKomeijiFaint: [String] = (1...10).map { "koishi_komeiji_faint_\($0)"}
+        static let koishiKomeijiMoveForward: [String] = (1...8).map { "koishi_komeiji_move_forward_\($0)"}
+        static let koishiKomeijiMoveBackwards: [String] = (1...10).map { "koishi_komeiji_move_backwards_\($0)"}
+        static let koishiKomeijiGetHit: [String] = (1...5).map { "koishi_komeiji_get_hit_\($0)"}
+        
+        static let reisenUdongeinInabaProfileSmall = "reisen_udongein_inaba_profile"
+        static let reisenUdongeinInabaProfileLarge = "ressen_udongein_inaba_profile_big"
+        static let reisenUdongeinInabaIdle: [String] = (1...14).map { "reisen_udongein_inaba_idle_\($0)" }
+        static let reisenUdongeinInabaAttack: [String] = (1...11).map { "reisen_udongein_inaba_attack_\($0)"}
+        static let reisenUdongeinInabaFaint: [String] = (1...6).map { "reisen_udongein_inaba_faint_\($0)"}
+        static let reisenUdongeinInabaMoveForward: [String] = (1...9).map { "reisen_udongein_inaba_move_forward_\($0)"}
+        static let reisenUdongeinInabaMoveBackwards: [String] = (1...9).map { "reisen_udongein_inaba_move_backwards_\($0)"}
+        static let reisenUdongeinInabaGetHit: [String] = (1...4).map { "reisen_udongein_inaba_get_hit_\($0)"}
     }
 }
 

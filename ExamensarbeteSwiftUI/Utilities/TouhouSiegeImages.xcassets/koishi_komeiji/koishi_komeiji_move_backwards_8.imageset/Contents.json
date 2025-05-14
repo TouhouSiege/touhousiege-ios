@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "koishi_komeiji_move_backwards_8.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
