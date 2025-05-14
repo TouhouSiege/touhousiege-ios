@@ -45,8 +45,10 @@ class GameViewModel {
             }
         }
     }
+    
     var observableBoolGameStatus: Bool = false
     
+    /// Generates a random background for the gamescene
     func randomBackgroundGenerator() -> String {
         let randomBackground = Int.random(in: 0...7)
         

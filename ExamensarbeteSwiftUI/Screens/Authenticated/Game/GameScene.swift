@@ -240,8 +240,8 @@ class GameScene: SKScene {
         let hexagonSize = CGSize(width: width * TouhouSiegeStyle.Decimals.xMedium, height: width * TouhouSiegeStyle.Decimals.xMedium)
         let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
         let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
-        let hexagonStartX: CGFloat = width * 0.15
-        let hexagonStartY: CGFloat = width * 0.35
+        let hexagonStartX: CGFloat = width * (TouhouSiegeStyle.BigDecimals.xxSmall + TouhouSiegeStyle.Decimals.xMedium)
+        let hexagonStartY: CGFloat = width * TouhouSiegeStyle.BigDecimals.small
         
         let columns = 5
         let rows = 3
@@ -282,7 +282,7 @@ class GameScene: SKScene {
         let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
         let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
         let hexagonStartX: CGFloat = -width * 0.5
-        let hexagonStartY: CGFloat = width * 0.35
+        let hexagonStartY: CGFloat =  width * TouhouSiegeStyle.BigDecimals.small
         
         let columns = 5
         let rows = 3
