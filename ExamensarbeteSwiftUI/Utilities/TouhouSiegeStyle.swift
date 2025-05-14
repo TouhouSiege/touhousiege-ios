@@ -74,6 +74,8 @@ public class TouhouSiegeStyle {
         static let gold04 = "goldcoin_04"
         static let gold05 = "goldcoin_05"
         
+        static let bg_play: [String] = (1...8).map { "bg_play_\($0)" }
+        
         static let reimuHakureiProfileSmall = "reimu_hakurei_profile"
         static let reimuHakureiProfileLarge = "reimu_hakurei_profile_big"
         static let reimuHakureiIdle: [String] = (1...14).map { "reimu_hakurei_idle_\($0)" }

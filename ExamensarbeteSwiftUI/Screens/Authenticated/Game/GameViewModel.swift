@@ -47,6 +47,12 @@ class GameViewModel {
     }
     var observableBoolGameStatus: Bool = false
     
+    func randomBackgroundGenerator() -> String {
+        let randomBackground = Int.random(in: 0...7)
+        
+        return TouhouSiegeStyle.Images.bg_play[randomBackground]
+    }
+    
     func startGame() {
         print("**********GAME STARTED!**********")
 

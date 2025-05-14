@@ -15,6 +15,8 @@ struct GameView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    let vm = GameViewModel()
+    
     var gameScene: SKScene {
         let gameScene = GameScene()
         gameScene.user = userManager.user
@@ -31,7 +33,20 @@ struct GameView: View {
             
             gameScene.size = CGSize(width: width, height: height)
             gameScene.scaleMode = .fill
-            gameScene.backgroundColor = .cyan
+            
+            let randomBackground = SKSpriteNode(imageNamed: vm.randomBackgroundGenerator())
+            randomBackground.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
+            randomBackground.size = gameScene.size
+            
+            let randomBackgroundOverlay = SKSpriteNode(color: .black, size: gameScene.size)
+            randomBackgroundOverlay.alpha = TouhouSiegeStyle.BigDecimals.small
+            randomBackgroundOverlay.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
+            
+            gameScene.addChild(randomBackground)
+            gameScene.addChild(randomBackgroundOverlay)
+
+            
+            
         } else {
             print("ERROR LOADING GAME...")
         }
