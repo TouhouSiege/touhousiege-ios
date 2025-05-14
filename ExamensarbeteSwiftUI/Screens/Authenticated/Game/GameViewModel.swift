@@ -174,6 +174,9 @@ class GameViewModel {
     func attackAnimationsAndOutcome(characterToActSprite: SKSpriteNode, characterToAttackSprite: SKSpriteNode, isTargetEnemy: Bool, completion: @escaping () -> Void) {
         characterToActSprite.removeAllActions() /// To remove the idle animation
         
+        let characterToActOriginalZPosition = characterToActSprite.zPosition
+        characterToActSprite.zPosition = 777
+        
         if let texture = characterToActSprite.texture {
             let aspectRatio = texture.size().width / texture.size().height
             characterToActSprite.size = CGSize(width:  (width * TouhouSiegeStyle.Decimals.xxLarge) * aspectRatio, height: width * TouhouSiegeStyle.Decimals.xxLarge)
@@ -263,6 +266,7 @@ class GameViewModel {
         ])
         
         let characterToActResumeIdleAnimationAction = SKAction.run {
+            characterToActSprite.zPosition = characterToActOriginalZPosition
             self.gameScene?.startIdleAnimation(character: characterToActSprite, characterName: characterToActName)
             completion()
         }
