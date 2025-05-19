@@ -19,6 +19,10 @@ class GameScene: SKScene {
     
     var placedCharacters: [String: SKSpriteNode] = [:]
     var disabledProfiles: [String: SKSpriteNode] = [:]
+    var disabledProfilesStrings: [String] = []
+    var profilePicturesCurrentlyShowing: [SKSpriteNode] = []
+    var profilePicturesCurrentlyShowingPositions: [CGPoint] = []
+    var profilePicturesTemporaryArrayOfIds: [Int] = []
     var enemyPositions: [Int: Character] = [:]
 
     var startButton: SKSpriteNode?
@@ -36,9 +40,11 @@ class GameScene: SKScene {
         print("GameScene Loaded!")
         guard let user = user else { return print("No characters found!") }
         
-        print("Loaded Characters: \(user.characters)")
+        profilePicturesTemporaryArrayOfIds = user.characters
         
-        createStartButton()
+        print("Loaded Characters: \(user.characters)")
+        createArrowButtons()
+        //createStartButton()
         createHexagonPlatforms()
         createEnemyHexagonPlatforms()
         createCharacterProfileSelection(characterIds: user.characters)
@@ -54,6 +60,16 @@ class GameScene: SKScene {
             
             if nodes.first(where: { $0.name == "startButton" }) != nil {
                 vm.startGame()
+                return
+            }
+            
+            if nodes.first(where: { $0.name == "rightArrow"}) != nil {
+                leftAndRightArrowFunctionality(arrow: "rightArrow")
+                return
+            }
+            
+            if nodes.first(where: { $0.name == "leftArrow"}) != nil {
+                leftAndRightArrowFunctionality(arrow: "leftArrow")
                 return
             }
             
@@ -167,16 +183,23 @@ class GameScene: SKScene {
     func createCharacterProfileSelection(characterIds: [Int]) {
         let smallProfileSize: CGFloat = width * TouhouSiegeStyle.Decimals.large
         let spacing: CGFloat = width * TouhouSiegeStyle.Decimals.xxSmall
-        let startX: CGFloat = middleScreen
+        let startX: CGFloat = (width * TouhouSiegeStyle.Decimals.large) + (width * TouhouSiegeStyle.Decimals.xxSmall)
+        var spacingDecider: CGFloat = 1
         
         for (index, characterId) in characterIds.enumerated() {
-            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
-                let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
-                icon.position = CGPoint(x: startX + (CGFloat(index) * (smallProfileSize + spacing)), y: spacing * 6)
-                icon.size = CGSize(width: smallProfileSize, height: smallProfileSize)
-                icon.name = "profile_" + characterData.name
-                
-                self.addChild(icon)
+            if index == (profilePicturesTemporaryArrayOfIds.startIndex) || index == ((profilePicturesTemporaryArrayOfIds.startIndex + 1)) || index == (profilePicturesTemporaryArrayOfIds.endIndex - 1) || index == (profilePicturesTemporaryArrayOfIds.endIndex - 2) || index == (profilePicturesTemporaryArrayOfIds.endIndex - 3) {
+                if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                    let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
+                    icon.position = CGPoint(x: startX + (CGFloat(spacingDecider) * (smallProfileSize + spacing)), y: spacing * 6)
+                    icon.size = CGSize(width: smallProfileSize, height: smallProfileSize)
+                    icon.name = "profile_" + characterData.name
+                    
+                    spacingDecider += 1
+                    profilePicturesCurrentlyShowing.append(icon)
+                    profilePicturesCurrentlyShowingPositions.append(icon.position)
+                    
+                    self.addChild(icon)
+                }
             }
         }
     }
@@ -186,11 +209,12 @@ class GameScene: SKScene {
         let name: String = "profile_" + characterName
         
         if let icon = self.children.first(where: { $0.name == name }) as? SKSpriteNode {
-            icon.color = UIColor.gray
-            icon.colorBlendFactor = TouhouSiegeStyle.Decimals.xLarge
+            icon.color = UIColor.black
+            icon.colorBlendFactor = TouhouSiegeStyle.BigDecimals.xLarge
             icon.name = nil
             
             disabledProfiles[characterName] = icon
+            disabledProfilesStrings.append(characterName)
         }
     }
     
@@ -201,6 +225,116 @@ class GameScene: SKScene {
             icon.name = "profile_" + characterName
             
             disabledProfiles.removeValue(forKey: characterName)
+            disabledProfilesStrings.removeAll { $0 == characterName }
+
+            }
+
+    }
+    
+    /// Creates left and right arrow buttons that allow the user to move between pages.
+    func createArrowButtons() {
+        let leftArrow = SKSpriteNode(imageNamed: "leftarrow")
+        leftArrow.name = "leftArrow"
+        leftArrow.size = CGSize(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
+        leftArrow.position = CGPoint(x: width * TouhouSiegeStyle.Decimals.large, y: width * TouhouSiegeStyle.Decimals.large)
+        addChild(leftArrow)
+        
+        let rightArrow = SKSpriteNode(imageNamed: "rightarrow")
+        rightArrow.name = "rightArrow"
+        rightArrow.size = CGSize(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
+        rightArrow.position = CGPoint(x: ((width * TouhouSiegeStyle.Decimals.large) * 7.1) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 7), y: width * TouhouSiegeStyle.Decimals.large)
+        addChild(rightArrow)
+        
+    }
+    
+    /// Function for the arrows for character selection
+    func leftAndRightArrowFunctionality(arrow: String) {
+        if arrow == "leftArrow" {
+            /// Remove the profile picture at the furthest right
+            profilePicturesCurrentlyShowing[profilePicturesCurrentlyShowing.count - 1].removeFromParent()
+            profilePicturesCurrentlyShowing.remove(at: profilePicturesCurrentlyShowing.count - 1)
+            
+            /// Move up the 2 icons left to the right one step to look like selecting left
+            profilePicturesCurrentlyShowing[0].position = profilePicturesCurrentlyShowingPositions[1]
+            profilePicturesCurrentlyShowing[1].position = profilePicturesCurrentlyShowingPositions[2]
+            
+            let characterId = profilePicturesTemporaryArrayOfIds[(profilePicturesTemporaryArrayOfIds.count / 2) - 1]
+            
+            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
+                icon.position = profilePicturesCurrentlyShowingPositions[0]
+                icon.size = profilePicturesCurrentlyShowing[1].size
+                
+                var isProfileDisabled = false
+               
+                for name in disabledProfilesStrings {
+                    if name == characterData.name {
+                        icon.color = UIColor.black
+                        icon.colorBlendFactor = TouhouSiegeStyle.BigDecimals.xLarge
+                        icon.name = nil
+                        isProfileDisabled = true
+                    }
+                }
+                
+                if !isProfileDisabled {
+                    icon.name = "profile_" + characterData.name
+                }
+                
+                profilePicturesCurrentlyShowing.insert(icon, at: 0)
+                
+                let characterIdToBeMoved = profilePicturesTemporaryArrayOfIds[profilePicturesTemporaryArrayOfIds.count - 1]
+                
+                profilePicturesTemporaryArrayOfIds.remove(at: profilePicturesTemporaryArrayOfIds.count - 1)
+                profilePicturesTemporaryArrayOfIds.insert(characterIdToBeMoved, at: 0)
+                
+                self.addChild(icon)
+                
+                print("ARRAY OF CHARACTER IDS TEMPORARY: \(profilePicturesTemporaryArrayOfIds)")
+            }
+        }
+        
+        if arrow == "rightArrow" {
+            /// Remove the profile picture at the furthest right
+            profilePicturesCurrentlyShowing[profilePicturesCurrentlyShowing.startIndex].removeFromParent()
+            profilePicturesCurrentlyShowing.remove(at: profilePicturesCurrentlyShowing.startIndex)
+            
+            /// Move up the 2 icons left to the right one step to look like selecting left
+            profilePicturesCurrentlyShowing[0].position = profilePicturesCurrentlyShowingPositions[0]
+            profilePicturesCurrentlyShowing[1].position = profilePicturesCurrentlyShowingPositions[1]
+            
+            let characterId = profilePicturesTemporaryArrayOfIds[(profilePicturesTemporaryArrayOfIds.count / 2) - 1]
+            
+            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
+                icon.position = profilePicturesCurrentlyShowingPositions[2]
+                icon.size = profilePicturesCurrentlyShowing[1].size
+                
+                var isProfileDisabled = false
+               
+                for name in disabledProfilesStrings {
+                    if name == characterData.name {
+                        icon.color = UIColor.black
+                        icon.colorBlendFactor = TouhouSiegeStyle.BigDecimals.xLarge
+                        icon.name = nil
+                        isProfileDisabled = true
+                    }
+                }
+                
+                if !isProfileDisabled {
+                    icon.name = "profile_" + characterData.name
+                }
+                
+                profilePicturesCurrentlyShowing.insert(icon, at: 2)
+                
+                let characterIdToBeMoved = profilePicturesTemporaryArrayOfIds[profilePicturesTemporaryArrayOfIds.startIndex]
+                
+                profilePicturesTemporaryArrayOfIds.remove(at: profilePicturesTemporaryArrayOfIds.startIndex)
+                profilePicturesTemporaryArrayOfIds.insert(characterIdToBeMoved, at: profilePicturesTemporaryArrayOfIds.endIndex)
+                
+                self.addChild(icon)
+                
+                print("ARRAY OF CHARACTER IDS TEMPORARY: \(profilePicturesTemporaryArrayOfIds)")
+            }
         }
     }
 
