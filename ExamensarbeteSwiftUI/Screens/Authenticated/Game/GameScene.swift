@@ -257,6 +257,8 @@ class GameScene: SKScene {
             /// Move up the 2 icons left to the right one step to look like selecting left
             profilePicturesCurrentlyShowing[0].position = profilePicturesCurrentlyShowingPositions[1]
             profilePicturesCurrentlyShowing[1].position = profilePicturesCurrentlyShowingPositions[2]
+            profilePicturesCurrentlyShowing[2].position = profilePicturesCurrentlyShowingPositions[3]
+            profilePicturesCurrentlyShowing[3].position = profilePicturesCurrentlyShowingPositions[4]
             
             let characterId = profilePicturesTemporaryArrayOfIds[(profilePicturesTemporaryArrayOfIds.count / 2) - 1]
             
@@ -288,8 +290,6 @@ class GameScene: SKScene {
                 profilePicturesTemporaryArrayOfIds.insert(characterIdToBeMoved, at: 0)
                 
                 self.addChild(icon)
-                
-                print("ARRAY OF CHARACTER IDS TEMPORARY: \(profilePicturesTemporaryArrayOfIds)")
             }
         }
         
@@ -301,12 +301,14 @@ class GameScene: SKScene {
             /// Move up the 2 icons left to the right one step to look like selecting left
             profilePicturesCurrentlyShowing[0].position = profilePicturesCurrentlyShowingPositions[0]
             profilePicturesCurrentlyShowing[1].position = profilePicturesCurrentlyShowingPositions[1]
+            profilePicturesCurrentlyShowing[2].position = profilePicturesCurrentlyShowingPositions[2]
+            profilePicturesCurrentlyShowing[3].position = profilePicturesCurrentlyShowingPositions[3]
             
             let characterId = profilePicturesTemporaryArrayOfIds[(profilePicturesTemporaryArrayOfIds.count / 2) - 1]
             
             if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
                 let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
-                icon.position = profilePicturesCurrentlyShowingPositions[2]
+                icon.position = profilePicturesCurrentlyShowingPositions[4]
                 icon.size = profilePicturesCurrentlyShowing[1].size
                 
                 var isProfileDisabled = false
@@ -324,7 +326,7 @@ class GameScene: SKScene {
                     icon.name = "profile_" + characterData.name
                 }
                 
-                profilePicturesCurrentlyShowing.insert(icon, at: 2)
+                profilePicturesCurrentlyShowing.insert(icon, at: 4)
                 
                 let characterIdToBeMoved = profilePicturesTemporaryArrayOfIds[profilePicturesTemporaryArrayOfIds.startIndex]
                 
@@ -332,8 +334,6 @@ class GameScene: SKScene {
                 profilePicturesTemporaryArrayOfIds.insert(characterIdToBeMoved, at: profilePicturesTemporaryArrayOfIds.endIndex)
                 
                 self.addChild(icon)
-                
-                print("ARRAY OF CHARACTER IDS TEMPORARY: \(profilePicturesTemporaryArrayOfIds)")
             }
         }
     }
