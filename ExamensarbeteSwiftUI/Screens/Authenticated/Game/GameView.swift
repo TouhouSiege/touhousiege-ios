@@ -12,6 +12,8 @@ struct GameView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var userManager: UserManager
     
+    @State var isHidden: Bool = false
+    
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
@@ -19,6 +21,8 @@ struct GameView: View {
     
     var gameScene: SKScene {
         let gameScene = GameScene()
+        gameScene.vm = vm
+        gameScene.isGameStarted = isHidden
         gameScene.user = userManager.user
         
         /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
@@ -55,12 +59,36 @@ struct GameView: View {
     }
     
     var body: some View {
-        VStack {
-            SpriteView(scene: gameScene)
-                .edgesIgnoringSafeArea(.all)
-        }.onDisappear { /// For memory purposes
-            gameScene.removeAllChildren()
-            gameScene.removeFromParent()
+        ZStack {
+            VStack {
+                SpriteView(scene: gameScene)
+                    .edgesIgnoringSafeArea(.all)
+            }.onDisappear { /// For memory purposes
+                gameScene.removeAllChildren()
+                gameScene.removeFromParent()
+            }
+            
+            VStack {
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    
+                    if !isHidden {
+                        HStack {
+                            ButtonSmall(function: {
+                                isHidden = true
+                                vm.startGame()
+                            }, text: "Start")
+                            .offset(x: -width * TouhouSiegeStyle.Decimals.xSmall)
+                            
+                            ButtonSmall(function: {
+                                navigationManager.navigateTo(screen: .home)
+                            }, text: "Cancel")
+                        }.offset(x: -width * TouhouSiegeStyle.Decimals.small, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                    }
+                }
+            }
         }
     }
 }

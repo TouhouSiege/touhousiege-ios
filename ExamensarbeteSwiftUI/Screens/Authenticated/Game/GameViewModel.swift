@@ -58,7 +58,21 @@ class GameViewModel {
     func startGame() {
         print("**********GAME STARTED!**********")
 
+        removeProfilesPicturesAndArrows()
         resetTurnQueue()
+    }
+    
+    func removeProfilesPicturesAndArrows() {
+        guard let gameScene = gameScene else { return }
+        guard let isGameStarted = gameScene.isGameStarted else { return }
+        
+        if isGameStarted {
+            for profile in gameScene.profilePicturesCurrentlyShowing {
+                profile.removeFromParent()
+            }
+            gameScene.profilePicturesCurrentlyShowing.removeAll()
+
+        }
     }
     
     /// Reset the queue of turns for the characters and rearranges the order based on speed

@@ -13,9 +13,9 @@ class GameScene: SKScene {
     let middleScreen: CGFloat = UIScreen.main.bounds.width / 2
     let width: CGFloat = UIScreen.main.bounds.width
     
+    var vm: GameViewModel?
+    var isGameStarted: Bool?
     var user: User?
-    
-    let vm = GameViewModel()
     
     var placedCharacters: [String: SKSpriteNode] = [:]
     var disabledProfiles: [String: SKSpriteNode] = [:]
@@ -28,6 +28,8 @@ class GameScene: SKScene {
     var startButton: SKSpriteNode?
     
     override func update(_ currentTime: TimeInterval) {
+        guard let vm = vm else { return }
+        
         if vm.observableBoolGameStatus {
             self.removeAllActions()
             self.removeAllChildren()
@@ -35,6 +37,8 @@ class GameScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        guard let vm = vm else { return }
+        
         vm.gameScene = self
         
         print("GameScene Loaded!")
@@ -44,7 +48,6 @@ class GameScene: SKScene {
         
         print("Loaded Characters: \(user.characters)")
         createArrowButtons()
-        //createStartButton()
         createHexagonPlatforms()
         createEnemyHexagonPlatforms()
         createCharacterProfileSelection(characterIds: user.characters)
@@ -54,6 +57,8 @@ class GameScene: SKScene {
     var currentSelectedCharacter: SKSpriteNode?
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let vm = vm else { return }
+        
         for touch in touches {
             let location = touch.location(in: self)
             let nodes = self.nodes(at: location)
@@ -116,6 +121,7 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let vm = vm else { return }
         let areaToPlacePlayerCharacter = self.children.filter { $0.name == "areatoplacecharacter" }
         
         if let character = currentSelectedCharacter {
@@ -371,6 +377,8 @@ class GameScene: SKScene {
 
     /// Creates the player side hexagon platforms
     func createHexagonPlatforms() {
+        guard let vm = vm else { return }
+        
         let hexagonSize = CGSize(width: width * TouhouSiegeStyle.Decimals.xMedium, height: width * TouhouSiegeStyle.Decimals.xMedium)
         let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
         let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
@@ -412,6 +420,7 @@ class GameScene: SKScene {
     
     /// Creates the enemy side hexagon platforms
     func createEnemyHexagonPlatforms() {
+        guard let vm = vm else { return }
         let hexagonSize = CGSize(width: width * TouhouSiegeStyle.Decimals.xMedium, height: width * TouhouSiegeStyle.Decimals.xMedium)
         let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
         let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
@@ -451,6 +460,8 @@ class GameScene: SKScene {
     
     /// Places enemy characters based on an aray of character ids
     func placeEnemyCharacters() {
+        guard let vm = vm else { return }
+        
         let enemyHexagons = self.children.filter { $0.name == "enemyHexagonPlatform" }
         
         for (index, characterId) in vm.enemyPlacementArray.enumerated() {
