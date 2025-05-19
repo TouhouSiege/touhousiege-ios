@@ -14,7 +14,6 @@ class GameScene: SKScene {
     let width: CGFloat = UIScreen.main.bounds.width
     
     var vm: GameViewModel?
-    var isGameStarted: Bool?
     var user: User?
     
     var placedCharacters: [String: SKSpriteNode] = [:]
@@ -25,7 +24,8 @@ class GameScene: SKScene {
     var profilePicturesTemporaryArrayOfIds: [Int] = []
     var enemyPositions: [Int: Character] = [:]
 
-    var startButton: SKSpriteNode?
+    var leftArrow: SKSpriteNode?
+    var rightArrow: SKSpriteNode?
     
     override func update(_ currentTime: TimeInterval) {
         guard let vm = vm else { return }
@@ -239,17 +239,17 @@ class GameScene: SKScene {
     
     /// Creates left and right arrow buttons that allow the user to move between pages.
     func createArrowButtons() {
-        let leftArrow = SKSpriteNode(imageNamed: "leftarrow")
-        leftArrow.name = "leftArrow"
-        leftArrow.size = CGSize(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
-        leftArrow.position = CGPoint(x: width * TouhouSiegeStyle.Decimals.large, y: width * TouhouSiegeStyle.Decimals.large)
-        addChild(leftArrow)
+        leftArrow = SKSpriteNode(imageNamed: "leftarrow")
+        leftArrow?.name = "leftArrow"
+        leftArrow?.size = CGSize(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
+        leftArrow?.position = CGPoint(x: width * TouhouSiegeStyle.Decimals.large, y: width * TouhouSiegeStyle.Decimals.large)
+        addChild(leftArrow!)
         
-        let rightArrow = SKSpriteNode(imageNamed: "rightarrow")
-        rightArrow.name = "rightArrow"
-        rightArrow.size = CGSize(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
-        rightArrow.position = CGPoint(x: ((width * TouhouSiegeStyle.Decimals.large) * 7.1) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 7), y: width * TouhouSiegeStyle.Decimals.large)
-        addChild(rightArrow)
+        rightArrow = SKSpriteNode(imageNamed: "rightarrow")
+        rightArrow?.name = "rightArrow"
+        rightArrow?.size = CGSize(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
+        rightArrow?.position = CGPoint(x: ((width * TouhouSiegeStyle.Decimals.large) * 7.1) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 7), y: width * TouhouSiegeStyle.Decimals.large)
+        addChild(rightArrow!)
         
     }
     
@@ -357,22 +357,6 @@ class GameScene: SKScene {
         let repeatAnimationIdle = SKAction.repeatForever(SKAction.animate(with: textures, timePerFrame: TouhouSiegeStyle.BigDecimals.xxSmall))
         
         character.run(repeatAnimationIdle)
-    }
-    
-    /// Create the start button
-    func createStartButton() {
-        startButton = SKSpriteNode(color: .green, size: CGSize(width: 150, height: 50))
-        startButton?.position = CGPoint(x: 150, y: 100)
-        startButton?.name = "startButton"
-        
-        let buttonLabel = SKLabelNode(text: "Start")
-        buttonLabel.fontSize = 20
-        buttonLabel.fontColor = .black
-        buttonLabel.position = CGPoint(x: 0, y: -10)
-        
-        startButton?.addChild(buttonLabel)
-        
-        self.addChild(startButton!)
     }
 
     /// Creates the player side hexagon platforms

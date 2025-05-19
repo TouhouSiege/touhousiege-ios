@@ -62,17 +62,16 @@ class GameViewModel {
         resetTurnQueue()
     }
     
+    /// Removes the profiles selection, arrows and buttons as soon as the game starts
     func removeProfilesPicturesAndArrows() {
         guard let gameScene = gameScene else { return }
-        guard let isGameStarted = gameScene.isGameStarted else { return }
         
-        if isGameStarted {
-            for profile in gameScene.profilePicturesCurrentlyShowing {
-                profile.removeFromParent()
-            }
-            gameScene.profilePicturesCurrentlyShowing.removeAll()
-
+        for profile in gameScene.profilePicturesCurrentlyShowing {
+            profile.removeFromParent()
         }
+        
+        gameScene.leftArrow?.removeFromParent()
+        gameScene.rightArrow?.removeFromParent()
     }
     
     /// Reset the queue of turns for the characters and rearranges the order based on speed

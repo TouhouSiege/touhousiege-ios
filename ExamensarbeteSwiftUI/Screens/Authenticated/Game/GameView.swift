@@ -22,7 +22,6 @@ struct GameView: View {
     var gameScene: SKScene {
         let gameScene = GameScene()
         gameScene.vm = vm
-        gameScene.isGameStarted = isHidden
         gameScene.user = userManager.user
         
         /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
