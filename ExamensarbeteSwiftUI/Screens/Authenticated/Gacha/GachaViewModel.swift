@@ -6,13 +6,8 @@
 //
 
 import Foundation
-import SwiftUICore
 
 class GachaViewModel {
-    @EnvironmentObject var navigationManager: NavigationManager
-    @EnvironmentObject var apiAuthManager: ApiAuthManager
-    @EnvironmentObject var userManager: UserManager
-    
     var apiManager: ApiAuthManager?
     var user: User?
     

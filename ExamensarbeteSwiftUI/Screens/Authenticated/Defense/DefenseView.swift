@@ -10,6 +10,7 @@ import SpriteKit
 
 struct DefenseView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var apiAuthManager: ApiAuthManager
     @EnvironmentObject var userManager: UserManager
     
     let width: CGFloat = UIScreen.main.bounds.width
@@ -18,44 +19,7 @@ struct DefenseView: View {
     let vmGameLogic = GameViewModel()
     let vm = DefenseViewModel()
     
-    var gameScene: SKScene {
-        let gameScene = GameScene()
-        gameScene.vm = vmGameLogic
-        gameScene.user = userManager.user
-        gameScene.isDefenseSetting = true
-        
-        /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
-         *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
-         */
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            let fullScreen = UIScreen.main.bounds.size
-            
-            let width = fullScreen.width - window.safeAreaInsets.left - window.safeAreaInsets.right
-            let height = fullScreen.height - window.safeAreaInsets.top - window.safeAreaInsets.bottom
-            
-            gameScene.size = CGSize(width: width, height: height)
-            gameScene.scaleMode = .fill
-            
-            let randomBackground = SKSpriteNode(imageNamed: vmGameLogic.randomBackgroundGenerator())
-            randomBackground.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
-            randomBackground.size = gameScene.size
-            
-            let randomBackgroundOverlay = SKSpriteNode(color: .black, size: gameScene.size)
-            randomBackgroundOverlay.alpha = TouhouSiegeStyle.BigDecimals.small
-            randomBackgroundOverlay.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
-            
-            gameScene.addChild(randomBackground)
-            gameScene.addChild(randomBackgroundOverlay)
-            
-            
-            
-        } else {
-            print("ERROR LOADING GAME...")
-        }
-        
-        return gameScene
-    }
+    @State private var gameScene: GameScene = GameScene()
     
     var body: some View {
         ZStack {
@@ -75,7 +39,9 @@ struct DefenseView: View {
                     
                     HStack {
                         ButtonSmall(function: {
-                            
+                            Task {
+                                await vm.updateDefense(defense: gameScene.playerPlacementArray)
+                            }
                         }, text: "Save")
                         .offset(x: -width * TouhouSiegeStyle.Decimals.xSmall)
                         
@@ -85,6 +51,41 @@ struct DefenseView: View {
                     }.offset(x: -width * TouhouSiegeStyle.Decimals.small, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                 }
             }
+        }.onAppear {
+            gameScene.vm = vmGameLogic
+            gameScene.user = userManager.user
+            gameScene.isDefenseSetting = true
+            
+            /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
+             *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
+             */
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                let fullScreen = UIScreen.main.bounds.size
+                
+                let width = fullScreen.width - window.safeAreaInsets.left - window.safeAreaInsets.right
+                let height = fullScreen.height - window.safeAreaInsets.top - window.safeAreaInsets.bottom
+                
+                gameScene.size = CGSize(width: width, height: height)
+                gameScene.scaleMode = .fill
+                
+                let randomBackground = SKSpriteNode(imageNamed: vmGameLogic.randomBackgroundGenerator())
+                randomBackground.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
+                randomBackground.size = gameScene.size
+                
+                let randomBackgroundOverlay = SKSpriteNode(color: .black, size: gameScene.size)
+                randomBackgroundOverlay.alpha = TouhouSiegeStyle.BigDecimals.small
+                randomBackgroundOverlay.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
+                
+                gameScene.addChild(randomBackground)
+                gameScene.addChild(randomBackgroundOverlay)
+                  
+            } else {
+                print("ERROR LOADING GAME...")
+            }
+            
+            vm.apiManager = apiAuthManager
+            vm.user = userManager.user
         }
     }
 }

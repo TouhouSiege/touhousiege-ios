@@ -23,8 +23,6 @@ class GameViewModel {
     var turnQueueIndexOfWhosTurn = 0
     var roundNumber: Int = 0
     
-    ///var enemyPlacementArray: [Int]? Placeholder for pvp
-    var playerPlacementArray: [Int] = Array(repeating: 0, count: 15)
     /// Test Array for enemy
     var enemyPlacementArray: [Int] = [
         0, 0, 103, 102, 0,
@@ -76,6 +74,8 @@ class GameViewModel {
     
     /// Reset the queue of turns for the characters and rearranges the order based on speed
     func resetTurnQueue() {
+        guard let gameScene = gameScene else { return }
+        
         checkForWinner()
 
         if isGameOver { return }
@@ -84,8 +84,8 @@ class GameViewModel {
         var characterTurnQueue: [CharacterOnBoard] = []
         
         /// Adds player characters to the queue
-        for index in 0..<playerPlacementArray.count {
-            if playerPlacementArray[index] != 0, let character = getPlayerCharacter(hexIndex: index) {
+        for index in 0..<gameScene.playerPlacementArray.count {
+            if gameScene.playerPlacementArray[index] != 0, let character = getPlayerCharacter(hexIndex: index) {
                 characterTurnQueue.append(CharacterOnBoard(character: character, isEnemy: false))
             }
         }
@@ -152,9 +152,10 @@ class GameViewModel {
     private func enemyCharacterTurnProcess(characterOnBoard: CharacterOnBoard) {
         let characterToAct = characterOnBoard.character
         
+        guard let gameScene = gameScene else { return }
         guard let characterToActIndex = getEnemyHexagonIndex(characterID: characterToAct.id) else { return }
         guard let characterToActSprite = enemySpritesHexaCoord[characterToActIndex] else { return }
-        guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex, opposingFormation: playerPlacementArray, attackType: characterToAct.stats.attackType, isTargetEnemy: false) else { return }
+        guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex, opposingFormation: gameScene.playerPlacementArray, attackType: characterToAct.stats.attackType, isTargetEnemy: false) else { return }
         guard let characterToAttackSprite = playerSpritesHexaCoord[characterToAttackIndex] else { return }
 
         attackAnimationsAndOutcome(characterToActSprite: characterToActSprite, characterToAttackSprite: characterToAttackSprite, isTargetEnemy: false) {
@@ -165,8 +166,10 @@ class GameViewModel {
     
     /// Checks if a winner is present and if it is, removes everyone from the queue and ends the game
     func checkForWinner() {
+        guard let gameScene = gameScene else { return }
+        
         let isEnemyAlive = enemyPlacementArray.contains { $0 != 0 }
-        let isPlayerAlive = playerPlacementArray.contains { $0 != 0 }
+        let isPlayerAlive = gameScene.playerPlacementArray.contains { $0 != 0 }
         
         if !isEnemyAlive {
             turnQueueArray.removeAll()
@@ -322,6 +325,8 @@ class GameViewModel {
     
     /// Remove all logical information if a character faints so the game won't freeze
     func removeFaintedCharacterLogical(_ target: Character, isTargetEnemy: Bool) {
+        guard let gameScene = gameScene else { return }
+        
         if isTargetEnemy {
             for i in 0..<enemyPlacementArray.count {
                 if enemyPlacementArray[i] == target.id {
@@ -330,9 +335,9 @@ class GameViewModel {
                 }
             }
         } else {
-            for i in 0..<playerPlacementArray.count {
-                if playerPlacementArray[i] == target.id {
-                    playerPlacementArray[i] = 0
+            for i in 0..<gameScene.playerPlacementArray.count {
+                if gameScene.playerPlacementArray[i] == target.id {
+                    gameScene.playerPlacementArray[i] = 0
                     break
                 }
             }
@@ -395,7 +400,8 @@ class GameViewModel {
     
     /// To retrieve index of where a player character is placed
     func getPlayerHexagonIndex(characterId: Int) -> Int? {
-        return playerPlacementArray.firstIndex(where: { $0 == characterId })
+        guard let gameScene = gameScene else { return nil }
+        return gameScene.playerPlacementArray.firstIndex(where: { $0 == characterId })
     }
     
     /// To retrieve the index of where a enemy character is placed
@@ -406,7 +412,9 @@ class GameViewModel {
     
     /// To retrieve player characters currently on the board
     func getPlayerCharacter(hexIndex: Int) -> Character? {
-        let id = playerPlacementArray[hexIndex]
+        guard let gameScene = gameScene else { return nil }
+        
+        let id = gameScene.playerPlacementArray[hexIndex]
         guard id != 0 else { return nil }
         return Characters.allCharacters.first { $0.id == id }
     }

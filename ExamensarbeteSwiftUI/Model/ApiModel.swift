@@ -32,6 +32,11 @@ struct UpdateCharactersRequest: Codable {
     var characters: Array<Int>
 }
 
+/// PUT, update defense
+struct UpdateDefenseRequest: Codable {
+    var defense: Array<Int>
+}
+
 struct AuthResponse: Decodable {
     var success: Bool
     var message: String
@@ -39,7 +44,7 @@ struct AuthResponse: Decodable {
     var username: String
 }
 
-struct CharacterUpdateResponse: Decodable {
+struct GeneralUpdateResponse: Decodable {
     let success: Bool
     let message: String
 }

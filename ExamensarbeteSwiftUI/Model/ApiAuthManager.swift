@@ -50,12 +50,24 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
-    func tempGetCharacters(userId: Int, characters: [Int]) async throws -> CharacterUpdateResponse {
+    func tempGetCharacters(userId: Int, characters: [Int]) async throws -> GeneralUpdateResponse {
         let updateCharacterRequest = UpdateCharactersRequest(characters: characters)
 
-        let response: CharacterUpdateResponse = try await api.put(
+        let response: GeneralUpdateResponse = try await api.put(
             url: "\(BASE_URL)/update-characters?id=\(userId)",
             body: updateCharacterRequest,
+            token: token
+        )
+
+        return response
+    }
+    
+    func setDefense(userId: Int, defense: [Int]) async throws -> GeneralUpdateResponse {
+        let updateDefenseRequest = UpdateDefenseRequest(defense: defense)
+
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-defense?id=\(userId)",
+            body: updateDefenseRequest,
             token: token
         )
 

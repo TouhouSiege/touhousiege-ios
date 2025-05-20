@@ -24,6 +24,7 @@ class GameScene: SKScene {
     var profilePicturesCurrentlyShowingPositions: [CGPoint] = []
     var profilePicturesTemporaryArrayOfIds: [Int] = []
     var enemyPositions: [Int: Character] = [:]
+    var playerPlacementArray: [Int] = Array(repeating: 0, count: 15)
 
     var leftArrow: SKSpriteNode?
     var rightArrow: SKSpriteNode?
@@ -138,18 +139,18 @@ class GameScene: SKScene {
                     
                     if let placedCharacterData = Characters.allCharacters.first(where: { $0.name == placedCharacterName }),
                        let placedCharacterIndex = areaToPlacePlayerCharacter.firstIndex(of: validAreaToPlaceCharacter) {
-                        let previousIndex = vm.playerPlacementArray.firstIndex(where: { $0 == placedCharacterData.id })
+                        let previousIndex = playerPlacementArray.firstIndex(where: { $0 == placedCharacterData.id })
                         
                         /// Makes sure if a placed character sprite is moved the index in the array gets removed so no duplicates are made
                         if previousIndex != nil && previousIndex != placedCharacterIndex {
                             guard let previousIndex else { return }
                             
-                            vm.playerPlacementArray[previousIndex] = 0
+                            playerPlacementArray[previousIndex] = 0
                         }
                         
                         /// Removes sprite and re enables picking of that character if a sprite was already placed
-                        if vm.playerPlacementArray[placedCharacterIndex] != 0 {
-                            let replacedCharacterId = vm.playerPlacementArray[placedCharacterIndex]
+                        if playerPlacementArray[placedCharacterIndex] != 0 {
+                            let replacedCharacterId = playerPlacementArray[placedCharacterIndex]
                             if let replacedCharacterName = Characters.allCharacters.first(where: { $0.id == replacedCharacterId })?.name,
                                let replacedCharacter = placedCharacters[replacedCharacterName] {
                                 
@@ -157,11 +158,11 @@ class GameScene: SKScene {
                                 replacedCharacter.removeFromParent()
                                 reEnableCharacterProfileSelection(characterName: replacedCharacterName)
                             }
-                            vm.playerPlacementArray[placedCharacterIndex] = 0
+                            playerPlacementArray[placedCharacterIndex] = 0
                         }
                         
                         /// Add placed character to the board and saves id, character and index
-                        vm.playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
+                        playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
                         placedCharacters[placedCharacterName] = character
                         vm.playerSpritesHexaCoord[placedCharacterIndex] = character
                     }
@@ -172,8 +173,8 @@ class GameScene: SKScene {
                 } else {
                     /// If dragged outside valid position, resets character
                     if let characterId = Characters.allCharacters.first(where: { $0.name == character.name })?.id {
-                        if let index = vm.playerPlacementArray.firstIndex(where: { $0 == characterId }) {
-                            vm.playerPlacementArray[index] = 0
+                        if let index = playerPlacementArray.firstIndex(where: { $0 == characterId }) {
+                            playerPlacementArray[index] = 0
                         }
                     }
                     
