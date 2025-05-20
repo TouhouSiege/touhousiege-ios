@@ -45,11 +45,6 @@ struct HomeView: View {
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .about)
                 }, text: "About").offset(x: width * 0.18)
-                
-                ButtonBig(function: {
-                    apiAuthManager.logoutUser()
-                    navigationManager.navigateTo(screen: .landing)
-                }, text: "Log Out")
             }
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {

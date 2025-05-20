@@ -23,6 +23,8 @@ struct NavigationScreenManager {
             return AnyView(ShopView())
         case .register:
             return AnyView(RegisterView())
+        case .settings:
+            return AnyView(SettingsView())
         }
     }
 }

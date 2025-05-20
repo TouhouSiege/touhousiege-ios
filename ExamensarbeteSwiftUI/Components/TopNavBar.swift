@@ -68,7 +68,7 @@ struct TopNavBar: View {
                         
                         HStack {
                             Button(action: {
-                                
+                                navigationManager.navigateTo(screen: .settings)
                             }) {
                                 Image(systemName: "gear")
                                     .resizable()
