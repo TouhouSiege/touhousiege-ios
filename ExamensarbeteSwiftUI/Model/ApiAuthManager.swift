@@ -87,6 +87,28 @@ class ApiAuthManager: ObservableObject {
         
         return response
     }
+    
+    func updateEndOfGame(userId: Int, caseGame: Int) async throws -> GeneralUpdateResponse {
+        var updateEndOfGameRequest: UpdateEndOfGameRequest? = nil
+        
+        switch caseGame {
+        case 1: updateEndOfGameRequest = UpdateEndOfGameRequest(caseGame: 1)
+        case 2: updateEndOfGameRequest = UpdateEndOfGameRequest(caseGame: 2)
+        case 3: updateEndOfGameRequest = UpdateEndOfGameRequest(caseGame: 3)
+        case 4: updateEndOfGameRequest = UpdateEndOfGameRequest(caseGame: 4)
+        default: print("Error, no end of game status was valid!")
+        }
+        
+        guard let updateEndOfGameRequest = updateEndOfGameRequest else { return GeneralUpdateResponse(success: false, message: "Failed to find a valid number for case!") }
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-end-of-game?id=\(userId)",
+            body: updateEndOfGameRequest,
+            token: token
+        )
+
+        return response
+    }
 
     func logoutUser() {
         keychain.delete("token")

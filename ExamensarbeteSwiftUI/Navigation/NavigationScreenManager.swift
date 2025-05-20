@@ -3,7 +3,7 @@ import SwiftUI
 struct NavigationScreenManager {
     static func viewForScreen(_ screen: Screen) -> AnyView {
         switch screen {
-        case .game(var isComputerPlaying):
+        case .game(let isComputerPlaying):
             return AnyView(GameView(isComputerPlaying: isComputerPlaying))
         case .home:
             return AnyView(HomeView())

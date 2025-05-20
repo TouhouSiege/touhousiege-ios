@@ -60,6 +60,8 @@ struct GameView: View {
             gameScene.user = userManager.user
             gameScene.isDefenseSetting = false
             gameScene.isComputerPlaying = isComputerPlaying
+            vm.user = userManager.user
+            vm.apiAuthManager = apiAuthManager
             
             /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
              *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
@@ -95,6 +97,7 @@ struct GameView: View {
                             if response.success {
                                 if let randomPlayer = response.user {
                                     gameScene.enemyPlacementArrayPlayer = randomPlayer.defense
+                                    vm.enemyUser = randomPlayer
                                 }
                             } 
                         } catch let error {

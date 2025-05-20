@@ -11,6 +11,10 @@ import SpriteKit
 class GameViewModel {
     weak var gameScene: GameScene?
     
+    var user: User?
+    var apiAuthManager: ApiAuthManager?
+    var enemyUser: User?
+    
     let width = UIScreen.main.bounds.width
     
     var playerHexagonCoordinates: [CGPoint] = []
@@ -41,11 +45,15 @@ class GameViewModel {
     var isGameOver: Bool = false {
         didSet {
             if playerWon {
-                winner(enemyWon: false)
+                Task {
+                    await winner(enemyWon: false)
+                }
             }
             
             if enemyWon {
-                winner(enemyWon: true)
+                Task {
+                    await winner(enemyWon: true)
+                }
             }
         }
     }
@@ -66,9 +74,19 @@ class GameViewModel {
         gameScene.placeEnemyCharacters(enemyArray: enemyPlacementArrayPlayer)
     }
     
+    func checkIfEnemyPlayerIsComputer() {
+        guard let isComputerPlaying = gameScene?.isComputerPlaying else { return }
+        
+        if !isComputerPlaying {
+            guard let enemyUserDefense = enemyUser?.defense else { return }
+            enemyPlacementArrayComputer = enemyUserDefense
+        }
+    }
+    
     func startGame() {
         print("**********GAME STARTED!**********")
-
+        
+        checkIfEnemyPlayerIsComputer()
         removeProfilesPicturesAndArrows()
         resetTurnQueue()
     }
@@ -196,7 +214,7 @@ class GameViewModel {
     }
     
     /// Gets called when a winner is found TODO - IMPLEMENT AFTER STUFF
-    func winner(enemyWon: Bool) {
+    func winner(enemyWon: Bool) async {
         if enemyWon {
             print("haha du förlorade")
         }
@@ -206,6 +224,71 @@ class GameViewModel {
         }
 
         observableBoolGameStatus = true
+        
+        guard let gameScene = gameScene else { return }
+        guard let isComputerPlaying = await gameScene.isComputerPlaying else { return }
+        
+        await endOfGameCalculationsAndBackendCalls(isComputerPlaying: isComputerPlaying)
+    }
+    
+    /// Function that checks what variable to update in the database if ethier player or computer or enemy player wins
+    func endOfGameCalculationsAndBackendCalls(isComputerPlaying: Bool) async {
+        guard let user = user else { return }
+        guard let apiAuthManager = apiAuthManager else { return }
+   
+        if isComputerPlaying {
+            if playerWon {
+                do {
+                    let response = try await apiAuthManager.updateEndOfGame(userId: user.id, caseGame: 1)
+                    print(response.message)
+                } catch let error {
+                    print("Error updating PvM Winner: \(error)")
+                }
+            }
+            
+            if enemyWon {
+                do {
+                    let response = try await apiAuthManager.updateEndOfGame(userId: user.id, caseGame: 2)
+                    print(response.message)
+                } catch let error {
+                    print("Error updating PvM Loser: \(error)")
+                }
+            }
+        } else {
+            guard let enemyUser = enemyUser else { return }
+            
+            if playerWon {
+                do {
+                    let response = try await apiAuthManager.updateEndOfGame(userId: user.id, caseGame: 3)
+                    print(response.message)
+                } catch let error {
+                    print("Error updating PvP Winner: \(error)")
+                }
+                
+                do {
+                    let response = try await apiAuthManager.updateEndOfGame(userId: enemyUser.id, caseGame: 4)
+                    print(response.message)
+                } catch let error {
+                    print("Error updating Enemy PvP Loser: \(error)")
+                }
+            }
+            
+            if enemyWon {
+                do {
+                    let response = try await apiAuthManager.updateEndOfGame(userId: user.id, caseGame: 4)
+                    print(response.message)
+                } catch let error {
+                    print("Error updating PvP Loser: \(error)")
+                }
+                
+                do {
+                    let response = try await apiAuthManager.updateEndOfGame(userId: enemyUser.id, caseGame: 3)
+                    print(response.message)
+                } catch let error {
+                    print("Error updating Enemy PvP Winnter: \(error)")
+                }
+            }
+        }
     }
     
     func attackAnimationsAndOutcome(characterToActSprite: SKSpriteNode, characterToAttackSprite: SKSpriteNode, isTargetEnemy: Bool, completion: @escaping () -> Void) {

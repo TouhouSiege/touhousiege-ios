@@ -41,6 +41,11 @@ struct UpdateDefenseRequest: Codable {
     var defense: Array<Int>
 }
 
+/// PUT, update rankings pvm win
+struct UpdateEndOfGameRequest: Codable {
+    var caseGame: Int
+}
+
 /// GET, random player
 struct GetRandomPlayerDefense: Codable {
     var user: User
