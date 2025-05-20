@@ -524,6 +524,11 @@ class GameViewModel: ObservableObject {
     }
 }
 
+/// To track if a character is placed on the board
+class CheckForCharactersPlaced: ObservableObject {
+    @Published var isCharactersPlaced: Bool = false
+}
+
 /// For turn queue structure
 struct CharacterOnBoard {
     let character: Character

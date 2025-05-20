@@ -17,13 +17,26 @@ class GameScene: SKScene {
     var user: User?
     var isDefenseSetting: Bool?
     var isComputerPlaying: Bool?
+    var checkForCharactersPlaced: CheckForCharactersPlaced?
+    
     var enemyPlacementArrayPlayer: [Int]? {
         didSet {
             vm?.randomEnemyDelayFunction()
         }
     }
     
-    var placedCharacters: [String: SKSpriteNode] = [:]
+    var placedCharacters: [String: SKSpriteNode] = [:] {
+        didSet {
+            if !placedCharacters.isEmpty {
+                checkForCharactersPlaced?.isCharactersPlaced = true
+            }
+            
+            if placedCharacters.isEmpty {
+                checkForCharactersPlaced?.isCharactersPlaced = false
+            }
+        }
+    }
+    
     var disabledProfiles: [String: SKSpriteNode] = [:]
     var disabledProfilesStrings: [String] = []
     var profilePicturesCurrentlyShowing: [SKSpriteNode] = []
@@ -107,7 +120,6 @@ class GameScene: SKScene {
                     
                     self.addChild(newCharacterSpriteBase)
                     
-                    placedCharacters[realCharacterName] = newCharacterSpriteBase
                     currentSelectedCharacter = newCharacterSpriteBase
                     disableCharacterProfileSelection(characterName: realCharacterName)
                 }

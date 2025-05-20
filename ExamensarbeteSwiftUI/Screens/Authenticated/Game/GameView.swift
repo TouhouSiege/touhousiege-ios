@@ -21,9 +21,10 @@ struct GameView: View {
     let height: CGFloat = UIScreen.main.bounds.height
     
     @StateObject var vm = GameViewModel()
+    @StateObject var checkForCharactersPlaced = CheckForCharactersPlaced()
     @State var gameScene: GameScene = GameScene()
     @State var endGameText: String = ""
-    @State private var opacityAnimation: Double = 0.0
+    @State var opacityAnimation: Double = 0.0
     
     var body: some View {
         ZStack {
@@ -84,6 +85,8 @@ struct GameView: View {
                                 vm.startGame()
                             }, text: "Start")
                             .offset(x: -width * TouhouSiegeStyle.Decimals.xSmall)
+                            .disabled(!checkForCharactersPlaced.isCharactersPlaced)
+                            .opacity(checkForCharactersPlaced.isCharactersPlaced ? 1 : 0.3)
                             
                             ButtonSmall(function: {
                                 navigationManager.navigateTo(screen: .play)
@@ -97,6 +100,7 @@ struct GameView: View {
             gameScene.user = userManager.user
             gameScene.isDefenseSetting = false
             gameScene.isComputerPlaying = isComputerPlaying
+            gameScene.checkForCharactersPlaced = checkForCharactersPlaced
             vm.user = userManager.user
             vm.apiAuthManager = apiAuthManager
             
