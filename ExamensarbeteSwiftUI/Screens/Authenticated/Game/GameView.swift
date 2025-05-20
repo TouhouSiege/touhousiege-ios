@@ -16,6 +16,7 @@ struct GameView: View {
     var isComputerPlaying: Bool
     
     @State var isHidden: Bool = false
+    @State var isWinnerFound = false
     
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
@@ -24,7 +25,8 @@ struct GameView: View {
     @StateObject var checkForCharactersPlaced = CheckForCharactersPlaced()
     @State var gameScene: GameScene = GameScene()
     @State var endGameText: String = ""
-    @State var opacityAnimation: Double = 0.0
+    @State var opacityAnimationResultText: Double = 0.0
+    @State var opacityAnimationContinueText: Double = 0.0
     
     var body: some View {
         ZStack {
@@ -40,33 +42,47 @@ struct GameView: View {
                 if vm.isGameOver {
                     ZStack {
                         Color.black
-                            .opacity(opacityAnimation)
+                            .opacity(opacityAnimationResultText)
                             .edgesIgnoringSafeArea(.all)
                             .onAppear {
                                 withAnimation(.easeIn(duration: 2.5)) {
-                                    opacityAnimation = 0.8
+                                    opacityAnimationResultText = TouhouSiegeStyle.BigDecimals.xxLarge
                                 }
                             }
-                        
-                        Text(endGameText)
-                            .font(TouhouSiegeStyle.FontSize.ultra)
-                            .foregroundColor(.white)
-                            .opacity(opacityAnimation)
-                            .onAppear {
-                                withAnimation(.easeIn(duration: 2.5)) {
-                                    opacityAnimation = 0.8
+                        ZStack {
+                            Text(endGameText)
+                                .font(TouhouSiegeStyle.FontSize.ultra)
+                                .foregroundColor(.white)
+                                .opacity(opacityAnimationResultText)
+                                .onAppear {
+                                    withAnimation(.easeIn(duration: 2.5)) {
+                                        opacityAnimationResultText = TouhouSiegeStyle.BigDecimals.xxLarge
+                                    }
                                 }
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                                    gameScene.removeAllChildren()
-                                    navigationManager.navigateTo(screen: .afterGame(isComputerPlaying: isComputerPlaying))
-                                }
+                                .offset(y: -width * TouhouSiegeStyle.Decimals.medium)
+                            
+                            if isWinnerFound {
+                                Text("Press anywhere to continue")
+                                    .font(TouhouSiegeStyle.FontSize.large)
+                                    .foregroundColor(.white)
+                                    .opacity(opacityAnimationContinueText)
+                                    .onAppear {
+                                        withAnimation(Animation.easeIn(duration: 1.0).repeatForever(autoreverses: true)) {
+                                            opacityAnimationContinueText = TouhouSiegeStyle.BigDecimals.xxLarge
+                                        }
+                                    }
+                                    .offset(y: width * TouhouSiegeStyle.Decimals.medium)
                             }
+                        }
                     }.onAppear {
                         if vm.playerWon {
                             endGameText = "You Won"
                         } else {
                             endGameText = "You Lose"
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                            isWinnerFound = true
                         }
                     }
                 }
@@ -140,7 +156,7 @@ struct GameView: View {
                                     gameScene.enemyPlacementArrayPlayer = randomPlayer.defense
                                     vm.enemyUser = randomPlayer
                                 }
-                            } 
+                            }
                         } catch let error {
                             print("Error loading random enemy player: \(error)")
                         }
@@ -148,6 +164,11 @@ struct GameView: View {
                 }
             } else {
                 print("ERROR LOADING GAME...")
+            }
+        }
+        .onTapGesture {
+            if isWinnerFound {
+                navigationManager.navigateTo(screen: .afterGame(isComputerPlaying: isComputerPlaying))
             }
         }
     }
