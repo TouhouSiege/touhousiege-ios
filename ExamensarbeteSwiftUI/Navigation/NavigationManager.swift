@@ -20,6 +20,7 @@ enum Screen: Hashable {
     case shop
     case register
     case settings
+    case play
 }
 
 /// Statenavigation with EnvironmentObject

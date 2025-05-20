@@ -25,6 +25,8 @@ struct NavigationScreenManager {
             return AnyView(RegisterView())
         case .settings:
             return AnyView(SettingsView())
+        case .play:
+            return AnyView(PlayView())
         }
     }
 }

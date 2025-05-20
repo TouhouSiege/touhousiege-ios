@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AboutView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var apiAuthManager: ApiAuthManager
+    @EnvironmentObject var userManager: UserManager
     
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
@@ -17,12 +19,20 @@ struct AboutView: View {
         ZStack {
             BackgroundMain()
             
+            if userManager.user != nil {
+                TopNavBar()
+            }
+            
             VStack {
                 Spacer()
                 
-                ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .home)
-                }, text: "Back").offset(y: -width * 0.03)
+                HStack {
+                    ButtonBig(function: {
+                        navigationManager.navigateTo(screen: .home)
+                    }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                    
+                    Spacer()
+                }
             }
         }
     }

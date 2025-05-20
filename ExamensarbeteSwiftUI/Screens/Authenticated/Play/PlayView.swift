@@ -1,13 +1,13 @@
 //
-//  LoggedInLandingPage.swift
+//  PlayGameView.swift
 //  ExamensarbeteSwiftUI
 //
-//  Created by Michihide Sugito on 2025-02-26.
+//  Created by Michihide Sugito on 2025-05-20.
 //
 
 import SwiftUI
 
-struct HomeView: View {
+struct PlayView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var apiAuthManager: ApiAuthManager
     @EnvironmentObject var userManager: UserManager
@@ -15,8 +15,7 @@ struct HomeView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    @State var testText = "Not loaded yet..."
-    @State var hasCharacters = false
+    @State var isDefenseSet: Bool = false
     
     var body: some View {
         ZStack {
@@ -25,26 +24,29 @@ struct HomeView: View {
             
             VStack {
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .play)
-                }, text: "Play").offset(x: width * 0.15)
-                    .disabled(!hasCharacters)
-                    .opacity(hasCharacters ? 1 : 0.5)
+                    navigationManager.navigateTo(screen: .game)
+                }, text: "Player vs Computer").offset(x: -width * 0.25)
+                    .disabled(!isDefenseSet)
+                    .opacity(isDefenseSet ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .gacha)
-                }, text: "Gacha").offset(x: width * 0.12)
+                    navigationManager.navigateTo(screen: .game)
+                }, text: "Player vs Player").offset(x: -width * 0.22)
+                    .disabled(!isDefenseSet)
+                    .opacity(isDefenseSet ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .shop)
-                }, text: "Shop").offset(x: width * 0.12)
+                }, text: "Colosseum").offset(x: -width * 0.22)
+                    .disabled(true)
+                    .opacity(0.5)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .characters)
-                }, text: "Characters").offset(x: width * 0.15)
+                }, text: "Defense").offset(x: -width * 0.25)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .about)
-                }, text: "About").offset(x: width * 0.18)
+                    navigationManager.navigateTo(screen: .home)
+                }, text: "Back").offset(x: -width * 0.28)
             }.offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
@@ -52,7 +54,7 @@ struct HomeView: View {
                     try await userManager.getUser()
                     
                     if let user = userManager.user {
-                        hasCharacters = !user.characters.isEmpty
+                        isDefenseSet = !user.defense.isEmpty
                     }
                 } catch let error {
                     print("Error loading user: \(error)")
@@ -72,8 +74,9 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    PlayView()
         .environmentObject(NavigationManager())
         .environmentObject(UserManager(apiAuthManager: ApiAuthManager()))
         .environmentObject(ApiAuthManager())
 }
+

@@ -35,7 +35,7 @@ struct TopNavBar: View {
                             }) {
                                 Image(systemName: "house")
                                     .resizable()
-                                    .frame(width: height * 0.075, height: height * 0.075)
+                                    .frame(width: height * 0.07, height: height * 0.07)
                                     .foregroundStyle(.white)
                             }
                         }
@@ -72,7 +72,7 @@ struct TopNavBar: View {
                             }) {
                                 Image(systemName: "gear")
                                     .resizable()
-                                    .frame(width: height * 0.075, height: height * 0.075)
+                                    .frame(width: height * 0.07, height: height * 0.07)
                                     .foregroundStyle(.white)
                             }
                         }

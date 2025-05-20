@@ -23,11 +23,27 @@ struct GachaView: View {
             TopNavBar()
             
             VStack {
-                ButtonBig(function: {
-                    Task {
-                        await vm.rollTenCharacters()
-                    }
-                }, text: "Roll Characters")
+                Spacer()
+                
+                HStack {
+                    ButtonBig(function: {
+                        navigationManager.navigateTo(screen: .home)
+                    }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        ButtonBig(function: {
+                            
+                        }, text: "Roll x 1")
+                        
+                        ButtonBig(function: {
+                            Task {
+                                await vm.rollTenCharacters()
+                            }
+                        }, text: "Roll x 10")
+                    }.offset(x: -width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                }
             }
         }
         .onAppear {
