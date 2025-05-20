@@ -83,6 +83,12 @@ class GameViewModel: ObservableObject {
         }
     }
     
+    func resetGame() {
+        for character in Characters.allCharacters {
+            character.stats.currentHp = character.stats.maxHp
+        }
+    }
+    
     func startGame() {
         print("**********GAME STARTED!**********")
         
@@ -149,7 +155,7 @@ class GameViewModel: ObservableObject {
         }
         
         /// Checks if a character has fainted during the round and skips if that characters turn comes up
-        if turnQueueArray[turnQueueIndexOfWhosTurn].character.stats.hp <= 0 {
+        if turnQueueArray[turnQueueIndexOfWhosTurn].character.stats.currentHp <= 0 {
             turnQueueIndexOfWhosTurn += 1
             characterPreTurnProcess()
             return
@@ -224,6 +230,7 @@ class GameViewModel: ObservableObject {
         }
 
         observableBoolGameStatus = true
+        resetGame()
         
         guard let gameScene = gameScene else { return }
         guard let isComputerPlaying = await gameScene.isComputerPlaying else { return }
@@ -363,7 +370,7 @@ class GameViewModel: ObservableObject {
         let characterToAttackFaintAnimation = SKAction.animate(with: characterToAttackFaintTextures, timePerFrame: partThreeDuration / Double(characterToAttackFaintTextures.count))
         
         let characterToAttackFaintOrIdleAction = SKAction.run {
-            if characterToAttackData.stats.hp <= 0 {
+            if characterToAttackData.stats.currentHp <= 0 {
                 characterToAttackSprite.run(characterToAttackFaintAnimation)
             } else {
                 self.gameScene?.startIdleAnimation(character: characterToAttackSprite, characterName: characterToAttackName)
@@ -371,7 +378,7 @@ class GameViewModel: ObservableObject {
         }
         
         let characterToAttackRemovalAction = SKAction.run {
-            if characterToAttackData.stats.hp <= 0 {
+            if characterToAttackData.stats.currentHp <= 0 {
                 self.removeFaintedCharacterVisual(characterToAttackData, targetSprite: characterToAttackSprite)
             }
         }
@@ -408,12 +415,12 @@ class GameViewModel: ObservableObject {
         
         guard calculatedDamage > 0 else { return print("You did nothing!") }
         
-        target.stats.hp -= calculatedDamage
+        target.stats.currentHp -= calculatedDamage
         
-        print("\(isTargetEnemy ? "Player" : "Enemy") \(attacker.name) deals \(calculatedDamage) damage to \(isTargetEnemy ? "Enemy" : "Player") \(target.name)! Remaining HP: \(target.stats.hp)")
+        print("\(isTargetEnemy ? "Player" : "Enemy") \(attacker.name) deals \(calculatedDamage) damage to \(isTargetEnemy ? "Enemy" : "Player") \(target.name)! Remaining HP: \(target.stats.currentHp)")
 
         
-        if target.stats.hp <= 0 {
+        if target.stats.currentHp <= 0 {
             print("\(isTargetEnemy ? "Enemy" : "Player") \(target.name) has fainted!")
             removeFaintedCharacterLogical(target, isTargetEnemy: isTargetEnemy)
         }

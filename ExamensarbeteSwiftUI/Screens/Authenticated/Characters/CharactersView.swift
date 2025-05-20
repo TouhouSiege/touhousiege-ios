@@ -57,7 +57,7 @@ struct CharactersView: View {
                         .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
                     CharacterStatsBanner(statType: "Defense", text: String(selectedCharacter.stats.defense))
                         .offset(x: width * TouhouSiegeStyle.Decimals.large)
-                    CharacterStatsBanner(statType: "Health", text: String(selectedCharacter.stats.hp))
+                    CharacterStatsBanner(statType: "Health", text: String(selectedCharacter.stats.maxHp))
                         .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
                     CharacterStatsBanner(statType: "Speed", text: String(selectedCharacter.stats.speed))
                         .offset(x: width * TouhouSiegeStyle.Decimals.medium)

@@ -28,15 +28,17 @@ class Character: Identifiable {
     class Stats {
         var attack: Int
         var defense: Int
-        var hp: Int
+        var maxHp: Int
+        var currentHp: Int
         var speed: Int
         var classType: ClassType
         var attackType: AttackType
         
-        init(attack: Int, defense: Int, hp: Int, speed: Int, classType: ClassType, attackType: AttackType) {
+        init(attack: Int, defense: Int, maxHp: Int, currentHp: Int, speed: Int, classType: ClassType, attackType: AttackType) {
             self.attack = attack
             self.defense = defense
-            self.hp = hp
+            self.maxHp = maxHp
+            self.currentHp = currentHp
             self.speed = speed
             self.classType = classType
             self.attackType = attackType
@@ -101,7 +103,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 30,
                 defense: 0,
-                hp: 100,
+                maxHp: 100,
+                currentHp: 100,
                 speed: 110,
                 classType: .Mage,
                 attackType: .Front
@@ -126,7 +129,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 30,
                 defense: 0,
-                hp: 80,
+                maxHp: 160,
+                currentHp: 160,
                 speed: 120,
                 classType: .Warrior,
                 attackType: .Front
@@ -151,7 +155,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 30,
                 defense: 0,
-                hp: 120,
+                maxHp: 120,
+                currentHp: 120,
                 speed: 100,
                 classType: .Mage,
                 attackType: .Skip
@@ -176,7 +181,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 24,
                 defense: 10,
-                hp: 200,
+                maxHp: 200,
+                currentHp: 200,
                 speed: 60,
                 classType: .Mage,
                 attackType: .Back
@@ -201,7 +207,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 40,
                 defense: 2,
-                hp: 76,
+                maxHp: 70,
+                currentHp: 70,
                 speed: 130,
                 classType: .Mage,
                 attackType: .Back
@@ -227,7 +234,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 30,
                 defense: 0,
-                hp: 100,
+                maxHp: 100,
+                currentHp: 100,
                 speed: 110,
                 classType: .Mage,
                 attackType: .Front
@@ -252,7 +260,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 30,
                 defense: 0,
-                hp: 80,
+                maxHp: 160,
+                currentHp: 160,
                 speed: 120,
                 classType: .Warrior,
                 attackType: .Front
@@ -277,7 +286,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 30,
                 defense: 0,
-                hp: 120,
+                maxHp: 120,
+                currentHp: 120,
                 speed: 100,
                 classType: .Mage,
                 attackType: .Skip
@@ -302,7 +312,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 24,
                 defense: 10,
-                hp: 200,
+                maxHp: 200,
+                currentHp: 200,
                 speed: 60,
                 classType: .Mage,
                 attackType: .Back
@@ -327,7 +338,8 @@ struct Characters {
             stats: Character.Stats(
                 attack: 40,
                 defense: 2,
-                hp: 76,
+                maxHp: 70,
+                currentHp: 70,
                 speed: 130,
                 classType: .Mage,
                 attackType: .Back
