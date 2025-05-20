@@ -81,16 +81,6 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             let nodes = self.nodes(at: location)
             
-            if nodes.first(where: { $0.name == "rightArrow"}) != nil {
-                leftAndRightArrowFunctionality(arrow: "rightArrow")
-                return
-            }
-            
-            if nodes.first(where: { $0.name == "leftArrow"}) != nil {
-                leftAndRightArrowFunctionality(arrow: "leftArrow")
-                return
-            }
-            
             /// Check for existing character on hexagon
             if let selectedNode = nodes.first(where: { placedCharacters[$0.name ?? ""] != nil }) {
                 currentSelectedCharacter = selectedNode as? SKSpriteNode
@@ -134,67 +124,82 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let vm = vm else { return }
-        let areaToPlacePlayerCharacter = self.children.filter { $0.name == "areatoplacecharacter" }
-        
-        if let character = currentSelectedCharacter {
-            for touch in touches {
-                let location = touch.location(in: self)
-                
-                if let validAreaToPlaceCharacter = areaToPlacePlayerCharacter.first(where: { ($0 as? SKSpriteNode)?.contains(location) ?? false }) {
-                    
-                    character.position = CGPoint(x: validAreaToPlaceCharacter.position.x, y: validAreaToPlaceCharacter.position.y + (width * TouhouSiegeStyle.Decimals.medium))
-                    
-                    guard let placedCharacterName = character.name else { return }
-                    
-                    if let placedCharacterData = Characters.allCharacters.first(where: { $0.name == placedCharacterName }),
-                       let placedCharacterIndex = areaToPlacePlayerCharacter.firstIndex(of: validAreaToPlaceCharacter) {
-                        let previousIndex = playerPlacementArray.firstIndex(where: { $0 == placedCharacterData.id })
-                        
-                        /// Makes sure if a placed character sprite is moved the index in the array gets removed so no duplicates are made
-                        if previousIndex != nil && previousIndex != placedCharacterIndex {
-                            guard let previousIndex else { return }
-                            
-                            playerPlacementArray[previousIndex] = 0
-                        }
-                        
-                        /// Removes sprite and re enables picking of that character if a sprite was already placed
-                        if playerPlacementArray[placedCharacterIndex] != 0 {
-                            let replacedCharacterId = playerPlacementArray[placedCharacterIndex]
-                            if let replacedCharacterName = Characters.allCharacters.first(where: { $0.id == replacedCharacterId })?.name,
-                               let replacedCharacter = placedCharacters[replacedCharacterName] {
-                                
-                                placedCharacters.removeValue(forKey: replacedCharacterName)
-                                replacedCharacter.removeFromParent()
-                                reEnableCharacterProfileSelection(characterName: replacedCharacterName)
-                            }
-                            playerPlacementArray[placedCharacterIndex] = 0
-                        }
-                        
-                        /// Add placed character to the board and saves id, character and index
-                        playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
-                        placedCharacters[placedCharacterName] = character
-                        vm.playerSpritesHexaCoord[placedCharacterIndex] = character
-                    }
-                    
-                    startIdleAnimation(character: character, characterName: character.name ?? "")
-                    disableCharacterProfileSelection(characterName: character.name ?? "")
-                    
-                } else {
-                    /// If dragged outside valid position, resets character
-                    if let characterId = Characters.allCharacters.first(where: { $0.name == character.name })?.id {
-                        if let index = playerPlacementArray.firstIndex(where: { $0 == characterId }) {
-                            playerPlacementArray[index] = 0
-                        }
-                    }
-                    
-                    placedCharacters.removeValue(forKey: character.name ?? "")
-                    character.removeFromParent()
-                    reEnableCharacterProfileSelection(characterName: character.name ?? "")
-                }
+        for touch in touches {
+            let location = touch.location(in: self)
+            let nodes = self.nodes(at: location)
+            
+            if nodes.first(where: { $0.name == "rightArrow"}) != nil {
+                leftAndRightArrowFunctionality(arrow: "rightArrow")
+                return
             }
             
-            currentSelectedCharacter = nil
+            if nodes.first(where: { $0.name == "leftArrow"}) != nil {
+                leftAndRightArrowFunctionality(arrow: "leftArrow")
+                return
+            }
+            
+            guard let vm = vm else { return }
+            let areaToPlacePlayerCharacter = self.children.filter { $0.name == "areatoplacecharacter" }
+            
+            if let character = currentSelectedCharacter {
+                for touch in touches {
+                    let location = touch.location(in: self)
+                    
+                    if let validAreaToPlaceCharacter = areaToPlacePlayerCharacter.first(where: { ($0 as? SKSpriteNode)?.contains(location) ?? false }) {
+                        
+                        character.position = CGPoint(x: validAreaToPlaceCharacter.position.x, y: validAreaToPlaceCharacter.position.y + (width * TouhouSiegeStyle.Decimals.medium))
+                        
+                        guard let placedCharacterName = character.name else { return }
+                        
+                        if let placedCharacterData = Characters.allCharacters.first(where: { $0.name == placedCharacterName }),
+                           let placedCharacterIndex = areaToPlacePlayerCharacter.firstIndex(of: validAreaToPlaceCharacter) {
+                            let previousIndex = playerPlacementArray.firstIndex(where: { $0 == placedCharacterData.id })
+                            
+                            /// Makes sure if a placed character sprite is moved the index in the array gets removed so no duplicates are made
+                            if previousIndex != nil && previousIndex != placedCharacterIndex {
+                                guard let previousIndex else { return }
+                                
+                                playerPlacementArray[previousIndex] = 0
+                            }
+                            
+                            /// Removes sprite and re enables picking of that character if a sprite was already placed
+                            if playerPlacementArray[placedCharacterIndex] != 0 {
+                                let replacedCharacterId = playerPlacementArray[placedCharacterIndex]
+                                if let replacedCharacterName = Characters.allCharacters.first(where: { $0.id == replacedCharacterId })?.name,
+                                   let replacedCharacter = placedCharacters[replacedCharacterName] {
+                                    
+                                    placedCharacters.removeValue(forKey: replacedCharacterName)
+                                    replacedCharacter.removeFromParent()
+                                    reEnableCharacterProfileSelection(characterName: replacedCharacterName)
+                                }
+                                playerPlacementArray[placedCharacterIndex] = 0
+                            }
+                            
+                            /// Add placed character to the board and saves id, character and index
+                            playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
+                            placedCharacters[placedCharacterName] = character
+                            vm.playerSpritesHexaCoord[placedCharacterIndex] = character
+                        }
+                        
+                        startIdleAnimation(character: character, characterName: character.name ?? "")
+                        disableCharacterProfileSelection(characterName: character.name ?? "")
+                        
+                    } else {
+                        /// If dragged outside valid position, resets character
+                        if let characterId = Characters.allCharacters.first(where: { $0.name == character.name })?.id {
+                            if let index = playerPlacementArray.firstIndex(where: { $0 == characterId }) {
+                                playerPlacementArray[index] = 0
+                            }
+                        }
+                        
+                        placedCharacters.removeValue(forKey: character.name ?? "")
+                        character.removeFromParent()
+                        reEnableCharacterProfileSelection(characterName: character.name ?? "")
+                    }
+                }
+                
+                currentSelectedCharacter = nil
+            }
         }
     }
     
