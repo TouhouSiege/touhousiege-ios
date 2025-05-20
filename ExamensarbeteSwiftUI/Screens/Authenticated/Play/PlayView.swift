@@ -41,7 +41,7 @@ struct PlayView: View {
                     .opacity(0.5)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .characters)
+                    navigationManager.navigateTo(screen: .defense)
                 }, text: "Defense").offset(x: -width * 0.25)
                 
                 ButtonBig(function: {

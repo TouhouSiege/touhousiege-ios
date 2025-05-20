@@ -15,6 +15,7 @@ class GameScene: SKScene {
     
     var vm: GameViewModel?
     var user: User?
+    var isDefenseSetting: Bool?
     
     var placedCharacters: [String: SKSpriteNode] = [:]
     var disabledProfiles: [String: SKSpriteNode] = [:]
@@ -43,30 +44,31 @@ class GameScene: SKScene {
         
         print("GameScene Loaded!")
         guard let user = user else { return print("No characters found!") }
+        guard let isDefenseSetting = isDefenseSetting else { return }
         
         profilePicturesTemporaryArrayOfIds = user.characters
         
         print("Loaded Characters: \(user.characters)")
-        createArrowButtons()
-        createHexagonPlatforms()
-        createEnemyHexagonPlatforms()
-        createCharacterProfileSelection(characterIds: user.characters)
-        placeEnemyCharacters()
+        
+        if isDefenseSetting {
+            createArrowButtons()
+            createHexagonPlatforms()
+            createCharacterProfileSelection(characterIds: user.characters)
+        } else {
+            createArrowButtons()
+            createHexagonPlatforms()
+            createEnemyHexagonPlatforms()
+            createCharacterProfileSelection(characterIds: user.characters)
+            placeEnemyCharacters()
+        }
     }
     
     var currentSelectedCharacter: SKSpriteNode?
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let vm = vm else { return }
-        
         for touch in touches {
             let location = touch.location(in: self)
             let nodes = self.nodes(at: location)
-            
-            if nodes.first(where: { $0.name == "startButton" }) != nil {
-                vm.startGame()
-                return
-            }
             
             if nodes.first(where: { $0.name == "rightArrow"}) != nil {
                 leftAndRightArrowFunctionality(arrow: "rightArrow")
@@ -362,11 +364,20 @@ class GameScene: SKScene {
     /// Creates the player side hexagon platforms
     func createHexagonPlatforms() {
         guard let vm = vm else { return }
+        guard let isDefenseSetting = isDefenseSetting else { return }
         
         let hexagonSize = CGSize(width: width * TouhouSiegeStyle.Decimals.xMedium, height: width * TouhouSiegeStyle.Decimals.xMedium)
         let hexagonSpaceBetweenX: CGFloat = hexagonSize.width * 1.1
         let hexagonSpaceBetweenY: CGFloat = hexagonSize.height * 1.1
-        let hexagonStartX: CGFloat = width * (TouhouSiegeStyle.BigDecimals.xxSmall + TouhouSiegeStyle.Decimals.xMedium)
+        //let hexagonStartX: CGFloat = width * (TouhouSiegeStyle.BigDecimals.xxSmall + TouhouSiegeStyle.Decimals.xMedium)
+        let hexagonStartX: CGFloat = {
+            if isDefenseSetting {
+                return ((width / 2) - (hexagonSpaceBetweenX * 3))
+            } else {
+                return width * (TouhouSiegeStyle.BigDecimals.xxSmall + TouhouSiegeStyle.Decimals.xMedium)
+            }
+        }()
+                        
         let hexagonStartY: CGFloat = width * TouhouSiegeStyle.BigDecimals.small
         
         let columns = 5

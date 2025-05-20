@@ -21,6 +21,7 @@ enum Screen: Hashable {
     case register
     case settings
     case play
+    case defense
 }
 
 /// Statenavigation with EnvironmentObject

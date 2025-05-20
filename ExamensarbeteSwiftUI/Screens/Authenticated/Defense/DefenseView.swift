@@ -1,29 +1,28 @@
 //
-//  GameView.swift
+//  DefenseView.swift
 //  ExamensarbeteSwiftUI
 //
-//  Created by Michihide Sugito on 2025-02-26.
+//  Created by Michihide Sugito on 2025-05-20.
 //
 
 import SwiftUI
 import SpriteKit
 
-struct GameView: View {
+struct DefenseView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var userManager: UserManager
-    
-    @State var isHidden: Bool = false
     
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    let vm = GameViewModel()
+    let vmGameLogic = GameViewModel()
+    let vm = DefenseViewModel()
     
     var gameScene: SKScene {
         let gameScene = GameScene()
-        gameScene.vm = vm
+        gameScene.vm = vmGameLogic
         gameScene.user = userManager.user
-        gameScene.isDefenseSetting = false
+        gameScene.isDefenseSetting = true
         
         /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
          *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
@@ -38,7 +37,7 @@ struct GameView: View {
             gameScene.size = CGSize(width: width, height: height)
             gameScene.scaleMode = .fill
             
-            let randomBackground = SKSpriteNode(imageNamed: vm.randomBackgroundGenerator())
+            let randomBackground = SKSpriteNode(imageNamed: vmGameLogic.randomBackgroundGenerator())
             randomBackground.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
             randomBackground.size = gameScene.size
             
@@ -48,7 +47,7 @@ struct GameView: View {
             
             gameScene.addChild(randomBackground)
             gameScene.addChild(randomBackgroundOverlay)
-
+            
             
             
         } else {
@@ -74,19 +73,16 @@ struct GameView: View {
                 HStack {
                     Spacer()
                     
-                    if !isHidden {
-                        HStack {
-                            ButtonSmall(function: {
-                                isHidden = true
-                                vm.startGame()
-                            }, text: "Start")
-                            .offset(x: -width * TouhouSiegeStyle.Decimals.xSmall)
+                    HStack {
+                        ButtonSmall(function: {
                             
-                            ButtonSmall(function: {
-                                navigationManager.navigateTo(screen: .play)
-                            }, text: "Cancel")
-                        }.offset(x: -width * TouhouSiegeStyle.Decimals.small, y: -width * TouhouSiegeStyle.Decimals.xSmall)
-                    }
+                        }, text: "Save")
+                        .offset(x: -width * TouhouSiegeStyle.Decimals.xSmall)
+                        
+                        ButtonSmall(function: {
+                            navigationManager.navigateTo(screen: .play)
+                        }, text: "Cancel")
+                    }.offset(x: -width * TouhouSiegeStyle.Decimals.small, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                 }
             }
         }
@@ -94,7 +90,7 @@ struct GameView: View {
 }
 
 #Preview {
-    GameView()
+    DefenseView()
 }
 
 
