@@ -19,45 +19,8 @@ struct GameView: View {
     
     let vm = GameViewModel()
     
-    var gameScene: SKScene {
-        let gameScene = GameScene()
-        gameScene.vm = vm
-        gameScene.user = userManager.user
-        gameScene.isDefenseSetting = false
-        
-        /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
-         *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
-         */
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            let fullScreen = UIScreen.main.bounds.size
-            
-            let width = fullScreen.width - window.safeAreaInsets.left - window.safeAreaInsets.right
-            let height = fullScreen.height - window.safeAreaInsets.top - window.safeAreaInsets.bottom
-            
-            gameScene.size = CGSize(width: width, height: height)
-            gameScene.scaleMode = .fill
-            
-            let randomBackground = SKSpriteNode(imageNamed: vm.randomBackgroundGenerator())
-            randomBackground.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
-            randomBackground.size = gameScene.size
-            
-            let randomBackgroundOverlay = SKSpriteNode(color: .black, size: gameScene.size)
-            randomBackgroundOverlay.alpha = TouhouSiegeStyle.BigDecimals.small
-            randomBackgroundOverlay.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
-            
-            gameScene.addChild(randomBackground)
-            gameScene.addChild(randomBackgroundOverlay)
-
-            
-            
-        } else {
-            print("ERROR LOADING GAME...")
-        }
-        
-        return gameScene
-    }
-    
+    @State var gameScene: GameScene = GameScene()
+   
     var body: some View {
         ZStack {
             VStack {
@@ -88,6 +51,40 @@ struct GameView: View {
                         }.offset(x: -width * TouhouSiegeStyle.Decimals.small, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                     }
                 }
+            }
+        }.onAppear {
+            gameScene.vm = vm
+            gameScene.user = userManager.user
+            gameScene.isDefenseSetting = false
+            
+            /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
+             *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
+             */
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                let fullScreen = UIScreen.main.bounds.size
+                
+                let width = fullScreen.width - window.safeAreaInsets.left - window.safeAreaInsets.right
+                let height = fullScreen.height - window.safeAreaInsets.top - window.safeAreaInsets.bottom
+                
+                gameScene.size = CGSize(width: width, height: height)
+                gameScene.scaleMode = .fill
+                
+                let randomBackground = SKSpriteNode(imageNamed: vm.randomBackgroundGenerator())
+                randomBackground.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
+                randomBackground.size = gameScene.size
+                
+                let randomBackgroundOverlay = SKSpriteNode(color: .black, size: gameScene.size)
+                randomBackgroundOverlay.alpha = TouhouSiegeStyle.BigDecimals.small
+                randomBackgroundOverlay.position = CGPoint(x: gameScene.size.width / 2, y: gameScene.size.height / 2)
+                
+                gameScene.addChild(randomBackground)
+                gameScene.addChild(randomBackgroundOverlay)
+
+                
+                
+            } else {
+                print("ERROR LOADING GAME...")
             }
         }
     }

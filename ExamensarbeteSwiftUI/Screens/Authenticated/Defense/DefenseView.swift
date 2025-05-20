@@ -19,7 +19,7 @@ struct DefenseView: View {
     let vmGameLogic = GameViewModel()
     let vm = DefenseViewModel()
     
-    @State private var gameScene: GameScene = GameScene()
+    @State var gameScene: GameScene = GameScene()
     
     var body: some View {
         ZStack {
