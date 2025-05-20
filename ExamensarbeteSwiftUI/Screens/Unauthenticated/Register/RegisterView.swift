@@ -41,7 +41,7 @@ struct RegisterView: View {
                                 let _ = try await apiAuthManager.register(email: email, username: username, password: password)
                                 navigationManager.navigateTo(screen: .landing)
                             } catch let error {
-                                print("Error on apitestPOST: \(error)")
+                                print("Error on registering: \(error)")
                             }
                             isLoading = false
                         }

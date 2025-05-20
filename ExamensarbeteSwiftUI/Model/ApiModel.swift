@@ -25,6 +25,10 @@ struct RegisterRequest: Encodable {
     var defense: Array<Int> = []
     var rankingNormalPvp: Int = 0
     var rankingColloseum: Int = 0
+    var pvmWins: Int = 0
+    var pvmLosses: Int = 0
+    var pvpWins: Int = 0
+    var pvpLosses: Int = 0
 }
 
 /// PUT, update characters

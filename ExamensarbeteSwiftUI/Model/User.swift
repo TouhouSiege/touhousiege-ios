@@ -19,4 +19,8 @@ struct User: Decodable, Encodable {
     var defense: [Int]
     var rankingNormalPvp: Int
     var rankingColloseum: Int
+    var pvmWins: Int
+    var pvmLosses: Int
+    var pvpWins: Int
+    var pvpLosses: Int
 }
