@@ -42,6 +42,7 @@ struct CharactersView: View {
                             .scaledToFit()
                             .edgesIgnoringSafeArea(.all)
                             .frame(height: heightFullCover)
+                        
                     }
                 }
             }
@@ -70,6 +71,8 @@ struct CharactersView: View {
                     ScrollView {
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: width * TouhouSiegeStyle.Decimals.xxLarge + TouhouSiegeStyle.Decimals.xxSmall, maximum: width * TouhouSiegeStyle.Decimals.xxLarge + TouhouSiegeStyle.Decimals.xSmall)), count: 4), spacing: width * TouhouSiegeStyle.Decimals.xxSmall) {
                             ForEach(characters.prefix(while: { $0.id <= 99 }), id: \.id) { character in
+                                let characterNotObtained = !(userManager.user?.characters.contains(where: { $0 == character.id }) ?? false)
+
                                 Image(character.profilePicture.small)
                                     .resizable()
                                     .scaledToFit()
@@ -78,14 +81,18 @@ struct CharactersView: View {
                                     .onTapGesture(perform: {
                                         selectedCharacter = character
                                         selectedCharacterId = character.id
-                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                        withAnimation(.easeInOut(duration: TouhouSiegeStyle.Decimals.xSmall)) {
                                             selectedCharacterId = nil
                                         }
+                                    })
+                                    .overlay(content: {
+                                        Color.black
+                                            .opacity(characterNotObtained ? TouhouSiegeStyle.BigDecimals.xLarge : 0.0)
                                     })
                             }
                         }
                     }
-                    .frame(maxWidth: ((width * TouhouSiegeStyle.Decimals.xxLarge) * 4) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 3), maxHeight: 200)
+                    .frame(maxWidth: ((width * TouhouSiegeStyle.Decimals.xxLarge) * 4) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 3), maxHeight: width - (width * TouhouSiegeStyle.Decimals.xSmall) - (width * TouhouSiegeStyle.BigDecimals.xSmall))
                     .offset(x: width * TouhouSiegeStyle.Decimals.medium, y: width * TouhouSiegeStyle.Decimals.xSmall + height * TouhouSiegeStyle.BigDecimals.xSmall)
                     
                     Spacer()
