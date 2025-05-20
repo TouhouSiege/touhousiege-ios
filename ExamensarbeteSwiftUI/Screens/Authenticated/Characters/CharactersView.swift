@@ -15,10 +15,84 @@ struct CharactersView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    /// Crasches without simplifying
+    let characters = Characters.allCharacters
+    
+    /// To fetch what character to highlight
+    @State var selectedCharacter: Character? = nil
+    @State var selectedCharacterId: Int? = nil
+    @State var tapAnimation: Bool = false
+    
     var body: some View {
         ZStack {
             BackgroundMain()
+            
+            HStack {
+                Spacer()
+                
+                if let selectedCharacter = selectedCharacter {
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                       let window = windowScene.windows.first {
+                        let fullScreen = UIScreen.main.bounds.size
+
+                        let heightFullCover = fullScreen.height - window.safeAreaInsets.top - window.safeAreaInsets.bottom
+                        
+                        Image(selectedCharacter.profilePicture.big)
+                            .resizable()
+                            .scaledToFit()
+                            .edgesIgnoringSafeArea(.all)
+                            .frame(height: heightFullCover)
+                    }
+                }
+            }
+            
+            VStack {
+                if let selectedCharacter = selectedCharacter {
+                    CharacterStatsBanner(statType: "Attack", text: String(selectedCharacter.stats.attack))
+                        .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
+                    CharacterStatsBanner(statType: "Type", text: selectedCharacter.stats.attackType.rawValue)
+                        .offset(x: width * TouhouSiegeStyle.Decimals.medium)
+                    CharacterStatsBanner(statType: "Class", text: selectedCharacter.stats.classType.rawValue)
+                        .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
+                    CharacterStatsBanner(statType: "Defense", text: String(selectedCharacter.stats.defense))
+                        .offset(x: width * TouhouSiegeStyle.Decimals.large)
+                    CharacterStatsBanner(statType: "Health", text: String(selectedCharacter.stats.hp))
+                        .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
+                    CharacterStatsBanner(statType: "Speed", text: String(selectedCharacter.stats.speed))
+                        .offset(x: width * TouhouSiegeStyle.Decimals.medium)
+                }
+            }.offset(x: 0, y: width * TouhouSiegeStyle.Decimals.xSmall)
+            
             TopNavBar()
+            
+            VStack {
+                HStack {
+                    ScrollView {
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: width * TouhouSiegeStyle.Decimals.xxLarge + TouhouSiegeStyle.Decimals.xxSmall, maximum: width * TouhouSiegeStyle.Decimals.xxLarge + TouhouSiegeStyle.Decimals.xSmall)), count: 4), spacing: width * TouhouSiegeStyle.Decimals.xxSmall) {
+                            ForEach(characters.prefix(while: { $0.id <= 99 }), id: \.id) { character in
+                                Image(character.profilePicture.small)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: width * TouhouSiegeStyle.Decimals.xxLarge)
+                                    .opacity(selectedCharacterId == character.id ? TouhouSiegeStyle.BigDecimals.xxLarge : 1.0)
+                                    .onTapGesture(perform: {
+                                        selectedCharacter = character
+                                        selectedCharacterId = character.id
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            selectedCharacterId = nil
+                                        }
+                                    })
+                            }
+                        }
+                    }
+                    .frame(maxWidth: ((width * TouhouSiegeStyle.Decimals.xxLarge) * 4) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 3), maxHeight: 200)
+                    .offset(x: width * TouhouSiegeStyle.Decimals.medium, y: width * TouhouSiegeStyle.Decimals.xSmall + height * TouhouSiegeStyle.BigDecimals.xSmall)
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }
             
             VStack {
                 Spacer()

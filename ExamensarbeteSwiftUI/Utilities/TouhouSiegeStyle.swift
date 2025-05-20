@@ -113,7 +113,7 @@ public class TouhouSiegeStyle {
         static let koishiKomeijiGetHit: [String] = (1...5).map { "koishi_komeiji_get_hit_\($0)"}
         
         static let reisenUdongeinInabaProfileSmall = "reisen_udongein_inaba_profile"
-        static let reisenUdongeinInabaProfileLarge = "ressen_udongein_inaba_profile_big"
+        static let reisenUdongeinInabaProfileLarge = "reisen_udongein_inaba_profile_big"
         static let reisenUdongeinInabaIdle: [String] = (1...14).map { "reisen_udongein_inaba_idle_\($0)" }
         static let reisenUdongeinInabaAttack: [String] = (1...11).map { "reisen_udongein_inaba_attack_\($0)"}
         static let reisenUdongeinInabaFaint: [String] = (1...6).map { "reisen_udongein_inaba_faint_\($0)"}

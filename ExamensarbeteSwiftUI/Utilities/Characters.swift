@@ -77,16 +77,16 @@ class Character: Identifiable {
     }
     
     enum ClassType: String {
-        case warrior
-        case mage
-        case assassin
+        case Warrior
+        case Mage
+        case Assassin
     }
     
     // This will serve as your targeting preference:
     enum AttackType: String {
-        case front
-        case skip
-        case back
+        case Front
+        case Skip
+        case Back
     }
 }
 
@@ -103,8 +103,8 @@ struct Characters {
                 defense: 0,
                 hp: 100,
                 speed: 110,
-                classType: .mage,
-                attackType: .front
+                classType: .Mage,
+                attackType: .Front
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reimuHakureiProfileSmall,
@@ -128,8 +128,8 @@ struct Characters {
                 defense: 0,
                 hp: 80,
                 speed: 120,
-                classType: .warrior,
-                attackType: .front
+                classType: .Warrior,
+                attackType: .Front
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.tenshiHinanawiProfileSmall,
@@ -153,8 +153,8 @@ struct Characters {
                 defense: 0,
                 hp: 120,
                 speed: 100,
-                classType: .mage,
-                attackType: .skip
+                classType: .Mage,
+                attackType: .Skip
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.hijiriByakurenProfileSmall,
@@ -178,8 +178,8 @@ struct Characters {
                 defense: 10,
                 hp: 200,
                 speed: 60,
-                classType: .mage,
-                attackType: .back
+                classType: .Mage,
+                attackType: .Back
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
@@ -203,8 +203,8 @@ struct Characters {
                 defense: 2,
                 hp: 76,
                 speed: 130,
-                classType: .mage,
-                attackType: .back
+                classType: .Mage,
+                attackType: .Back
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,
@@ -229,8 +229,8 @@ struct Characters {
                 defense: 0,
                 hp: 100,
                 speed: 110,
-                classType: .mage,
-                attackType: .front
+                classType: .Mage,
+                attackType: .Front
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reimuHakureiProfileSmall,
@@ -254,8 +254,8 @@ struct Characters {
                 defense: 0,
                 hp: 80,
                 speed: 120,
-                classType: .warrior,
-                attackType: .front
+                classType: .Warrior,
+                attackType: .Front
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.tenshiHinanawiProfileSmall,
@@ -279,8 +279,8 @@ struct Characters {
                 defense: 0,
                 hp: 120,
                 speed: 100,
-                classType: .mage,
-                attackType: .skip
+                classType: .Mage,
+                attackType: .Skip
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.hijiriByakurenProfileSmall,
@@ -304,8 +304,8 @@ struct Characters {
                 defense: 10,
                 hp: 200,
                 speed: 60,
-                classType: .mage,
-                attackType: .back
+                classType: .Mage,
+                attackType: .Back
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
@@ -329,8 +329,8 @@ struct Characters {
                 defense: 2,
                 hp: 76,
                 speed: 130,
-                classType: .mage,
-                attackType: .back
+                classType: .Mage,
+                attackType: .Back
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,

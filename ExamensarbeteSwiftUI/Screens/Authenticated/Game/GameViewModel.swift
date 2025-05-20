@@ -376,20 +376,20 @@ class GameViewModel {
             if !indices.isEmpty {
                 if isTargetEnemy {
                     switch attackType {
-                    case .front:
+                    case .Front:
                         return indices.first
-                    case .skip:
+                    case .Skip:
                         return indices.count > 1 ? indices[1] : indices.first
-                    case .back:
+                    case .Back:
                         return indices.last
                     }
                 } else {
                     switch attackType {
-                    case .front:
+                    case .Front:
                         return indices.last
-                    case .skip:
+                    case .Skip:
                         return indices.count > 1 ? indices[indices.count - 2] : indices.first /// Checks the second from the back for mirror effect
-                    case .back:
+                    case .Back:
                         return indices.first
                     }
                 }
