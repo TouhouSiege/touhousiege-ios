@@ -20,10 +20,11 @@ struct GameView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    let vm = GameViewModel()
-    
+    @StateObject var vm = GameViewModel()
     @State var gameScene: GameScene = GameScene()
-   
+    @State var endGameText: String = ""
+    @State private var opacityAnimation: Double = 0.0
+    
     var body: some View {
         ZStack {
             VStack {
@@ -32,6 +33,42 @@ struct GameView: View {
             }.onDisappear { /// For memory purposes
                 gameScene.removeAllChildren()
                 gameScene.removeFromParent()
+            }
+            
+            VStack {
+                if vm.isGameOver {
+                    ZStack {
+                        Color.black
+                            .opacity(opacityAnimation)
+                            .edgesIgnoringSafeArea(.all)
+                            .onAppear {
+                                withAnimation(.easeIn(duration: 2.5)) {
+                                    opacityAnimation = 0.8
+                                }
+                            }
+                        
+                        Text(endGameText)
+                            .font(TouhouSiegeStyle.FontSize.ultra)
+                            .foregroundColor(.white)
+                            .opacity(opacityAnimation)
+                            .onAppear {
+                                withAnimation(.easeIn(duration: 2.5)) {
+                                    opacityAnimation = 0.8
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                    gameScene.removeAllChildren()
+                                    navigationManager.navigateTo(screen: .afterGame(isComputerPlaying: isComputerPlaying))
+                                }
+                            }
+                    }.onAppear {
+                        if vm.playerWon {
+                            endGameText = "You Won"
+                        } else {
+                            endGameText = "You Lose"
+                        }
+                    }
+                }
             }
             
             VStack {

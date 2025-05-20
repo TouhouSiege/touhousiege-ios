@@ -40,7 +40,6 @@ class GameScene: SKScene {
         
         if vm.observableBoolGameStatus {
             self.removeAllActions()
-            self.removeAllChildren()
         }
     }
     

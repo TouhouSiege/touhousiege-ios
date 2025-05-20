@@ -22,6 +22,7 @@ enum Screen: Hashable {
     case settings
     case play
     case defense
+    case afterGame(isComputerPlaying: Bool)
 }
 
 /// Statenavigation with EnvironmentObject

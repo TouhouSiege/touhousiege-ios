@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class GameViewModel {
+class GameViewModel: ObservableObject {
     weak var gameScene: GameScene?
     
     var user: User?
@@ -42,7 +42,7 @@ class GameViewModel {
     
     var playerWon: Bool = false
     var enemyWon: Bool = false
-    var isGameOver: Bool = false {
+    @Published var isGameOver: Bool = false {
         didSet {
             if playerWon {
                 Task {
@@ -448,6 +448,7 @@ class GameViewModel {
 
     /// Function that selects which target to attack at which index with the help of row order priority and indices
     func selectTargetIndex(attackerFormationIndex: Int, opposingFormation: [Int], attackType: Character.AttackType, isTargetEnemy: Bool) -> Int? {
+        
         let columns = 5
         let attackerRowPriority = attackerFormationIndex / columns
         let rowOrder: [Int]
@@ -465,8 +466,8 @@ class GameViewModel {
 
         for row in rowOrder {
             let start = row * columns
-            let end = start + columns
-            
+            let end = min(start + columns, opposingFormation.count)
+          
             let indices = (start..<end).filter { opposingFormation[$0] != 0 }
             
             if !indices.isEmpty {

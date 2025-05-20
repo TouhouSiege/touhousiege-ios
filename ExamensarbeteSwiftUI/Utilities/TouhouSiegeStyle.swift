@@ -15,6 +15,7 @@ public class TouhouSiegeStyle {
         static let xMedium = Font.system(size: 16)
         static let large = Font.system(size: 18)
         static let xLarge = Font.system(size: 20)
+        static let ultra = Font.system(size: 62)
     }
     
     struct CornerRadius {

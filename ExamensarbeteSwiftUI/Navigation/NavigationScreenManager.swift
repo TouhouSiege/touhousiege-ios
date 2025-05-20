@@ -29,6 +29,7 @@ struct NavigationScreenManager {
             return AnyView(PlayView())
         case .defense:
             return AnyView(DefenseView())
-        }
+        case .afterGame(let isComputerPlaying):
+            return AnyView(AfterGame(isComputerPlaying: isComputerPlaying))        }
     }
 }
