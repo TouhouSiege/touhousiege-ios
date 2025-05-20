@@ -12,7 +12,7 @@ enum Screen: Hashable {
     case home
     case landing
     case login
-    case game
+    case game(isComputerPlaying: Bool)
     case gacha
     case purchaseCrystal
     case about

@@ -23,12 +23,18 @@ class GameViewModel {
     var turnQueueIndexOfWhosTurn = 0
     var roundNumber: Int = 0
     
-    /// Test Array for enemy
-    var enemyPlacementArray: [Int] = [
-        0, 0, 103, 102, 0,
-        0, 0, 101, 0, 0,
-        0, 0, 0, 0, 0
-    ]
+    /// Arrays for player vs computer
+    var enemyPlacementArray: [Int] = {
+        let randomArrayNumber = Int.random(in: 0...3)
+        
+        switch randomArrayNumber {
+        case 0: return [101, 0, 0, 0, 102, 103, 0, 0, 0, 0, 0, 104, 0, 105]
+        case 1: return [0, 103, 102, 0, 0, 101, 0, 0, 104, 0, 0, 105, 0, 0]
+        case 2: return [105, 0, 0, 103, 0, 0, 0, 102, 0, 104, 0, 101, 0, 0]
+        case 3: return [0, 0, 101, 0, 102, 0, 0, 105, 0, 0, 103, 0, 0, 104]
+        default: return []
+        }
+    }()
     
     var playerWon: Bool = false
     var enemyWon: Bool = false

@@ -16,6 +16,7 @@ class GameScene: SKScene {
     var vm: GameViewModel?
     var user: User?
     var isDefenseSetting: Bool?
+    var isComputerPlaying: Bool?
     
     var placedCharacters: [String: SKSpriteNode] = [:]
     var disabledProfiles: [String: SKSpriteNode] = [:]
@@ -25,7 +26,7 @@ class GameScene: SKScene {
     var profilePicturesTemporaryArrayOfIds: [Int] = []
     var enemyPositions: [Int: Character] = [:]
     var playerPlacementArray: [Int] = Array(repeating: 0, count: 15)
-
+    
     var leftArrow: SKSpriteNode?
     var rightArrow: SKSpriteNode?
     
@@ -60,7 +61,14 @@ class GameScene: SKScene {
             createHexagonPlatforms()
             createEnemyHexagonPlatforms()
             createCharacterProfileSelection(characterIds: user.characters)
-            placeEnemyCharacters()
+            
+            guard let isComputerPlaying = isComputerPlaying else { return }
+            
+            if isComputerPlaying {
+                placeEnemyCharacters(enemyArray: vm.enemyPlacementArray)
+            } else {
+                
+            }
         }
     }
     
@@ -102,7 +110,7 @@ class GameScene: SKScene {
                     } else {
                         newCharacterSpriteBase.size = CGSize(width: width * TouhouSiegeStyle.Decimals.xxLarge, height: width * TouhouSiegeStyle.Decimals.xxLarge)
                     }
-
+                    
                     newCharacterSpriteBase.name = realCharacterName
                     
                     self.addChild(newCharacterSpriteBase)
@@ -114,7 +122,7 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let character = currentSelectedCharacter {
             for touch in touches {
@@ -235,9 +243,9 @@ class GameScene: SKScene {
             
             disabledProfiles.removeValue(forKey: characterName)
             disabledProfilesStrings.removeAll { $0 == characterName }
-
-            }
-
+            
+        }
+        
     }
     
     /// Creates left and right arrow buttons that allow the user to move between pages.
@@ -277,7 +285,7 @@ class GameScene: SKScene {
                 icon.size = profilePicturesCurrentlyShowing[1].size
                 
                 var isProfileDisabled = false
-               
+                
                 for name in disabledProfilesStrings {
                     if name == characterData.name {
                         icon.color = UIColor.black
@@ -321,7 +329,7 @@ class GameScene: SKScene {
                 icon.size = profilePicturesCurrentlyShowing[1].size
                 
                 var isProfileDisabled = false
-               
+                
                 for name in disabledProfilesStrings {
                     if name == characterData.name {
                         icon.color = UIColor.black
@@ -346,7 +354,7 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
     /// Start the idle animation of a character and loops it
     func startIdleAnimation(character: SKSpriteNode, characterName: String) {
         var textures: [SKTexture] = []
@@ -356,12 +364,12 @@ class GameScene: SKScene {
                 textures.append(SKTexture(imageNamed: imageName))
             }
         }
-  
+        
         let repeatAnimationIdle = SKAction.repeatForever(SKAction.animate(with: textures, timePerFrame: TouhouSiegeStyle.BigDecimals.xxSmall))
         
         character.run(repeatAnimationIdle)
     }
-
+    
     /// Creates the player side hexagon platforms
     func createHexagonPlatforms() {
         guard let vm = vm else { return }
@@ -378,7 +386,7 @@ class GameScene: SKScene {
                 return width * (TouhouSiegeStyle.BigDecimals.xxSmall + TouhouSiegeStyle.Decimals.xMedium)
             }
         }()
-                        
+        
         let hexagonStartY: CGFloat = width * TouhouSiegeStyle.BigDecimals.small
         
         let columns = 5
@@ -455,12 +463,12 @@ class GameScene: SKScene {
     }
     
     /// Places enemy characters based on an aray of character ids
-    func placeEnemyCharacters() {
+    func placeEnemyCharacters(enemyArray: [Int]) {
         guard let vm = vm else { return }
         
         let enemyHexagons = self.children.filter { $0.name == "enemyHexagonPlatform" }
         
-        for (index, characterId) in vm.enemyPlacementArray.enumerated() {
+        for (index, characterId) in enemyArray.enumerated() {
             
             if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
                 let enemySprite = SKSpriteNode(imageNamed: characterData.animations.idle[0])

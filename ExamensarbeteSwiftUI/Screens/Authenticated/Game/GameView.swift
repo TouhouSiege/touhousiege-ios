@@ -12,6 +12,8 @@ struct GameView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var userManager: UserManager
     
+    var isComputerPlaying: Bool
+    
     @State var isHidden: Bool = false
     
     let width: CGFloat = UIScreen.main.bounds.width
@@ -56,6 +58,7 @@ struct GameView: View {
             gameScene.vm = vm
             gameScene.user = userManager.user
             gameScene.isDefenseSetting = false
+            gameScene.isComputerPlaying = isComputerPlaying
             
             /** Workaround cause UIScreen.main.bounds.width/height doesn't always work when working with newer phone models
              *  leaving undesired space at some places (probably some wonky bug with mixing spritekit and swiftui - personal guess)
@@ -91,7 +94,7 @@ struct GameView: View {
 }
 
 #Preview {
-    GameView()
+    GameView(isComputerPlaying: true)
 }
 
 

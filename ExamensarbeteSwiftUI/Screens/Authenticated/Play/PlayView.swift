@@ -15,6 +15,9 @@ struct PlayView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    /// Roundabout way to set who the opponent is
+    let vm = GameViewModel()
+    
     @State var isDefenseSet: Bool = false
     
     var body: some View {
@@ -24,13 +27,13 @@ struct PlayView: View {
             
             VStack {
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .game)
+                    navigationManager.navigateTo(screen: .game(isComputerPlaying: true))
                 }, text: "Player vs Computer").offset(x: -width * 0.25)
                     .disabled(!isDefenseSet)
                     .opacity(isDefenseSet ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .game)
+                    navigationManager.navigateTo(screen: .game(isComputerPlaying: false))
                 }, text: "Player vs Player").offset(x: -width * 0.22)
                     .disabled(!isDefenseSet)
                     .opacity(isDefenseSet ? 1 : 0.5)
