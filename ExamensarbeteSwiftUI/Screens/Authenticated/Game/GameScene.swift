@@ -73,6 +73,13 @@ class GameScene: SKScene {
             createArrowButtons()
             createHexagonPlatforms()
             createCharacterProfileSelection(characterIds: user.characters)
+            
+            /* TODO - need to map out all characters in corresponding dictionairys and check for profile aswell.
+            if !user.defense.isEmpty {
+                placePlayerCharacters(playerDefense: user.defense)
+            }
+             */
+            
         } else {
             createArrowButtons()
             createHexagonPlatforms()
@@ -507,6 +514,37 @@ class GameScene: SKScene {
                 startIdleAnimation(character: enemySprite, characterName: characterData.name)
                 
                 self.addChild(enemySprite)
+            }
+        }
+    }
+    
+    
+    /// TODO
+    /// Places player characters based on an aray of character ids if in defense mode
+    func placePlayerCharacters(playerDefense: [Int]) {
+        guard let vm = vm else { return }
+        
+        let playerHexagons = self.children.filter { $0.name == "hexagonPlatform" }
+        
+        for (index, characterId) in playerDefense.enumerated() {
+            
+            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                let playerSprite = SKSpriteNode(imageNamed: characterData.animations.idle[0])
+                
+                if let texture = playerSprite.texture {
+                    let aspectRatio = texture.size().width / texture.size().height
+                    playerSprite.size = CGSize(width: (width * TouhouSiegeStyle.Decimals.xxLarge) * aspectRatio, height: width * TouhouSiegeStyle.Decimals.xxLarge)
+                }
+                
+                playerSprite.name = characterData.name
+                
+                let hexagonPosition = CGPoint(x: playerHexagons[index].frame.midX, y: playerHexagons[index].frame.midY + (width * TouhouSiegeStyle.Decimals.medium))
+                playerSprite.position = hexagonPosition
+                vm.playerHexagonCoordinates.append(hexagonPosition)
+                vm.playerSpritesHexaCoord[index] = playerSprite
+                startIdleAnimation(character: playerSprite, characterName: characterData.name)
+                
+                self.addChild(playerSprite)
             }
         }
     }
