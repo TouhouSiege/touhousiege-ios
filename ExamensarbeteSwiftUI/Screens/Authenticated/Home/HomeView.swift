@@ -24,11 +24,6 @@ struct HomeView: View {
             TopNavBar()
             
             VStack {
-                Text("\(String(describing: apiAuthManager.username))")
-                Text("\(String(describing: userManager.user))")
-            }
-            
-            VStack {
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .game)
                 }, text: "Play").offset(x: width * 0.15)
@@ -36,28 +31,8 @@ struct HomeView: View {
                     .opacity(hasCharacters ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                    Task {
-                        do {
-                            guard let userId = userManager.user?.id else {
-                                print("No user id found.")
-                                return
-                            }
-                            let response = try await apiAuthManager.tempGetCharacters(userId: userId, characters: [
-                                Characters.allCharacters[0].id,
-                                Characters.allCharacters[1].id,
-                                Characters.allCharacters[2].id,
-                                Characters.allCharacters[3].id,
-                                Characters.allCharacters[4].id
-                            ])
-                            print("Characters updated successfully: \(response)")
-                            hasCharacters = true
-                        } catch let error {
-                            print("Error updating characters: \(error)")
-                        }
-                    }
+                    navigationManager.navigateTo(screen: .gacha)
                 }, text: "Gacha").offset(x: width * 0.12)
-
-
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .shop)
