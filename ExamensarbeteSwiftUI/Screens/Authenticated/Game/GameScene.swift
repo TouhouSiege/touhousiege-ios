@@ -17,6 +17,11 @@ class GameScene: SKScene {
     var user: User?
     var isDefenseSetting: Bool?
     var isComputerPlaying: Bool?
+    var enemyPlacementArrayPlayer: [Int]? {
+        didSet {
+            vm?.randomEnemyDelayFunction()
+        }
+    }
     
     var placedCharacters: [String: SKSpriteNode] = [:]
     var disabledProfiles: [String: SKSpriteNode] = [:]
@@ -65,10 +70,8 @@ class GameScene: SKScene {
             guard let isComputerPlaying = isComputerPlaying else { return }
             
             if isComputerPlaying {
-                placeEnemyCharacters(enemyArray: vm.enemyPlacementArray)
-            } else {
-                
-            }
+                placeEnemyCharacters(enemyArray: vm.enemyPlacementArrayComputer)
+            } 
         }
     }
     

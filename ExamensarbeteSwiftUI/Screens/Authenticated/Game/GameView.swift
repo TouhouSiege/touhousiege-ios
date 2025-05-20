@@ -10,6 +10,7 @@ import SpriteKit
 
 struct GameView: View {
     @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var apiAuthManager: ApiAuthManager
     @EnvironmentObject var userManager: UserManager
     
     var isComputerPlaying: Bool
@@ -83,9 +84,24 @@ struct GameView: View {
                 
                 gameScene.addChild(randomBackground)
                 gameScene.addChild(randomBackgroundOverlay)
-
                 
-                
+                if !isComputerPlaying {
+                    Task {
+                        do {
+                            guard let user = userManager.user else { return }
+                            
+                            let response = try await apiAuthManager.getRandomPlayer(user: user)
+                            
+                            if response.success {
+                                if let randomPlayer = response.user {
+                                    gameScene.enemyPlacementArrayPlayer = randomPlayer.defense
+                                }
+                            } 
+                        } catch let error {
+                            print("Error loading random enemy player: \(error)")
+                        }
+                    }
+                }
             } else {
                 print("ERROR LOADING GAME...")
             }

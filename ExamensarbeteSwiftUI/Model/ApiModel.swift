@@ -37,6 +37,11 @@ struct UpdateDefenseRequest: Codable {
     var defense: Array<Int>
 }
 
+/// GET, random player
+struct GetRandomPlayerDefense: Codable {
+    var user: User
+}
+
 struct AuthResponse: Decodable {
     var success: Bool
     var message: String
@@ -46,6 +51,12 @@ struct AuthResponse: Decodable {
 
 struct GeneralUpdateResponse: Decodable {
     let success: Bool
+    let message: String
+}
+
+struct GetRandomPlayerReponse: Decodable {
+    let success: Bool
+    let user: User?
     let message: String
 }
 

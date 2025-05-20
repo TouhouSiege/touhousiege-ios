@@ -7,10 +7,12 @@
 
 import Foundation
 import KeychainSwift
+import SwiftUICore
 
 class ApiAuthManager: ObservableObject {
     @Published var token: String? = nil
     @Published var username: String? = nil
+    
     
     let api = Api()
     let keychain = KeychainSwift()
@@ -71,6 +73,18 @@ class ApiAuthManager: ObservableObject {
             token: token
         )
 
+        return response
+    }
+    
+    func getRandomPlayer(user: User) async throws -> GetRandomPlayerReponse {
+        let getRandomPlayer = GetRandomPlayerDefense(user: user)
+        
+        let response: GetRandomPlayerReponse = try await api.post(
+            url: "\(BASE_URL)/random-enemy",
+            body: getRandomPlayer,
+            token: token
+        )
+        
         return response
     }
 

@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct User: Decodable {
+struct User: Decodable, Encodable {
     var id: Int
     var email: String
     var username: String
+    var password: String
     var stamina: Int
     var diamonds: Int
     var gold: Int

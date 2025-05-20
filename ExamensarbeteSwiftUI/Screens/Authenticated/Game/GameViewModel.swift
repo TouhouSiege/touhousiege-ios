@@ -24,7 +24,7 @@ class GameViewModel {
     var roundNumber: Int = 0
     
     /// Arrays for player vs computer
-    var enemyPlacementArray: [Int] = {
+    var enemyPlacementArrayComputer: [Int] = {
         let randomArrayNumber = Int.random(in: 0...3)
         
         switch randomArrayNumber {
@@ -57,6 +57,13 @@ class GameViewModel {
         let randomBackground = Int.random(in: 0...7)
         
         return TouhouSiegeStyle.Images.bg_play[randomBackground]
+    }
+    
+    func randomEnemyDelayFunction() {
+        guard let gameScene = gameScene else { return }
+        guard let enemyPlacementArrayPlayer = gameScene.enemyPlacementArrayPlayer else { return }
+        
+        gameScene.placeEnemyCharacters(enemyArray: enemyPlacementArrayPlayer)
     }
     
     func startGame() {
@@ -97,8 +104,8 @@ class GameViewModel {
         }
         
         /// Adds enemy characters to the queue
-        for index in 0..<enemyPlacementArray.count {
-            if enemyPlacementArray[index] != 0, let character = getEnemyCharacter(hexIndex: index) {
+        for index in 0..<enemyPlacementArrayComputer.count {
+            if enemyPlacementArrayComputer[index] != 0, let character = getEnemyCharacter(hexIndex: index) {
                 characterTurnQueue.append(CharacterOnBoard(character: character, isEnemy: true))
             }
         }
@@ -145,7 +152,7 @@ class GameViewModel {
         
         guard let characterToActIndex = getPlayerHexagonIndex(characterId: characterToAct.id) else { return }
         guard let characterToActSprite = playerSpritesHexaCoord[characterToActIndex] else { return }
-        guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex,opposingFormation: enemyPlacementArray,attackType: characterToAct.stats.attackType, isTargetEnemy: true) else { return }
+        guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex,opposingFormation: enemyPlacementArrayComputer,attackType: characterToAct.stats.attackType, isTargetEnemy: true) else { return }
         guard let characterToAttackSprite = enemySpritesHexaCoord[characterToAttackIndex] else { return }
    
         attackAnimationsAndOutcome(characterToActSprite: characterToActSprite, characterToAttackSprite: characterToAttackSprite, isTargetEnemy: true) {
@@ -174,7 +181,7 @@ class GameViewModel {
     func checkForWinner() {
         guard let gameScene = gameScene else { return }
         
-        let isEnemyAlive = enemyPlacementArray.contains { $0 != 0 }
+        let isEnemyAlive = enemyPlacementArrayComputer.contains { $0 != 0 }
         let isPlayerAlive = gameScene.playerPlacementArray.contains { $0 != 0 }
         
         if !isEnemyAlive {
@@ -334,9 +341,9 @@ class GameViewModel {
         guard let gameScene = gameScene else { return }
         
         if isTargetEnemy {
-            for i in 0..<enemyPlacementArray.count {
-                if enemyPlacementArray[i] == target.id {
-                    enemyPlacementArray[i] = 0
+            for i in 0..<enemyPlacementArrayComputer.count {
+                if enemyPlacementArrayComputer[i] == target.id {
+                    enemyPlacementArrayComputer[i] = 0
                     break
                 }
             }
@@ -413,7 +420,7 @@ class GameViewModel {
     /// To retrieve the index of where a enemy character is placed
     func getEnemyHexagonIndex(characterID: Int) -> Int? {
         // Returns the index in enemyPlacementArray where the character is placed.
-        return enemyPlacementArray.firstIndex(where: { $0 == characterID })
+        return enemyPlacementArrayComputer.firstIndex(where: { $0 == characterID })
     }
     
     /// To retrieve player characters currently on the board
@@ -427,7 +434,7 @@ class GameViewModel {
 
     /// To retrieve enemy characters currently on the board
     func getEnemyCharacter(hexIndex: Int) -> Character? {
-        let id = enemyPlacementArray[hexIndex]
+        let id = enemyPlacementArrayComputer[hexIndex]
         guard id != 0 else { return nil }
         return Characters.allCharacters.first { $0.id == id }
     }
