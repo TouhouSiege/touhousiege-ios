@@ -25,7 +25,7 @@ class ApiAuthManager: ObservableObject {
     }
     
     func register(email: String, username: String, password: String) async throws {
-        let registerPayload = RegisterRequest(email: email, username: username, password: password)
+        let registerPayload = RegisterRequest(email: email, username: username, password: password, characters: [])
         
         let response: AuthResponse = try await api.post(url: "\(BASE_URL)/register", body: registerPayload, token: nil)
         
@@ -61,6 +61,18 @@ class ApiAuthManager: ObservableObject {
             token: token
         )
 
+        return response
+    }
+    
+    func gachaRollTen(userId: Int, characters: [Character]) async throws -> GeneralUpdateResponse {
+        let updateCharacterRequest = UpdateCharactersUniqueRequest(characters: characters)
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-characters?id=\(userId)",
+            body: updateCharacterRequest,
+            token: token
+            )
+        
         return response
     }
     

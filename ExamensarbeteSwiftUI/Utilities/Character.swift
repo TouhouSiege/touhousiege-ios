@@ -8,15 +8,15 @@
 import Foundation
 import SwiftUI
 
-class Character: Identifiable {
-    var id: Int
+class Character: Identifiable, Codable {
+    var id: Int?
     var name: String
     var team: Team
     var stats: Stats
     let profilePicture: ProfilePicture
     let animations: Animations
     
-    init(id: Int, name: String, team: Team, stats: Stats, profilePicture: ProfilePicture, animations: Animations) {
+    init(id: Int?, name: String, team: Team, stats: Stats, profilePicture: ProfilePicture, animations: Animations) {
         self.id = id
         self.name = name
         self.team = team
@@ -25,7 +25,7 @@ class Character: Identifiable {
         self.animations = animations
     }
     
-    class Stats {
+    class Stats: Codable {
         var attack: Int
         var defense: Int
         var maxHp: Int
@@ -33,8 +33,9 @@ class Character: Identifiable {
         var speed: Int
         var classType: ClassType
         var attackType: AttackType
+        var level: Int
         
-        init(attack: Int, defense: Int, maxHp: Int, currentHp: Int, speed: Int, classType: ClassType, attackType: AttackType) {
+        init(attack: Int, defense: Int, maxHp: Int, currentHp: Int, speed: Int, classType: ClassType, attackType: AttackType, level: Int) {
             self.attack = attack
             self.defense = defense
             self.maxHp = maxHp
@@ -42,10 +43,11 @@ class Character: Identifiable {
             self.speed = speed
             self.classType = classType
             self.attackType = attackType
+            self.level = level
         }
     }
     
-    class ProfilePicture {
+    class ProfilePicture: Codable {
         let small: String
         let big: String
         
@@ -55,7 +57,7 @@ class Character: Identifiable {
         }
     }
     
-    class Animations {
+    class Animations: Codable {
         var idle: [String]
         var attack: [String]
         var faint: [String]
@@ -73,19 +75,18 @@ class Character: Identifiable {
         }
     }
     
-    enum Team: String {
+    enum Team: String, Codable {
         case player
         case enemy
     }
     
-    enum ClassType: String {
+    enum ClassType: String, Codable {
         case Warrior
         case Mage
         case Assassin
     }
     
-    // This will serve as your targeting preference:
-    enum AttackType: String {
+    enum AttackType: String, Codable {
         case Front
         case Skip
         case Back
@@ -97,17 +98,18 @@ struct Characters {
     static let allCharacters: [Character] = [
         /// PLAYER - Characters
         Character(
-            id: 1,
+            id: nil,
             name: "Hakurei Reimu",
             team: .player,
             stats: Character.Stats(
-                attack: 30,
-                defense: 0,
+                attack: 35,
+                defense: 20,
                 maxHp: 100,
                 currentHp: 100,
                 speed: 110,
                 classType: .Mage,
-                attackType: .Front
+                attackType: .Front,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reimuHakureiProfileSmall,
@@ -123,17 +125,18 @@ struct Characters {
         ),
     
         Character(
-            id: 2,
+            id: nil,
             name: "Tenshi Hinanawi",
             team: .player,
             stats: Character.Stats(
                 attack: 30,
-                defense: 0,
+                defense: 28,
                 maxHp: 160,
                 currentHp: 160,
                 speed: 120,
                 classType: .Warrior,
-                attackType: .Front
+                attackType: .Front,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.tenshiHinanawiProfileSmall,
@@ -149,17 +152,18 @@ struct Characters {
         ),
     
         Character(
-            id: 3,
+            id: nil,
             name: "Hijiri Byakuren",
             team: .player,
             stats: Character.Stats(
-                attack: 30,
-                defense: 0,
-                maxHp: 120,
-                currentHp: 120,
+                attack: 42,
+                defense: 12,
+                maxHp: 140,
+                currentHp: 140,
                 speed: 100,
                 classType: .Mage,
-                attackType: .Skip
+                attackType: .Skip,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.hijiriByakurenProfileSmall,
@@ -175,17 +179,18 @@ struct Characters {
         ),
         
         Character(
-            id: 4,
+            id: nil,
             name: "Koishi Komeiji",
             team: .player,
             stats: Character.Stats(
-                attack: 24,
-                defense: 10,
+                attack: 12,
+                defense: 60,
                 maxHp: 200,
                 currentHp: 200,
                 speed: 60,
                 classType: .Mage,
-                attackType: .Back
+                attackType: .Back,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
@@ -201,17 +206,18 @@ struct Characters {
             ),
         
         Character(
-            id: 5,
+            id: nil,
             name: "Reisen Udongein Inaba",
             team: .player,
             stats: Character.Stats(
-                attack: 40,
-                defense: 2,
+                attack: 60,
+                defense: 5,
                 maxHp: 70,
                 currentHp: 70,
                 speed: 130,
                 classType: .Mage,
-                attackType: .Back
+                attackType: .Back,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,
@@ -238,7 +244,8 @@ struct Characters {
                 currentHp: 100,
                 speed: 110,
                 classType: .Mage,
-                attackType: .Front
+                attackType: .Front,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reimuHakureiProfileSmall,
@@ -264,7 +271,8 @@ struct Characters {
                 currentHp: 160,
                 speed: 120,
                 classType: .Warrior,
-                attackType: .Front
+                attackType: .Front,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.tenshiHinanawiProfileSmall,
@@ -290,7 +298,8 @@ struct Characters {
                 currentHp: 120,
                 speed: 100,
                 classType: .Mage,
-                attackType: .Skip
+                attackType: .Skip,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.hijiriByakurenProfileSmall,
@@ -316,7 +325,8 @@ struct Characters {
                 currentHp: 200,
                 speed: 60,
                 classType: .Mage,
-                attackType: .Back
+                attackType: .Back,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
@@ -342,7 +352,8 @@ struct Characters {
                 currentHp: 70,
                 speed: 130,
                 classType: .Mage,
-                attackType: .Back
+                attackType: .Back,
+                level: 1
             ),
             profilePicture: Character.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,

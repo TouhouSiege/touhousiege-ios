@@ -195,7 +195,7 @@ class GameScene: SKScene {
                             }
                             
                             /// Add placed character to the board and saves id, character and index
-                            playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
+                            //playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
                             placedCharacters[placedCharacterName] = character
                             vm.playerSpritesHexaCoord[placedCharacterIndex] = character
                         }

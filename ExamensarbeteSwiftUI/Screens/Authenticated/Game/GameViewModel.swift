@@ -174,7 +174,7 @@ class GameViewModel: ObservableObject {
     func playerCharacterTurnProcess(characterOnBoard: CharacterOnBoard) {
         let characterToAct = characterOnBoard.character
         
-        guard let characterToActIndex = getPlayerHexagonIndex(characterId: characterToAct.id) else { return }
+        guard let characterToActIndex = getPlayerHexagonIndex(characterId: characterToAct.id ?? 0) else { return }
         guard let characterToActSprite = playerSpritesHexaCoord[characterToActIndex] else { return }
         guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex,opposingFormation: enemyPlacementArrayComputer,attackType: characterToAct.stats.attackType, isTargetEnemy: true) else { return }
         guard let characterToAttackSprite = enemySpritesHexaCoord[characterToAttackIndex] else { return }
@@ -190,7 +190,7 @@ class GameViewModel: ObservableObject {
         let characterToAct = characterOnBoard.character
         
         guard let gameScene = gameScene else { return }
-        guard let characterToActIndex = getEnemyHexagonIndex(characterID: characterToAct.id) else { return }
+        guard let characterToActIndex = getEnemyHexagonIndex(characterID: characterToAct.id ?? 0) else { return }
         guard let characterToActSprite = enemySpritesHexaCoord[characterToActIndex] else { return }
         guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex, opposingFormation: gameScene.playerPlacementArray, attackType: characterToAct.stats.attackType, isTargetEnemy: false) else { return }
         guard let characterToAttackSprite = playerSpritesHexaCoord[characterToAttackIndex] else { return }

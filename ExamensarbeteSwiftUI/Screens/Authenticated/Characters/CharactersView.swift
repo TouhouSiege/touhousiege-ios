@@ -26,7 +26,7 @@ struct CharactersView: View {
     var body: some View {
         ZStack {
             BackgroundMain()
-            
+            /*/
             HStack {
                 Spacer()
                 
@@ -111,7 +111,7 @@ struct CharactersView: View {
                     
                     Spacer()
                 }
-            }
+            }*/
         }
     }
 }

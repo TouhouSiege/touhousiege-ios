@@ -13,7 +13,7 @@ struct LoginRequest: Encodable {
     var password: String
 }
 
-/// POST, register
+/// POST, register new user
 struct RegisterRequest: Encodable {
     var email: String
     var username: String
@@ -21,7 +21,7 @@ struct RegisterRequest: Encodable {
     var stamina: Int = 100
     var diamonds: Int = 0
     var gold: Int = 0
-    var characters: Array<Int> = []
+    var characters: [CharacterData]
     var defense: Array<Int> = []
     var rankingNormalPvp: Int = 0
     var rankingColloseum: Int = 0
@@ -31,9 +31,46 @@ struct RegisterRequest: Encodable {
     var pvpLosses: Int = 0
 }
 
+struct CharacterData: Encodable {
+    var name: String
+    var team: String
+    var stats: StatsData
+    var profilePicture: ProfilePictureData
+    var animations: AnimationsData
+}
+
+struct StatsData: Encodable {
+    var attack: Int
+    var defense: Int
+    var maxHp: Int
+    var currentHp: Int
+    var speed: Int
+    var classType: String
+    var attackType: String
+}
+
+struct ProfilePictureData: Encodable {
+    var small: String
+    var big: String
+}
+
+struct AnimationsData: Encodable {
+    var idle: [String]
+    var attack: [String]
+    var faint: [String]
+    var moveForward: [String]
+    var moveBackward: [String]
+    var getHit: [String]
+}
+
 /// PUT, update characters
 struct UpdateCharactersRequest: Codable {
     var characters: Array<Int>
+}
+
+/// PUT, update characters, OBJECT not ids
+struct UpdateCharactersUniqueRequest: Codable {
+    var characters: Array<Character>
 }
 
 /// PUT, update defense
