@@ -26,7 +26,7 @@ struct CharactersView: View {
     var body: some View {
         ZStack {
             BackgroundMain()
-            /*/
+
             HStack {
                 Spacer()
                 
@@ -51,7 +51,7 @@ struct CharactersView: View {
                 if let selectedCharacter = selectedCharacter {
                     CharacterStatsBanner(statType: "Attack", text: String(selectedCharacter.stats.attack))
                         .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
-                    CharacterStatsBanner(statType: "Type", text: selectedCharacter.stats.attackType.rawValue)
+                    CharacterStatsBanner(statType: "Level", text: String(selectedCharacter.stats.level))
                         .offset(x: width * TouhouSiegeStyle.Decimals.medium)
                     CharacterStatsBanner(statType: "Class", text: selectedCharacter.stats.classType.rawValue)
                         .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
@@ -70,21 +70,26 @@ struct CharactersView: View {
                 HStack {
                     ScrollView {
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: width * TouhouSiegeStyle.Decimals.xxLarge + TouhouSiegeStyle.Decimals.xxSmall, maximum: width * TouhouSiegeStyle.Decimals.xxLarge + TouhouSiegeStyle.Decimals.xSmall)), count: 4), spacing: width * TouhouSiegeStyle.Decimals.xxSmall) {
-                            ForEach(characters.prefix(while: { $0.id <= 99 }), id: \.id) { character in
-                                let characterNotObtained = !(userManager.user?.characters.contains(where: { $0 == character.id }) ?? false)
-
+                            ForEach(characters.prefix(5), id: \.name) { character in
+                                let characterNotObtained = !(userManager.user?.characters.contains { $0.name == character.name } ?? false)
+                                
                                 Image(character.profilePicture.small)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: width * TouhouSiegeStyle.Decimals.xxLarge)
                                     .opacity(selectedCharacterId == character.id ? TouhouSiegeStyle.BigDecimals.xxLarge : 1.0)
-                                    .onTapGesture(perform: {
-                                        selectedCharacter = character
+                                    .onTapGesture {
+                                        if let userOwned = userManager.user?.characters.first(where: { $0.name == character.name }) {
+                                            selectedCharacter = userOwned
+                                        } else {
+                                            selectedCharacter = character
+                                        }
                                         selectedCharacterId = character.id
                                         withAnimation(.easeInOut(duration: TouhouSiegeStyle.Decimals.xSmall)) {
                                             selectedCharacterId = nil
                                         }
-                                    })
+                                    }
+
                                     .overlay(content: {
                                         Color.black
                                             .opacity(characterNotObtained ? TouhouSiegeStyle.BigDecimals.xLarge : 0.0)
@@ -111,7 +116,7 @@ struct CharactersView: View {
                     
                     Spacer()
                 }
-            }*/
+            }
         }
     }
 }
