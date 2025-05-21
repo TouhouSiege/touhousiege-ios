@@ -78,6 +78,7 @@ class GameViewModel: ObservableObject {
         
         if !isComputerPlaying {
             guard let enemyUserDefense = enemyUser?.defense else { return }
+            
             enemyPlacementArrayComputer = enemyUserDefense
         } else {
         }
@@ -187,7 +188,7 @@ class GameViewModel: ObservableObject {
     }
     
     /// Enemy turn
-    private func enemyCharacterTurnProcess(characterOnBoard: CharacterOnBoard) {
+    func enemyCharacterTurnProcess(characterOnBoard: CharacterOnBoard) {
         let characterToAct = characterOnBoard.character
         
         guard let gameScene = gameScene else { return }
@@ -195,7 +196,7 @@ class GameViewModel: ObservableObject {
         guard let characterToActSprite = enemySpritesHexaCoord[characterToActIndex] else { return }
         guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex, opposingFormation: gameScene.playerPlacementArray, attackType: characterToAct.stats.attackType, isTargetEnemy: false) else { return }
         guard let characterToAttackSprite = playerSpritesHexaCoord[characterToAttackIndex] else { return }
-
+        
         attackAnimationsAndOutcome(characterToActSprite: characterToActSprite, characterToAttackSprite: characterToAttackSprite, isTargetEnemy: false) {
             self.turnQueueIndexOfWhosTurn += 1
             self.characterPreTurnProcess()

@@ -156,6 +156,7 @@ struct GameView: View {
                                     gameScene.enemyPlacementArrayPlayer = randomPlayer.defense
                                     gameScene.enemyUser = randomPlayer
                                     vm.enemyUser = randomPlayer
+                                    vm.enemyPlacementArrayComputer = randomPlayer.defense
                                     
                                 }
                             }

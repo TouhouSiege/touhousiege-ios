@@ -71,8 +71,6 @@ class GameScene: SKScene {
             profilePicturesTemporaryArrayOfIds.append(profilePicture)
         }
         
-        print("Loaded Characters: \(user.characters)")
-        
         if isDefenseSetting {
             createArrowButtons()
             createHexagonPlatforms()
@@ -81,6 +79,8 @@ class GameScene: SKScene {
             /* TODO - need to map out all characters in corresponding dictionairys and check for profile aswell.
             if !user.defense.isEmpty {
                 placePlayerCharacters(playerDefense: user.defense)
+             
+                TODO - MIRROR
             }
              */
             
@@ -89,8 +89,19 @@ class GameScene: SKScene {
             createHexagonPlatforms()
             createEnemyHexagonPlatforms()
             createCharacterProfileSelection(characterIds: profilePicturesTemporaryArrayOfIds)
+  
             
             guard let isComputerPlaying = isComputerPlaying else { return }
+            
+            if !isComputerPlaying {
+                guard let enemyDefense = enemyUser?.defense else { return }
+                
+                for character in enemyDefense {
+                    print("Character name: \(String(describing: character?.name)) + Character ID: \(String(describing: character?.id))")
+                }
+                
+                placeEnemyCharacters(enemyArray: enemyDefense)
+            }
             
             if isComputerPlaying {
                 placeEnemyCharacters(enemyArray: vm.enemyPlacementArrayComputer)
@@ -502,9 +513,13 @@ class GameScene: SKScene {
         
         for (index, character) in enemyArray.enumerated() {
             if let enemyCharacter = character,
-               let characterData = Characters.allCharacters.first(where: { $0.id == enemyCharacter.id }) {
+               let characterData = Characters.allCharacters.first(where: { $0.name == enemyCharacter.name }) {
                 
                 guard index < enemyHexagons.count else { continue }
+                
+                /// To mirror the placement of characters
+                let indexMirror = enemyHexagons.count - 1 - index
+                guard indexMirror < enemyHexagons.count else { continue }
                 
                 let enemySprite = SKSpriteNode(imageNamed: characterData.animations.idle[0])
                 
@@ -516,7 +531,7 @@ class GameScene: SKScene {
                 enemySprite.name = characterData.name
                 enemySprite.xScale = -1   /// Mirror it
                 
-                let hexagonPosition = CGPoint(x: enemyHexagons[index].frame.midX, y: enemyHexagons[index].frame.midY + (width * TouhouSiegeStyle.Decimals.medium))
+                let hexagonPosition = CGPoint(x: enemyHexagons[indexMirror].frame.midX, y: enemyHexagons[indexMirror].frame.midY + (width * TouhouSiegeStyle.Decimals.medium))
                 enemySprite.position = hexagonPosition
                 vm.enemyHexagonCoordinates.append(hexagonPosition)
                 vm.enemySpritesHexaCoord[index] = enemySprite
