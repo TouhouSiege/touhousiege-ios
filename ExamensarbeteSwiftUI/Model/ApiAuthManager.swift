@@ -65,9 +65,23 @@ class ApiAuthManager: ObservableObject {
     }
     
     func gachaRollTen(userId: Int, characters: [GameCharacter]) async throws -> GeneralUpdateResponse {
-        let defenseConverted: [CharacterData] = characters.map { $0.toCharacterData() }
+        let gachaRollConverted: [CharacterData] = characters.map { $0.toCharacterData() }
         
-        let updateCharacterRequest = UpdateCharactersUniqueRequest(characters: defenseConverted)
+        let updateCharacterRequest = UpdateCharactersUniqueRequest(characters: gachaRollConverted)
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-characters?id=\(userId)",
+            body: updateCharacterRequest,
+            token: token
+            )
+        
+        return response
+    }
+    
+    func gachaRollOne(userId: Int, character: [GameCharacter]) async throws -> GeneralUpdateResponse {
+        let gachaRollConverted: [CharacterData] = character.map { $0.toCharacterData() }
+        
+        let updateCharacterRequest = UpdateCharactersUniqueRequest(characters: gachaRollConverted)
         
         let response: GeneralUpdateResponse = try await api.put(
             url: "\(BASE_URL)/update-characters?id=\(userId)",

@@ -34,7 +34,9 @@ struct GachaView: View {
                     
                     HStack {
                         ButtonBig(function: {
-                            
+                            Task {
+                                await vm.rollOneCharacter()
+                            }
                         }, text: "Roll x 1")
                         
                         ButtonBig(function: {

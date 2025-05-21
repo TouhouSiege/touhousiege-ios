@@ -80,7 +80,6 @@ class GameScene: SKScene {
             if !user.defense.isEmpty {
                 placePlayerCharacters(playerDefense: user.defense)
              
-                TODO - MIRROR
             }
              */
             
