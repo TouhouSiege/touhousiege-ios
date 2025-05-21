@@ -15,8 +15,8 @@ struct User: Decodable, Encodable {
     var stamina: Int
     var diamonds: Int
     var gold: Int
-    var characters: [Int]
-    var defense: [Int]
+    var characters: [GameCharacter]
+    var defense: [GameCharacter?]
     var rankingNormalPvp: Int
     var rankingColloseum: Int
     var pvmWins: Int

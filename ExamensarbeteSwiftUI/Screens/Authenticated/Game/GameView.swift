@@ -154,7 +154,9 @@ struct GameView: View {
                             if response.success {
                                 if let randomPlayer = response.user {
                                     gameScene.enemyPlacementArrayPlayer = randomPlayer.defense
+                                    gameScene.enemyUser = randomPlayer
                                     vm.enemyUser = randomPlayer
+                                    
                                 }
                             }
                         } catch let error {

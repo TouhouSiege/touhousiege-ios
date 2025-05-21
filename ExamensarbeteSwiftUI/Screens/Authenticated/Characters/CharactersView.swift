@@ -19,7 +19,7 @@ struct CharactersView: View {
     let characters = Characters.allCharacters
     
     /// To fetch what character to highlight
-    @State var selectedCharacter: Character? = nil
+    @State var selectedCharacter: GameCharacter? = nil
     @State var selectedCharacterId: Int? = nil
     @State var tapAnimation: Bool = false
     

@@ -15,11 +15,12 @@ class GameScene: SKScene {
     
     var vm: GameViewModel?
     var user: User?
+    var enemyUser: User?
     var isDefenseSetting: Bool?
     var isComputerPlaying: Bool?
     var checkForCharactersPlaced: CheckForCharactersPlaced?
     
-    var enemyPlacementArrayPlayer: [Int]? {
+    var enemyPlacementArrayPlayer: [GameCharacter?] = [] {
         didSet {
             vm?.randomEnemyDelayFunction()
         }
@@ -42,8 +43,8 @@ class GameScene: SKScene {
     var profilePicturesCurrentlyShowing: [SKSpriteNode] = []
     var profilePicturesCurrentlyShowingPositions: [CGPoint] = []
     var profilePicturesTemporaryArrayOfIds: [Int] = []
-    var enemyPositions: [Int: Character] = [:]
-    var playerPlacementArray: [Int] = Array(repeating: 0, count: 15)
+    var enemyPositions: [Int: GameCharacter] = [:]
+    var playerPlacementArray: [GameCharacter?] = Array(repeating: nil, count: 15)
     
     var leftArrow: SKSpriteNode?
     var rightArrow: SKSpriteNode?
@@ -64,15 +65,18 @@ class GameScene: SKScene {
         print("GameScene Loaded!")
         guard let user = user else { return print("No characters found!") }
         guard let isDefenseSetting = isDefenseSetting else { return }
-        
-        profilePicturesTemporaryArrayOfIds = user.characters
+  
+        for profilePicture in user.characters {
+            guard let profilePicture = profilePicture.id else { return }
+            profilePicturesTemporaryArrayOfIds.append(profilePicture)
+        }
         
         print("Loaded Characters: \(user.characters)")
         
         if isDefenseSetting {
             createArrowButtons()
             createHexagonPlatforms()
-            createCharacterProfileSelection(characterIds: user.characters)
+            createCharacterProfileSelection(characterIds: profilePicturesTemporaryArrayOfIds)
             
             /* TODO - need to map out all characters in corresponding dictionairys and check for profile aswell.
             if !user.defense.isEmpty {
@@ -84,7 +88,7 @@ class GameScene: SKScene {
             createArrowButtons()
             createHexagonPlatforms()
             createEnemyHexagonPlatforms()
-            createCharacterProfileSelection(characterIds: user.characters)
+            createCharacterProfileSelection(characterIds: profilePicturesTemporaryArrayOfIds)
             
             guard let isComputerPlaying = isComputerPlaying else { return }
             
@@ -112,7 +116,7 @@ class GameScene: SKScene {
                 let realCharacterName = selectedNode.name!.replacingOccurrences(of: "profile_", with: "")
                 
                 /// Creates a new sprite for the first click on profile
-                if let characterData = Characters.allCharacters.first(where: { $0.name == realCharacterName }) {
+                if let characterData = user?.characters.first(where: { $0.name == realCharacterName }) {
                     let newCharacterSpriteBase = SKSpriteNode(imageNamed: characterData.animations.idle[0])
                     newCharacterSpriteBase.position = location
                     
@@ -170,32 +174,34 @@ class GameScene: SKScene {
                         
                         guard let placedCharacterName = character.name else { return }
                         
-                        if let placedCharacterData = Characters.allCharacters.first(where: { $0.name == placedCharacterName }),
+                        if let placedCharacterData = user?.characters.first(where: { $0.name == placedCharacterName }),
                            let placedCharacterIndex = areaToPlacePlayerCharacter.firstIndex(of: validAreaToPlaceCharacter) {
-                            let previousIndex = playerPlacementArray.firstIndex(where: { $0 == placedCharacterData.id })
+                            let previousIndex = playerPlacementArray.firstIndex(where: { $0?.id == placedCharacterData.id })
                             
                             /// Makes sure if a placed character sprite is moved the index in the array gets removed so no duplicates are made
                             if previousIndex != nil && previousIndex != placedCharacterIndex {
                                 guard let previousIndex else { return }
                                 
-                                playerPlacementArray[previousIndex] = 0
+                                playerPlacementArray[previousIndex] = nil
                             }
                             
                             /// Removes sprite and re enables picking of that character if a sprite was already placed
-                            if playerPlacementArray[placedCharacterIndex] != 0 {
-                                let replacedCharacterId = playerPlacementArray[placedCharacterIndex]
-                                if let replacedCharacterName = Characters.allCharacters.first(where: { $0.id == replacedCharacterId })?.name,
-                                   let replacedCharacter = placedCharacters[replacedCharacterName] {
-                                    
-                                    placedCharacters.removeValue(forKey: replacedCharacterName)
-                                    replacedCharacter.removeFromParent()
-                                    reEnableCharacterProfileSelection(characterName: replacedCharacterName)
+                            if playerPlacementArray[placedCharacterIndex] != nil {
+                                _ = playerPlacementArray[placedCharacterIndex]
+                                if let replacedCharacter = playerPlacementArray[placedCharacterIndex] {
+                                    let replacedCharacterId = replacedCharacter.id
+                                    if let replacedCharacterName = user?.characters.first(where: { $0.id == replacedCharacterId })?.name,
+                                       let replacedSprite = placedCharacters[replacedCharacterName] {
+                                        placedCharacters.removeValue(forKey: replacedCharacterName)
+                                        replacedSprite.removeFromParent()
+                                        reEnableCharacterProfileSelection(characterName: replacedCharacterName)
+                                    }
+                                    playerPlacementArray[placedCharacterIndex] = nil
                                 }
-                                playerPlacementArray[placedCharacterIndex] = 0
                             }
                             
                             /// Add placed character to the board and saves id, character and index
-                            //playerPlacementArray[placedCharacterIndex] = placedCharacterData.id
+                            playerPlacementArray[placedCharacterIndex] = placedCharacterData
                             placedCharacters[placedCharacterName] = character
                             vm.playerSpritesHexaCoord[placedCharacterIndex] = character
                         }
@@ -205,9 +211,9 @@ class GameScene: SKScene {
                         
                     } else {
                         /// If dragged outside valid position, resets character
-                        if let characterId = Characters.allCharacters.first(where: { $0.name == character.name })?.id {
-                            if let index = playerPlacementArray.firstIndex(where: { $0 == characterId }) {
-                                playerPlacementArray[index] = 0
+                        if let characterId = user?.characters.first(where: { $0.name == character.name })?.id {
+                            if let index = playerPlacementArray.firstIndex(where: { $0?.id == characterId }) {
+                                playerPlacementArray[index] = nil
                             }
                         }
                         
@@ -231,7 +237,7 @@ class GameScene: SKScene {
         
         for (index, characterId) in characterIds.enumerated() {
             if index == (profilePicturesTemporaryArrayOfIds.startIndex) || index == ((profilePicturesTemporaryArrayOfIds.startIndex + 1)) || index == (profilePicturesTemporaryArrayOfIds.endIndex - 1) || index == (profilePicturesTemporaryArrayOfIds.endIndex - 2) || index == (profilePicturesTemporaryArrayOfIds.endIndex - 3) {
-                if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+                if let characterData = user?.characters.first(where: { $0.id == characterId }) {
                     let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
                     icon.position = CGPoint(x: startX + (CGFloat(spacingDecider) * (smallProfileSize + spacing)), y: spacing * 6)
                     icon.size = CGSize(width: smallProfileSize, height: smallProfileSize)
@@ -305,7 +311,7 @@ class GameScene: SKScene {
             
             let characterId = profilePicturesTemporaryArrayOfIds[(profilePicturesTemporaryArrayOfIds.count / 2) - 1]
             
-            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+            if let characterData = user?.characters.first(where: { $0.id == characterId }) {
                 let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
                 icon.position = profilePicturesCurrentlyShowingPositions[0]
                 icon.size = profilePicturesCurrentlyShowing[1].size
@@ -349,7 +355,7 @@ class GameScene: SKScene {
             
             let characterId = profilePicturesTemporaryArrayOfIds[(profilePicturesTemporaryArrayOfIds.count / 2) - 1]
             
-            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+            if let characterData = user?.characters.first(where: { $0.id == characterId }) {
                 let icon = SKSpriteNode(imageNamed: characterData.profilePicture.small)
                 icon.position = profilePicturesCurrentlyShowingPositions[4]
                 icon.size = profilePicturesCurrentlyShowing[1].size
@@ -385,7 +391,7 @@ class GameScene: SKScene {
     func startIdleAnimation(character: SKSpriteNode, characterName: String) {
         var textures: [SKTexture] = []
         
-        if let characterData = Characters.allCharacters.first(where: { $0.name == characterName }) {
+        if let characterData = user?.characters.first(where: { $0.name == characterName }) {
             for imageName in characterData.animations.idle {
                 textures.append(SKTexture(imageNamed: imageName))
             }
@@ -488,15 +494,18 @@ class GameScene: SKScene {
         }
     }
     
-    /// Places enemy characters based on an aray of character ids
-    func placeEnemyCharacters(enemyArray: [Int]) {
+    /// Places enemy characters based on an aray of character ids TODO - enemyUSER should not search here.
+    func placeEnemyCharacters(enemyArray: [GameCharacter?]) {
         guard let vm = vm else { return }
         
         let enemyHexagons = self.children.filter { $0.name == "enemyHexagonPlatform" }
         
-        for (index, characterId) in enemyArray.enumerated() {
-            
-            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+        for (index, character) in enemyArray.enumerated() {
+            if let enemyCharacter = character,
+               let characterData = Characters.allCharacters.first(where: { $0.id == enemyCharacter.id }) {
+                
+                guard index < enemyHexagons.count else { continue }
+                
                 let enemySprite = SKSpriteNode(imageNamed: characterData.animations.idle[0])
                 
                 if let texture = enemySprite.texture {
@@ -504,21 +513,19 @@ class GameScene: SKScene {
                     enemySprite.size = CGSize(width: (width * TouhouSiegeStyle.Decimals.xxLarge) * aspectRatio, height: width * TouhouSiegeStyle.Decimals.xxLarge)
                 }
                 
-                enemySprite.name = "enemy_" + characterData.name
-                enemySprite.xScale = -1 /// To mirror it
+                enemySprite.name = characterData.name
+                enemySprite.xScale = -1   /// Mirror it
                 
                 let hexagonPosition = CGPoint(x: enemyHexagons[index].frame.midX, y: enemyHexagons[index].frame.midY + (width * TouhouSiegeStyle.Decimals.medium))
                 enemySprite.position = hexagonPosition
                 vm.enemyHexagonCoordinates.append(hexagonPosition)
                 vm.enemySpritesHexaCoord[index] = enemySprite
                 startIdleAnimation(character: enemySprite, characterName: characterData.name)
-                
                 self.addChild(enemySprite)
             }
         }
     }
-    
-    
+
     /// TODO
     /// Places player characters based on an aray of character ids if in defense mode
     func placePlayerCharacters(playerDefense: [Int]) {
@@ -528,7 +535,7 @@ class GameScene: SKScene {
         
         for (index, characterId) in playerDefense.enumerated() {
             
-            if let characterData = Characters.allCharacters.first(where: { $0.id == characterId }) {
+            if let characterData = user?.characters.first(where: { $0.id == characterId }) {
                 let playerSprite = SKSpriteNode(imageNamed: characterData.animations.idle[0])
                 
                 if let texture = playerSprite.texture {

@@ -25,7 +25,7 @@ class ApiAuthManager: ObservableObject {
     }
     
     func register(email: String, username: String, password: String) async throws {
-        let registerPayload = RegisterRequest(email: email, username: username, password: password, characters: [])
+        let registerPayload = RegisterRequest(email: email, username: username, password: password, characters: [], defense: [])
         
         let response: AuthResponse = try await api.post(url: "\(BASE_URL)/register", body: registerPayload, token: nil)
         
@@ -64,8 +64,10 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
-    func gachaRollTen(userId: Int, characters: [Character]) async throws -> GeneralUpdateResponse {
-        let updateCharacterRequest = UpdateCharactersUniqueRequest(characters: characters)
+    func gachaRollTen(userId: Int, characters: [GameCharacter]) async throws -> GeneralUpdateResponse {
+        let defenseConverted: [CharacterData] = characters.map { $0.toCharacterData() }
+        
+        let updateCharacterRequest = UpdateCharactersUniqueRequest(characters: defenseConverted)
         
         let response: GeneralUpdateResponse = try await api.put(
             url: "\(BASE_URL)/update-characters?id=\(userId)",
@@ -76,8 +78,10 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
-    func setDefense(userId: Int, defense: [Int]) async throws -> GeneralUpdateResponse {
-        let updateDefenseRequest = UpdateDefenseRequest(defense: defense)
+    func setDefense(userId: Int, defense: [GameCharacter?]) async throws -> GeneralUpdateResponse {
+        let defenseConverted: [CharacterData?] = defense.map { $0?.toCharacterData() }
+        
+        let updateDefenseRequest = UpdateDefenseRequest(defense: defenseConverted)
 
         let response: GeneralUpdateResponse = try await api.put(
             url: "\(BASE_URL)/update-defense?id=\(userId)",

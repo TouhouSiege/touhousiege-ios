@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class Character: Identifiable, Codable {
+class GameCharacter: Identifiable, Codable {
     var id: Int?
     var name: String
     var team: Team
@@ -95,13 +95,13 @@ class Character: Identifiable, Codable {
 
 
 struct Characters {
-    static let allCharacters: [Character] = [
+    static let allCharacters: [GameCharacter] = [
         /// PLAYER - Characters
-        Character(
+        GameCharacter(
             id: nil,
             name: "Hakurei Reimu",
             team: .player,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 35,
                 defense: 20,
                 maxHp: 100,
@@ -111,10 +111,10 @@ struct Characters {
                 attackType: .Front,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reimuHakureiProfileSmall,
                 big: TouhouSiegeStyle.Images.reimuHakureiProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.reimuHakureiIdle,
                 attack: TouhouSiegeStyle.Images.reimuHakureiAttack,
                 faint: TouhouSiegeStyle.Images.reimuHakureiFaint,
@@ -124,11 +124,11 @@ struct Characters {
             )
         ),
     
-        Character(
+        GameCharacter(
             id: nil,
             name: "Tenshi Hinanawi",
             team: .player,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 30,
                 defense: 28,
                 maxHp: 160,
@@ -138,10 +138,10 @@ struct Characters {
                 attackType: .Front,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.tenshiHinanawiProfileSmall,
                 big: TouhouSiegeStyle.Images.tenshiHinanawiProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.tenshiHinanawiIdle,
                 attack: TouhouSiegeStyle.Images.tenshiHinanawiAttack,
                 faint: TouhouSiegeStyle.Images.tenshiHinanawiFaint,
@@ -151,11 +151,11 @@ struct Characters {
                 )
         ),
     
-        Character(
+        GameCharacter(
             id: nil,
             name: "Hijiri Byakuren",
             team: .player,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 42,
                 defense: 12,
                 maxHp: 140,
@@ -165,10 +165,10 @@ struct Characters {
                 attackType: .Skip,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.hijiriByakurenProfileSmall,
                 big: TouhouSiegeStyle.Images.hijiriByakurenProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.hijiriByakurenIdle,
                 attack: TouhouSiegeStyle.Images.hijiriByakurenAttack,
                 faint: TouhouSiegeStyle.Images.hijiriByakurenFaint,
@@ -178,11 +178,11 @@ struct Characters {
                 )
         ),
         
-        Character(
+        GameCharacter(
             id: nil,
             name: "Koishi Komeiji",
             team: .player,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 12,
                 defense: 60,
                 maxHp: 200,
@@ -192,10 +192,10 @@ struct Characters {
                 attackType: .Back,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
                 big: TouhouSiegeStyle.Images.koishiKomeijiProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.koishiKomeijiIdle,
                 attack: TouhouSiegeStyle.Images.koishiKomeijiAttack,
                 faint: TouhouSiegeStyle.Images.koishiKomeijiFaint,
@@ -205,11 +205,11 @@ struct Characters {
                 )
             ),
         
-        Character(
+        GameCharacter(
             id: nil,
             name: "Reisen Udongein Inaba",
             team: .player,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 60,
                 defense: 5,
                 maxHp: 70,
@@ -219,10 +219,10 @@ struct Characters {
                 attackType: .Back,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,
                 big: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.reisenUdongeinInabaIdle,
                 attack: TouhouSiegeStyle.Images.reisenUdongeinInabaAttack,
                 faint: TouhouSiegeStyle.Images.reisenUdongeinInabaFaint,
@@ -233,11 +233,11 @@ struct Characters {
             ),
         
         /// ENEMY Characters
-        Character(
+        GameCharacter(
             id: 101,
             name: "Hakurei Reimu",
             team: .enemy,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 30,
                 defense: 0,
                 maxHp: 100,
@@ -247,10 +247,10 @@ struct Characters {
                 attackType: .Front,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reimuHakureiProfileSmall,
                 big: TouhouSiegeStyle.Images.reimuHakureiProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.reimuHakureiIdle,
                 attack: TouhouSiegeStyle.Images.reimuHakureiAttack,
                 faint: TouhouSiegeStyle.Images.reimuHakureiFaint,
@@ -260,11 +260,11 @@ struct Characters {
             )
         ),
     
-        Character(
+        GameCharacter(
             id: 102,
             name: "Tenshi Hinanawi",
             team: .enemy,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 30,
                 defense: 0,
                 maxHp: 160,
@@ -274,10 +274,10 @@ struct Characters {
                 attackType: .Front,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.tenshiHinanawiProfileSmall,
                 big: TouhouSiegeStyle.Images.tenshiHinanawiProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.tenshiHinanawiIdle,
                 attack: TouhouSiegeStyle.Images.tenshiHinanawiAttack,
                 faint: TouhouSiegeStyle.Images.tenshiHinanawiFaint,
@@ -287,11 +287,11 @@ struct Characters {
                 )
         ),
     
-        Character(
+        GameCharacter(
             id: 103,
             name: "Hijiri Byakuren",
             team: .enemy,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 30,
                 defense: 0,
                 maxHp: 120,
@@ -301,10 +301,10 @@ struct Characters {
                 attackType: .Skip,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.hijiriByakurenProfileSmall,
                 big: TouhouSiegeStyle.Images.hijiriByakurenProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.hijiriByakurenIdle,
                 attack: TouhouSiegeStyle.Images.hijiriByakurenAttack,
                 faint: TouhouSiegeStyle.Images.hijiriByakurenFaint,
@@ -314,11 +314,11 @@ struct Characters {
                 )
         ),
         
-        Character(
+        GameCharacter(
             id: 104,
             name: "Koishi Komeiji",
             team: .enemy,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 24,
                 defense: 10,
                 maxHp: 200,
@@ -328,10 +328,10 @@ struct Characters {
                 attackType: .Back,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.koishiKomeijiProfileSmall,
                 big: TouhouSiegeStyle.Images.koishiKomeijiProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.koishiKomeijiIdle,
                 attack: TouhouSiegeStyle.Images.koishiKomeijiAttack,
                 faint: TouhouSiegeStyle.Images.koishiKomeijiFaint,
@@ -341,11 +341,11 @@ struct Characters {
                 )
             ),
         
-        Character(
+        GameCharacter(
             id: 105,
             name: "Reisen Udongein Inaba",
             team: .enemy,
-            stats: Character.Stats(
+            stats: GameCharacter.Stats(
                 attack: 40,
                 defense: 2,
                 maxHp: 70,
@@ -355,10 +355,10 @@ struct Characters {
                 attackType: .Back,
                 level: 1
             ),
-            profilePicture: Character.ProfilePicture(
+            profilePicture: GameCharacter.ProfilePicture(
                 small: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileSmall,
                 big: TouhouSiegeStyle.Images.reisenUdongeinInabaProfileLarge),
-            animations: Character.Animations(
+            animations: GameCharacter.Animations(
                 idle: TouhouSiegeStyle.Images.reisenUdongeinInabaIdle,
                 attack: TouhouSiegeStyle.Images.reisenUdongeinInabaAttack,
                 faint: TouhouSiegeStyle.Images.reisenUdongeinInabaFaint,

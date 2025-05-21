@@ -11,8 +11,7 @@ class DefenseViewModel {
     var apiManager: ApiAuthManager?
     var user: User?
     
-    /// Temporary roll
-    func updateDefense(defense: [Int]) async {
+    func updateDefense(defense: [GameCharacter?]) async {
         do {
             guard let userId = user?.id else {
                 print("No user id found.")

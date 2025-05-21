@@ -14,7 +14,7 @@ struct LoginRequest: Encodable {
 }
 
 /// POST, register new user
-struct RegisterRequest: Encodable {
+struct RegisterRequest: Codable {
     var email: String
     var username: String
     var password: String
@@ -22,7 +22,7 @@ struct RegisterRequest: Encodable {
     var diamonds: Int = 0
     var gold: Int = 0
     var characters: [CharacterData]
-    var defense: Array<Int> = []
+    var defense: [CharacterData?]
     var rankingNormalPvp: Int = 0
     var rankingColloseum: Int = 0
     var pvmWins: Int = 0
@@ -31,7 +31,7 @@ struct RegisterRequest: Encodable {
     var pvpLosses: Int = 0
 }
 
-struct CharacterData: Encodable {
+struct CharacterData: Codable {
     var name: String
     var team: String
     var stats: StatsData
@@ -39,7 +39,7 @@ struct CharacterData: Encodable {
     var animations: AnimationsData
 }
 
-struct StatsData: Encodable {
+struct StatsData: Codable {
     var attack: Int
     var defense: Int
     var maxHp: Int
@@ -49,12 +49,12 @@ struct StatsData: Encodable {
     var attackType: String
 }
 
-struct ProfilePictureData: Encodable {
+struct ProfilePictureData: Codable {
     var small: String
     var big: String
 }
 
-struct AnimationsData: Encodable {
+struct AnimationsData: Codable {
     var idle: [String]
     var attack: [String]
     var faint: [String]
@@ -70,12 +70,12 @@ struct UpdateCharactersRequest: Codable {
 
 /// PUT, update characters, OBJECT not ids
 struct UpdateCharactersUniqueRequest: Codable {
-    var characters: Array<Character>
+    var characters: [CharacterData]
 }
 
 /// PUT, update defense
 struct UpdateDefenseRequest: Codable {
-    var defense: Array<Int>
+    var defense: [CharacterData?]
 }
 
 /// PUT, update rankings pvm win

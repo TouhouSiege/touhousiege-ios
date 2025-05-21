@@ -28,14 +28,12 @@ class GameViewModel: ObservableObject {
     var roundNumber: Int = 0
     
     /// Arrays for player vs computer
-    var enemyPlacementArrayComputer: [Int] = {
-        let randomArrayNumber = Int.random(in: 0...3)
+    
+    var enemyPlacementArrayComputer: [GameCharacter?] = {
+        let randomArrayNumber =  1
         
         switch randomArrayNumber {
-        case 0: return [101, 0, 0, 0, 102, 103, 0, 0, 0, 0, 0, 104, 0, 105]
-        case 1: return [0, 103, 102, 0, 0, 101, 0, 0, 104, 0, 0, 105, 0, 0]
-        case 2: return [105, 0, 0, 103, 0, 0, 0, 102, 0, 104, 0, 101, 0, 0]
-        case 3: return [0, 0, 101, 0, 102, 0, 0, 105, 0, 0, 103, 0, 0, 104]
+        case 1: return [nil, nil, nil, nil, Characters.allCharacters[5], nil, nil, nil, Characters.allCharacters[6], Characters.allCharacters[7], nil, nil, nil, nil, Characters.allCharacters[8]]
         default: return []
         }
     }()
@@ -69,7 +67,8 @@ class GameViewModel: ObservableObject {
     
     func randomEnemyDelayFunction() {
         guard let gameScene = gameScene else { return }
-        guard let enemyPlacementArrayPlayer = gameScene.enemyPlacementArrayPlayer else { return }
+        
+        let enemyPlacementArrayPlayer = gameScene.enemyPlacementArrayPlayer
         
         gameScene.placeEnemyCharacters(enemyArray: enemyPlacementArrayPlayer)
     }
@@ -80,11 +79,13 @@ class GameViewModel: ObservableObject {
         if !isComputerPlaying {
             guard let enemyUserDefense = enemyUser?.defense else { return }
             enemyPlacementArrayComputer = enemyUserDefense
+        } else {
         }
     }
     
     func resetGame() {
-        for character in Characters.allCharacters {
+        guard let characters = user?.characters else { return }
+        for character in characters {
             character.stats.currentHp = character.stats.maxHp
         }
     }
@@ -122,14 +123,14 @@ class GameViewModel: ObservableObject {
         
         /// Adds player characters to the queue
         for index in 0..<gameScene.playerPlacementArray.count {
-            if gameScene.playerPlacementArray[index] != 0, let character = getPlayerCharacter(hexIndex: index) {
+            if gameScene.playerPlacementArray[index]?.id != 0, let character = getPlayerCharacter(hexIndex: index) {
                 characterTurnQueue.append(CharacterOnBoard(character: character, isEnemy: false))
             }
         }
         
         /// Adds enemy characters to the queue
         for index in 0..<enemyPlacementArrayComputer.count {
-            if enemyPlacementArrayComputer[index] != 0, let character = getEnemyCharacter(hexIndex: index) {
+            if enemyPlacementArrayComputer[index]?.id != 0, let character = getEnemyCharacter(hexIndex: index) {
                 characterTurnQueue.append(CharacterOnBoard(character: character, isEnemy: true))
             }
         }
@@ -176,7 +177,7 @@ class GameViewModel: ObservableObject {
         
         guard let characterToActIndex = getPlayerHexagonIndex(characterId: characterToAct.id ?? 0) else { return }
         guard let characterToActSprite = playerSpritesHexaCoord[characterToActIndex] else { return }
-        guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex,opposingFormation: enemyPlacementArrayComputer,attackType: characterToAct.stats.attackType, isTargetEnemy: true) else { return }
+        guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex, opposingFormation: enemyPlacementArrayComputer, attackType: characterToAct.stats.attackType, isTargetEnemy: true) else { return }
         guard let characterToAttackSprite = enemySpritesHexaCoord[characterToAttackIndex] else { return }
    
         attackAnimationsAndOutcome(characterToActSprite: characterToActSprite, characterToAttackSprite: characterToAttackSprite, isTargetEnemy: true) {
@@ -190,7 +191,7 @@ class GameViewModel: ObservableObject {
         let characterToAct = characterOnBoard.character
         
         guard let gameScene = gameScene else { return }
-        guard let characterToActIndex = getEnemyHexagonIndex(characterID: characterToAct.id ?? 0) else { return }
+        guard let characterToActIndex = getEnemyHexagonIndex(characterId: characterToAct.id ?? 0) else { return }
         guard let characterToActSprite = enemySpritesHexaCoord[characterToActIndex] else { return }
         guard let characterToAttackIndex = selectTargetIndex(attackerFormationIndex: characterToActIndex, opposingFormation: gameScene.playerPlacementArray, attackType: characterToAct.stats.attackType, isTargetEnemy: false) else { return }
         guard let characterToAttackSprite = playerSpritesHexaCoord[characterToAttackIndex] else { return }
@@ -205,8 +206,8 @@ class GameViewModel: ObservableObject {
     func checkForWinner() {
         guard let gameScene = gameScene else { return }
         
-        let isEnemyAlive = enemyPlacementArrayComputer.contains { $0 != 0 }
-        let isPlayerAlive = gameScene.playerPlacementArray.contains { $0 != 0 }
+        let isEnemyAlive = enemyPlacementArrayComputer.contains { $0 != nil }
+        let isPlayerAlive = gameScene.playerPlacementArray.contains { $0 != nil }
         
         if !isEnemyAlive {
             turnQueueArray.removeAll()
@@ -301,6 +302,9 @@ class GameViewModel: ObservableObject {
     func attackAnimationsAndOutcome(characterToActSprite: SKSpriteNode, characterToAttackSprite: SKSpriteNode, isTargetEnemy: Bool, completion: @escaping () -> Void) {
         characterToActSprite.removeAllActions() /// To remove the idle animation
         
+        guard let characterToActName = characterToActSprite.name else { return }
+        guard let characterToAttackName = characterToAttackSprite.name else { return }
+        
         let characterToActOriginalZPosition = characterToActSprite.zPosition
         characterToActSprite.zPosition = 777
         
@@ -309,13 +313,15 @@ class GameViewModel: ObservableObject {
             characterToActSprite.size = CGSize(width:  (width * TouhouSiegeStyle.Decimals.xxLarge) * aspectRatio, height: width * TouhouSiegeStyle.Decimals.xxLarge)
         }
         
-        guard let characterToActName = characterToActSprite.name?.replacingOccurrences(of: "enemy_", with: "") else { return }
-        guard let characterToAttackName = characterToAttackSprite.name?.replacingOccurrences(of: "enemy_", with: "") else { return }
-        guard let attackerData = Characters.allCharacters.first(where: { $0.name == characterToActName }) else { return }
+        let attacker: GameCharacter? = isTargetEnemy ? user?.characters.first { $0.name == characterToActName } : enemyPlacementArrayComputer.compactMap { $0 }.first { $0.name == characterToActName }
         
-        let characterToAttackTeamCheck: Character.Team = isTargetEnemy ? .enemy : .player
+        let defender: GameCharacter? = isTargetEnemy ? enemyPlacementArrayComputer.compactMap { $0 }.first { $0.name == characterToAttackName } : user?.characters.first { $0.name == characterToAttackName }
         
-        guard let characterToAttackData = Characters.allCharacters.first(where: { $0.name == characterToAttackName && $0.team == characterToAttackTeamCheck }) else { return }
+        guard let attackerData = attacker else { return }
+        guard let characterToAttackData = defender else { return }
+
+        /// Used before when characters werent unique
+        /// let characterToAttackTeamCheck: GameCharacter.Team = isTargetEnemy ? .enemy : .player
         
         /// Positions of attacker and defender
         let characterToActOrginialPosition = characterToActSprite.position
@@ -323,9 +329,8 @@ class GameViewModel: ObservableObject {
         
         let distanceXAxis = characterToAttackPosition.x - characterToActOrginialPosition.x
         let distanceYAxis = characterToAttackPosition.y - characterToActOrginialPosition.y
-        
         let distanceToTarget = sqrt(distanceXAxis * distanceXAxis + distanceYAxis * distanceYAxis)
- 
+
         /// To make the attacker hit the defender slightly about infront instead of inside the center aswell
         let adjustedTargetPosition = CGPoint(
             x: characterToAttackPosition.x - distanceXAxis / distanceToTarget * width * TouhouSiegeStyle.Decimals.xSmall,
@@ -410,7 +415,7 @@ class GameViewModel: ObservableObject {
     }
 
     
-    func calculateAndApplyDamage(from attacker: Character, to target: Character, targetSprite: SKSpriteNode, isTargetEnemy: Bool) {
+    func calculateAndApplyDamage(from attacker: GameCharacter, to target: GameCharacter, targetSprite: SKSpriteNode, isTargetEnemy: Bool) {
         let calculatedDamage = attacker.stats.attack - target.stats.defense
         
         guard calculatedDamage > 0 else { return print("You did nothing!") }
@@ -427,20 +432,20 @@ class GameViewModel: ObservableObject {
     }
     
     /// Remove all logical information if a character faints so the game won't freeze
-    func removeFaintedCharacterLogical(_ target: Character, isTargetEnemy: Bool) {
+    func removeFaintedCharacterLogical(_ target: GameCharacter, isTargetEnemy: Bool) {
         guard let gameScene = gameScene else { return }
         
         if isTargetEnemy {
             for i in 0..<enemyPlacementArrayComputer.count {
-                if enemyPlacementArrayComputer[i] == target.id {
-                    enemyPlacementArrayComputer[i] = 0
+                if enemyPlacementArrayComputer[i]?.id == target.id {
+                    enemyPlacementArrayComputer[i] = nil
                     break
                 }
             }
         } else {
             for i in 0..<gameScene.playerPlacementArray.count {
-                if gameScene.playerPlacementArray[i] == target.id {
-                    gameScene.playerPlacementArray[i] = 0
+                if gameScene.playerPlacementArray[i]?.id == target.id {
+                    gameScene.playerPlacementArray[i] = nil
                     break
                 }
             }
@@ -448,13 +453,13 @@ class GameViewModel: ObservableObject {
     }
     
     /// Removes a character sprite that has fainted after a turn
-    func removeFaintedCharacterVisual(_ target: Character, targetSprite: SKSpriteNode) {
+    func removeFaintedCharacterVisual(_ target: GameCharacter, targetSprite: SKSpriteNode) {
         targetSprite.removeAllActions()
         targetSprite.removeFromParent()
     }
 
     /// Function that selects which target to attack at which index with the help of row order priority and indices
-    func selectTargetIndex(attackerFormationIndex: Int, opposingFormation: [Int], attackType: Character.AttackType, isTargetEnemy: Bool) -> Int? {
+    func selectTargetIndex(attackerFormationIndex: Int, opposingFormation: [GameCharacter?], attackType: GameCharacter.AttackType, isTargetEnemy: Bool) -> Int? {
         
         let columns = 5
         let attackerRowPriority = attackerFormationIndex / columns
@@ -474,8 +479,7 @@ class GameViewModel: ObservableObject {
         for row in rowOrder {
             let start = row * columns
             let end = min(start + columns, opposingFormation.count)
-          
-            let indices = (start..<end).filter { opposingFormation[$0] != 0 }
+            let indices = (start..<end).filter { opposingFormation[$0] != nil }
             
             if !indices.isEmpty {
                 if isTargetEnemy {
@@ -505,30 +509,36 @@ class GameViewModel: ObservableObject {
     /// To retrieve index of where a player character is placed
     func getPlayerHexagonIndex(characterId: Int) -> Int? {
         guard let gameScene = gameScene else { return nil }
-        return gameScene.playerPlacementArray.firstIndex(where: { $0 == characterId })
+        
+        return gameScene.playerPlacementArray.firstIndex(where: { $0?.id == characterId })
     }
     
     /// To retrieve the index of where a enemy character is placed
-    func getEnemyHexagonIndex(characterID: Int) -> Int? {
-        // Returns the index in enemyPlacementArray where the character is placed.
-        return enemyPlacementArrayComputer.firstIndex(where: { $0 == characterID })
+    func getEnemyHexagonIndex(characterId: Int) -> Int? {
+        
+        return enemyPlacementArrayComputer.firstIndex(where: { $0?.id == characterId })
     }
     
     /// To retrieve player characters currently on the board
-    func getPlayerCharacter(hexIndex: Int) -> Character? {
+    func getPlayerCharacter(hexIndex: Int) -> GameCharacter? {
         guard let gameScene = gameScene else { return nil }
         
-        let id = gameScene.playerPlacementArray[hexIndex]
-        guard id != 0 else { return nil }
-        return Characters.allCharacters.first { $0.id == id }
+        let characterData = gameScene.playerPlacementArray[hexIndex]
+        
+        guard characterData != nil else { return nil }
+        
+        return user?.characters.first { $0.id == characterData?.id }
     }
 
     /// To retrieve enemy characters currently on the board
-    func getEnemyCharacter(hexIndex: Int) -> Character? {
-        let id = enemyPlacementArrayComputer[hexIndex]
-        guard id != 0 else { return nil }
-        return Characters.allCharacters.first { $0.id == id }
+    func getEnemyCharacter(hexIndex: Int) -> GameCharacter? {
+        guard let characterData = enemyPlacementArrayComputer[hexIndex] else { return nil }
+        
+        let charactersNilFilter: [GameCharacter] = enemyPlacementArrayComputer.compactMap { $0 }
+        
+        return charactersNilFilter.first { $0.id == characterData.id }
     }
+
 }
 
 /// To track if a character is placed on the board
@@ -538,7 +548,7 @@ class CheckForCharactersPlaced: ObservableObject {
 
 /// For turn queue structure
 struct CharacterOnBoard {
-    let character: Character
+    let character: GameCharacter
     let isEnemy: Bool
 }
 
