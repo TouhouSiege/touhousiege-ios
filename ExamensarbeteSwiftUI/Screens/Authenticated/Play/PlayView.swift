@@ -15,9 +15,6 @@ struct PlayView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    /// Roundabout way to set who the opponent is
-    let vm = GameViewModel()
-    
     @State var isDefenseSet: Bool = false
     
     var body: some View {
