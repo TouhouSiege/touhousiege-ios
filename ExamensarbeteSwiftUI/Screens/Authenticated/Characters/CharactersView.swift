@@ -98,7 +98,7 @@ struct CharactersView: View {
                         }
                     }
                     .frame(maxWidth: ((width * TouhouSiegeStyle.Decimals.xxLarge) * 4) + ((width * TouhouSiegeStyle.Decimals.xxSmall) * 3), maxHeight: width - (width * TouhouSiegeStyle.Decimals.xSmall) - (width * TouhouSiegeStyle.BigDecimals.xSmall))
-                    .offset(x: width * TouhouSiegeStyle.Decimals.medium, y: width * TouhouSiegeStyle.Decimals.xSmall + height * TouhouSiegeStyle.BigDecimals.xSmall)
+                    .offset(x: width * TouhouSiegeStyle.Decimals.medium, y: width * TouhouSiegeStyle.Decimals.large + height * TouhouSiegeStyle.BigDecimals.xSmall)
                     
                     Spacer()
                 }

@@ -25,28 +25,28 @@ struct PlayView: View {
             VStack {
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .game(isComputerPlaying: true))
-                }, text: "Player vs Computer").offset(x: -width * 0.25)
+                }, text: "Player vs Computer").offset(x: -width * 0.2)
                     .disabled(!isDefenseSet)
                     .opacity(isDefenseSet ? 1 : 0.5)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .game(isComputerPlaying: false))
-                }, text: "Player vs Player").offset(x: -width * 0.22)
+                }, text: "Player vs Player").offset(x: -width * 0.17)
                     .disabled(!isDefenseSet)
                     .opacity(isDefenseSet ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                }, text: "Colosseum").offset(x: -width * 0.22)
+                }, text: "Colosseum").offset(x: -width * 0.17)
                     .disabled(true)
                     .opacity(0.5)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .defense)
-                }, text: "Defense").offset(x: -width * 0.25)
+                }, text: "Defense").offset(x: -width * 0.2)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .home)
-                }, text: "Back").offset(x: -width * 0.28)
+                }, text: "Back").offset(x: -width * 0.23)
             }.offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
