@@ -17,7 +17,7 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Settings")
             TopNavBar()
             
             VStack {

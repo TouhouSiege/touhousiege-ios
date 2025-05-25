@@ -27,7 +27,7 @@ struct ShopView: View {
     var body: some View {
         ZStack {
             ZStack {
-                BackgroundMain()
+                BackgroundMain(title: "Shop")
                 TopNavBar()
                 
                 VStack {

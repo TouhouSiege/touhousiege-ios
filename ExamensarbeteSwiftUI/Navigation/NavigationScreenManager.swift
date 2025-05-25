@@ -13,8 +13,6 @@ struct NavigationScreenManager {
             return AnyView(LoginView())
         case .gacha:
             return AnyView(GachaView())
-        case .purchaseCrystal:
-            return AnyView(PurchaseCrystalView())
         case .about:
             return AnyView(AboutView())
         case .characters:

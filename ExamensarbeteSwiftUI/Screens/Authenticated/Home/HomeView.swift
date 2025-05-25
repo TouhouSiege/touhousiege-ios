@@ -20,7 +20,7 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Home")
             TopNavBar()
             
             VStack {

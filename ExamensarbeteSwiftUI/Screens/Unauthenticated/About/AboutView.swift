@@ -17,7 +17,7 @@ struct AboutView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "About")
             
             if userManager.user != nil {
                 TopNavBar()

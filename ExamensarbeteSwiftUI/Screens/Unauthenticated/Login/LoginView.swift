@@ -16,7 +16,7 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Login")
             
             HStack {
                 VStack {

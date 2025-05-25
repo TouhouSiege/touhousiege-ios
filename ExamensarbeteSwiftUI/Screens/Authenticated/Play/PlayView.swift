@@ -19,7 +19,7 @@ struct PlayView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Play")
             TopNavBar()
             
             VStack {

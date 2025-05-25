@@ -14,7 +14,6 @@ enum Screen: Hashable {
     case login
     case game(isComputerPlaying: Bool)
     case gacha
-    case purchaseCrystal
     case about
     case characters
     case shop

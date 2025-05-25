@@ -6,7 +6,7 @@ struct LandingView: View {
 
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Welcome")
             
             VStack {
                 ButtonBig(function: {

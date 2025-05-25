@@ -19,7 +19,7 @@ struct GachaView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Gacha")
             TopNavBar()
             
             VStack {

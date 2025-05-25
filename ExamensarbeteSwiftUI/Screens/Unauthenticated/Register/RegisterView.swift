@@ -20,7 +20,7 @@ struct RegisterView: View {
     
     var body: some View {
         ZStack {
-            BackgroundMain()
+            BackgroundMain(title: "Register")
             
             HStack {
                 VStack {
