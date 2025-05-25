@@ -7,10 +7,12 @@
 
 import Foundation
 
-class ShopViewModel {
+class ShopViewModel: ObservableObject {
     var apiManager: ApiAuthManager?
     var user: User?
     var userManager: UserManager?
+    
+    @Published var confirmDialogError = false
     
     /// Diamond purchase function
     func purchaseDiamonds(amount: Int) async {
@@ -31,7 +33,7 @@ class ShopViewModel {
     /// Stamina purchase function
     func purchaseStamina(amount: Int, cost: Int) async {
         guard let goldCheck = user?.gold else { return }
-        guard goldCheck >= cost else { return print("Too little Gold!") }
+        guard goldCheck >= cost else { return await MainActor.run { confirmDialogError = true }}
         
         /// Trying to purchase stamina
         do {

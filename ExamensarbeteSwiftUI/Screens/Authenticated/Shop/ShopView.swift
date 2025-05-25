@@ -15,7 +15,7 @@ struct ShopView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    let vm = ShopViewModel()
+    @StateObject var vm = ShopViewModel()
     
     @State var buyTitle: String = ""
     @State var buyText: String = ""
@@ -123,7 +123,9 @@ struct ShopView: View {
                         Spacer()
                     }
                 }
-            }.disabled(confirmDialog)
+            }
+            .disabled(confirmDialog)
+            .disabled(vm.confirmDialogError)
             
             if confirmDialog {
                     ConfirmDialog(functionYes: {
@@ -173,6 +175,12 @@ struct ShopView: View {
                         
                     }, title: "Are you sure about this purchase?", buyTitle: buyTitle, buyText: buyText)
                     .opacity(isAnimating ? 1 : 0)
+            }
+            
+            if vm.confirmDialogError {
+                ErrorDialog(functionOk: {
+                    vm.confirmDialogError = false
+                }, title: "Purchase Failed!")
             }
         }
         .onAppear {
