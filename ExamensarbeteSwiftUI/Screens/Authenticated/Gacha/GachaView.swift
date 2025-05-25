@@ -39,7 +39,7 @@ struct GachaView: View {
                         HStack {
                             ButtonBig(function: {
                                 Task {
-                                    await vm.rollOneCharacter()
+                                    await vm.rollOneCharacter(cost: 100)
                                     withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                         isAnimating.toggle()
                                     }
@@ -48,7 +48,7 @@ struct GachaView: View {
                             
                             ButtonBig(function: {
                                 Task {
-                                    await vm.rollTenCharacters()
+                                    await vm.rollTenCharacters(cost: 1000)
                                     withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                         isAnimating.toggle()
                                     }

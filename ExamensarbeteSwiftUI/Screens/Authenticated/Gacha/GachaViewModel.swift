@@ -17,9 +17,9 @@ class GachaViewModel: ObservableObject {
     @Published var confirmDialogError = false
     
     /// Single Gacha roll plus check for diamonds before roll
-    func rollOneCharacter() async {
+    func rollOneCharacter(cost: Int) async {
         guard let diamondCheck = user?.diamonds else { return }
-        guard diamondCheck > 100 else { return await MainActor.run { confirmDialogError = true } }
+        guard diamondCheck >= 100 else { return await MainActor.run { confirmDialogError = true } }
         
         do {
             guard let userId = user?.id else {
@@ -40,12 +40,25 @@ class GachaViewModel: ObservableObject {
         } catch let error {
             print("Error updating characters: \(error)")
         }
+        
+        /// Updates diamonds based on cost
+        do {
+            guard let userId = user?.id else {
+                print("No user id found.")
+                return
+            }
+            
+            let response = try await apiManager?.updateDiamondsSubtract(userId: userId, diamonds: cost)
+            print("Amount of Diamonds updated successfully: \(String(describing: response))")
+        } catch let error {
+            print("Error updating amount of diamonds: \(error)")
+        }
     }
     
     /// Ten Gacha roll plus check for diamonds before roll
-    func rollTenCharacters() async {
+    func rollTenCharacters(cost: Int) async {
         guard let diamondCheck = user?.diamonds else { return }
-        guard diamondCheck > 1000 else { return await MainActor.run { confirmDialogError = true } }
+        guard diamondCheck >= 1000 else { return await MainActor.run { confirmDialogError = true } }
         
         do {
             guard let userId = user?.id else {
@@ -65,6 +78,19 @@ class GachaViewModel: ObservableObject {
             print("Characters updated successfully: \(String(describing: response))")
         } catch let error {
             print("Error updating characters: \(error)")
+        }
+        
+        /// Updates diamonds based on cost
+        do {
+            guard let userId = user?.id else {
+                print("No user id found.")
+                return
+            }
+            
+            let response = try await apiManager?.updateDiamondsSubtract(userId: userId, diamonds: cost)
+            print("Amount of Diamonds updated successfully: \(String(describing: response))")
+        } catch let error {
+            print("Error updating amount of diamonds: \(error)")
         }
     }
 }
