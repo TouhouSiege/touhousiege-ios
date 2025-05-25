@@ -15,6 +15,8 @@ struct ShopView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    let vm = ShopViewModel()
+    
     @State var buyTitle: String = ""
     @State var buyText: String = ""
     @State var whichTab: Int = 1
@@ -125,7 +127,25 @@ struct ShopView: View {
             
             if confirmDialog {
                     ConfirmDialog(functionYes: {
-                        
+                        Task {
+                            switch whichItem {
+                            case 1: await vm.purchaseDiamonds(amount: 400)
+                            case 2: await vm.purchaseDiamonds(amount: 900)
+                            case 3: await vm.purchaseDiamonds(amount: 2000)
+                            default: print("Error purchasing item!")
+                            }
+                            
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                isAnimating.toggle()
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                                whichItem = 0
+                                buyTitle = ""
+                                buyText = ""
+                                confirmDialog = false
+                            })
+                        }
                     }, functionNo: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             isAnimating.toggle()
@@ -141,6 +161,10 @@ struct ShopView: View {
                     }, title: "Are you sure about this purchase?", buyTitle: buyTitle, buyText: buyText)
                     .opacity(isAnimating ? 1 : 0)
             }
+        }
+        .onAppear {
+            vm.apiManager = apiAuthManager
+            vm.user = userManager.user
         }
     }
 }
