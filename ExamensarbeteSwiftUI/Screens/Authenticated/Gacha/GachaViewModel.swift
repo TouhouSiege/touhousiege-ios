@@ -14,11 +14,12 @@ class GachaViewModel: ObservableObject {
     
     @Published var successfullyRolled: Bool = false
     @Published var rolledCharacters: [String] = []
+    @Published var confirmDialogError = false
     
     /// Single Gacha roll plus check for diamonds before roll
     func rollOneCharacter() async {
         guard let diamondCheck = user?.diamonds else { return }
-        guard diamondCheck > 100 else { return print("Too little diamonds!") }
+        guard diamondCheck > 100 else { return await MainActor.run { confirmDialogError = true } }
         
         do {
             guard let userId = user?.id else {
@@ -44,7 +45,7 @@ class GachaViewModel: ObservableObject {
     /// Ten Gacha roll plus check for diamonds before roll
     func rollTenCharacters() async {
         guard let diamondCheck = user?.diamonds else { return }
-        guard diamondCheck > 1000 else { return print("Too little diamonds!") }
+        guard diamondCheck > 1000 else { return await MainActor.run { confirmDialogError = true } }
         
         do {
             guard let userId = user?.id else {

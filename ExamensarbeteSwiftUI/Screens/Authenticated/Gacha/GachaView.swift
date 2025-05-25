@@ -63,6 +63,7 @@ struct GachaView: View {
                 vm.user = userManager.user
             }
             .disabled(vm.successfullyRolled)
+            .disabled(vm.confirmDialogError)
             
             
             if vm.successfullyRolled {
@@ -88,6 +89,17 @@ struct GachaView: View {
                 }, title: "Congratulations, you got:", text: "\(vm.rolledCharacters.joined(separator: "\n"))")
                 .opacity(isAnimating ? 1 : 0)
             }
+            
+            if vm.confirmDialogError {
+                ErrorDialog(functionOk: {
+                    vm.confirmDialogError = false
+                }, title: "Purchase Failed!")
+            }
+        }
+        .onAppear {
+            vm.apiManager = apiAuthManager
+            vm.user = userManager.user
+            vm.userManager = userManager
         }
     }
 }
