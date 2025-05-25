@@ -15,7 +15,8 @@ struct ShopItemLister: View {
     var titel: String
     var text: String
     var cost: String
-    var image: Image?
+    var imageButton: Image?
+    var imageBigIcon: Image?
     
     var body: some View {
         VStack {
@@ -31,16 +32,24 @@ struct ShopItemLister: View {
             
             Spacer()
             
+            if let image = imageBigIcon {
+                image
+                    .resizable()
+                    .frame(width: width * TouhouSiegeStyle.Decimals.medium, height: width * TouhouSiegeStyle.Decimals.medium)
+            }
+            
+            Spacer()
+            
             ButtonSmall(function: {
                 function()
-            }, text: cost, image: image)
+            }, text: cost, image: imageButton)
             .offset(y: -width * TouhouSiegeStyle.Decimals.xSmall)
         }
         .frame(maxWidth: width * 0.2, maxHeight: width * 0.25)
         
         .background {
-            RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                .fill(.generalBrown.opacity(TouhouSiegeStyle.BigDecimals.xxLarge))
+            RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.small)
+                .fill(Color(TouhouSiegeStyle.Colors.brownGeneral).opacity(TouhouSiegeStyle.BigDecimals.xxLarge))
                 .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
                 
             

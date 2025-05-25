@@ -23,7 +23,7 @@ struct ButtonSmall: View {
             HStack {
                 Text(text)
                     .font(TouhouSiegeStyle.FontSize.small)
-                    .foregroundStyle(.ultraThickMaterial)
+                    .foregroundStyle(.thickMaterial)
                 
                 if let image = image {
                     image
@@ -33,9 +33,9 @@ struct ButtonSmall: View {
             }
             .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xxSmall, maxHeight: height * TouhouSiegeStyle.Decimals.xLarge)
             .background {
-                RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                    .fill(.ultraThinMaterial)
-                    .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
+                RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.small)
+                    .fill(Color(TouhouSiegeStyle.Colors.brownLight).opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
+                    .stroke(Color(TouhouSiegeStyle.Colors.brownGeneral).opacity(TouhouSiegeStyle.BigDecimals.Large), lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
             }
         })
     }

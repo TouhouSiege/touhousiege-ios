@@ -61,20 +61,29 @@ public class TouhouSiegeStyle {
     
     struct Colors {
         static let peachRed = Color("PeachRed")
+        static let brownGeneral = Color("GeneralBrown")
+        static let brownLight = Color("LightBrown")
+        static let brownDark = Color("DarkBrown")
     }
     
     struct Images {
         static let stamina01 = "stamina_01"
+        static let staminaSmall = "stamina_small"
         
         static let diamond01 = "diamond_01"
         static let diamond02 = "diamond_02"
         static let diamond03 = "diamond_03"
+        static let diamondSmall = "diamonds_small"
+        static let diamondMedium = "diamonds_medium"
+        static let diamondLarge = "diamonds_big"
         
         static let gold01 = "goldcoin_01"
         static let gold02 = "goldcoin_02"
         static let gold03 = "goldcoin_03"
         static let gold04 = "goldcoin_04"
         static let gold05 = "goldcoin_05"
+        static let goldSmall = "coins_small"
+        static let goldlarge = "coins_big"
         
         static let bg_play: [String] = (1...8).map { "bg_play_\($0)" }
         static let bg_general: String = "bg_general"

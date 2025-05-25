@@ -21,12 +21,12 @@ struct ButtonBig: View {
         }, label: {
             Text(text)
                 .font(TouhouSiegeStyle.FontSize.large.bold())
-                .foregroundStyle(.thinMaterial)
+                .foregroundStyle(.thickMaterial)
                 .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xSmall, maxHeight: height * TouhouSiegeStyle.BigDecimals.xxSmall)
                 .background {
-                    RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                        .fill(Color.generalBrown.opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
-                        .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
+                    RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.small)
+                        .fill(Color(TouhouSiegeStyle.Colors.brownLight).opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
+                        .stroke(Color(TouhouSiegeStyle.Colors.brownGeneral).opacity(TouhouSiegeStyle.BigDecimals.Large), lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
                 }
         })
     }

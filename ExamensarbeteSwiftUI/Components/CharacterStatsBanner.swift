@@ -18,7 +18,7 @@ struct CharacterStatsBanner: View {
         VStack {
             Text(statType)
                 .font(TouhouSiegeStyle.FontSize.xSmall.bold())
-                .foregroundStyle(.thinMaterial)
+                .foregroundStyle(.thickMaterial)
             Text(text)
                 .font(TouhouSiegeStyle.FontSize.medium)
                 .foregroundStyle(.ultraThickMaterial)
@@ -26,9 +26,9 @@ struct CharacterStatsBanner: View {
         .frame(width: width * TouhouSiegeStyle.Decimals.xxLarge, height: height * TouhouSiegeStyle.Decimals.large)
         .padding(width * TouhouSiegeStyle.Decimals.xxSmall)
         .background {
-            RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                .fill(Color(TouhouSiegeStyle.Colors.peachRed))
-                .stroke(.thinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.small)
+            RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.small)
+                .fill(Color(TouhouSiegeStyle.Colors.brownGeneral).opacity(TouhouSiegeStyle.BigDecimals.xxLarge))
+                .stroke(.thinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
         }
     }
 }

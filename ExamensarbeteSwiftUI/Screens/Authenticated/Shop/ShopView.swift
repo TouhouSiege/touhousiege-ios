@@ -55,7 +55,7 @@ struct ShopView: View {
                                 withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                     isAnimating.toggle()
                                 }
-                            }, titel: "Diamond Pack 1", text: "400 Diamonds", cost: "6.99€")
+                            }, titel: "Diamond Pack 1", text: "400 Diamonds", cost: "6.99€", imageBigIcon: Image(TouhouSiegeStyle.Images.diamondSmall))
                             
                             ShopItemLister(function: {
                                 whichItem = 2
@@ -65,7 +65,7 @@ struct ShopView: View {
                                 withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                     isAnimating.toggle()
                                 }
-                            }, titel: "Diamond Pack 2", text: "900 Diamonds", cost: "12.99€")
+                            }, titel: "Diamond Pack 2", text: "900 Diamonds", cost: "12.99€", imageBigIcon: Image(TouhouSiegeStyle.Images.diamondMedium))
                             
                             ShopItemLister(function: {
                                 whichItem = 3
@@ -75,7 +75,7 @@ struct ShopView: View {
                                 withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                     isAnimating.toggle()
                                 }
-                            }, titel: "Diamond Pack 3", text: "2000 Diamonds", cost: "24.99€")
+                            }, titel: "Diamond Pack 3", text: "2000 Diamonds", cost: "24.99€", imageBigIcon: Image(TouhouSiegeStyle.Images.diamondLarge))
                         }
                         
                         if whichTab == 2 {
@@ -87,7 +87,7 @@ struct ShopView: View {
                                 withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                     isAnimating.toggle()
                                 }
-                            }, titel: "Stamina Pack", text: "120 Stamina", cost: "750", image: Image(TouhouSiegeStyle.Images.gold01))
+                            }, titel: "Stamina Pack", text: "120 Stamina", cost: "750", imageButton: Image(TouhouSiegeStyle.Images.gold01), imageBigIcon: Image(TouhouSiegeStyle.Images.staminaSmall))
                             
                             ShopItemLister(function: {
                                 whichItem = 102
@@ -97,7 +97,7 @@ struct ShopView: View {
                                 withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                     isAnimating.toggle()
                                 }
-                            }, titel: "Gold Pack 1", text: "400 Gold", cost: "100", image: Image(TouhouSiegeStyle.Images.diamond01))
+                            }, titel: "Gold Pack 1", text: "400 Gold", cost: "100", imageButton: Image(TouhouSiegeStyle.Images.diamond01), imageBigIcon: Image(TouhouSiegeStyle.Images.goldSmall))
                             
                             ShopItemLister(function: {
                                 whichItem = 103
@@ -107,7 +107,7 @@ struct ShopView: View {
                                 withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                                     isAnimating.toggle()
                                 }
-                            }, titel: "Gold Pack 2", text: "1000 Gold", cost: "200", image: Image(TouhouSiegeStyle.Images.diamond01))
+                            }, titel: "Gold Pack 2", text: "1000 Gold", cost: "200", imageButton: Image(TouhouSiegeStyle.Images.diamond01), imageBigIcon: Image(TouhouSiegeStyle.Images.goldlarge))
                         }
                     }
                 }

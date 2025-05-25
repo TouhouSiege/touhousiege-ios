@@ -22,18 +22,18 @@ struct ConfirmDialog: View {
             VStack {
                 Text(title)
                     .font(TouhouSiegeStyle.FontSize.large.bold())
-                    .foregroundStyle(Color.generalBrown)
+                    .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
                     .offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
                 
                 Spacer()
                 
                 Text(buyTitle)
                     .font(TouhouSiegeStyle.FontSize.small.bold())
-                    .foregroundStyle(Color.generalBrown)
+                    .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
                 
                 Text(buyText)
                     .font(TouhouSiegeStyle.FontSize.xSmall)
-                    .foregroundStyle(Color.generalBrown)
+                    .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
                 
                 Spacer()
                 
@@ -50,9 +50,9 @@ struct ConfirmDialog: View {
             }
             .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.medium, maxHeight: height * TouhouSiegeStyle.BigDecimals.medium)
             .background {
-                RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                    .fill(.thinMaterial.opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
-                    .stroke(.generalBrown, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
+                RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.small)
+                    .fill(Color(TouhouSiegeStyle.Colors.brownGeneral).opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
+                    .stroke(Color(TouhouSiegeStyle.Colors.brownLight), lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
             }
         }
     }
