@@ -132,7 +132,7 @@ struct ShopView: View {
                             case 1: await vm.purchaseDiamonds(amount: 400)
                             case 2: await vm.purchaseDiamonds(amount: 900)
                             case 3: await vm.purchaseDiamonds(amount: 2000)
-                            case 101: await vm.purchaseStamina(amount: 120)
+                            case 101: await vm.purchaseStamina(amount: 120, cost: 750)
                             case 102: await vm.purchaseGold(amount: 400)
                             case 103: await vm.purchaseGold(amount: 1000)
                             default: print("Error purchasing item!")
