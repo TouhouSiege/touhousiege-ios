@@ -14,23 +14,33 @@ struct ButtonSmall: View {
     
     var function: () -> Void
     var text: String
+    var image: Image?
     
     var body: some View {
         Button(action: {
             function()
         }, label: {
-            Text(text)
-                .font(TouhouSiegeStyle.FontSize.small)
-                .foregroundStyle(.ultraThickMaterial)
-                .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xxSmall, maxHeight: height * TouhouSiegeStyle.Decimals.xLarge)
-                .background {
-                    RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                        .fill(.ultraThinMaterial)
-                        .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
+            HStack {
+                Text(text)
+                    .font(TouhouSiegeStyle.FontSize.small)
+                    .foregroundStyle(.ultraThickMaterial)
+                
+                if let image = image {
+                    image
+                        .resizable()
+                        .frame(width: width * TouhouSiegeStyle.Decimals.xSmall, height: width * TouhouSiegeStyle.Decimals.xSmall)
                 }
+            }
+            .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xxSmall, maxHeight: height * TouhouSiegeStyle.Decimals.xLarge)
+            .background {
+                RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
+                    .fill(.ultraThinMaterial)
+                    .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
+            }
         })
     }
 }
+
 
 #Preview {
     ButtonSmall(function: {

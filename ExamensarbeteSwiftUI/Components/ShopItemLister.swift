@@ -14,6 +14,8 @@ struct ShopItemLister: View {
     var function: () -> Void
     var titel: String
     var text: String
+    var cost: String
+    var image: Image?
     
     var body: some View {
         VStack {
@@ -31,7 +33,7 @@ struct ShopItemLister: View {
             
             ButtonSmall(function: {
                 function()
-            }, text: "Buy")
+            }, text: cost, image: image)
             .offset(y: -width * TouhouSiegeStyle.Decimals.xSmall)
         }
         .frame(maxWidth: width * 0.2, maxHeight: width * 0.25)
