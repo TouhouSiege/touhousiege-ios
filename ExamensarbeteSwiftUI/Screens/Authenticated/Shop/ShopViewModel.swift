@@ -65,7 +65,7 @@ class ShopViewModel: ObservableObject {
     /// Gold purchase function
     func purchaseGold(amount: Int, cost: Int) async {
         guard let diamondCheck = user?.diamonds else { return }
-        guard diamondCheck > cost else { return print("Too little diamonds!") }
+        guard diamondCheck > cost else { return await MainActor.run { confirmDialogError = true }}
         
         /// Trying to purchase gold
         do {
