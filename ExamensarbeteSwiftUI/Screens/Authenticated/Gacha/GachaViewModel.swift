@@ -10,7 +10,9 @@ import Foundation
 class GachaViewModel: ObservableObject {
     var apiManager: ApiAuthManager?
     var user: User?
+    var userManager: UserManager?
     
+    @Published var successfullyRolled: Bool = false
     @Published var rolledCharacters: [String] = []
     
     /// Single Gacha roll plus check for diamonds before roll
@@ -28,7 +30,10 @@ class GachaViewModel: ObservableObject {
             
             let response = try await apiManager?.gachaRollOne(userId: userId, character: [randomCharacter])
             
-            rolledCharacters.append(randomCharacter.name)
+            await MainActor.run {
+                rolledCharacters.append(randomCharacter.name)
+                successfullyRolled = true
+            }
             
             print("Characters updated successfully: \(String(describing: response))")
         } catch let error {
@@ -51,7 +56,10 @@ class GachaViewModel: ObservableObject {
             
             let response = try await apiManager?.gachaRollTen(userId: userId, characters: randomCharacters)
             
-            rolledCharacters.append(contentsOf: randomCharacters.map { $0.name } )
+            await MainActor.run {
+                rolledCharacters.append(contentsOf: randomCharacters.map { $0.name } )
+                successfullyRolled = true
+            }
             
             print("Characters updated successfully: \(String(describing: response))")
         } catch let error {

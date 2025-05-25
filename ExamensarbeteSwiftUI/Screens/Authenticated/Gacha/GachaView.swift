@@ -15,42 +15,78 @@ struct GachaView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    let vm = GachaViewModel()
+    @StateObject var vm = GachaViewModel()
+    
+    @State var isAnimating = false
     
     var body: some View {
         ZStack {
-            BackgroundMain(title: "Gacha")
-            TopNavBar()
-            
-            VStack {
-                Spacer()
+            ZStack {
+                BackgroundMain(title: "Gacha")
+                TopNavBar()
                 
-                HStack {
-                    ButtonBig(function: {
-                        navigationManager.navigateTo(screen: .home)
-                    }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
-                    
+                VStack {
                     Spacer()
                     
                     HStack {
                         ButtonBig(function: {
-                            Task {
-                                await vm.rollOneCharacter()
-                            }
-                        }, text: "Roll x 1")
+                            navigationManager.navigateTo(screen: .home)
+                        }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                         
-                        ButtonBig(function: {
-                            Task {
-                                await vm.rollTenCharacters()
-                            }
-                        }, text: "Roll x 10")
-                    }.offset(x: -width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                        Spacer()
+                        
+                        HStack {
+                            ButtonBig(function: {
+                                Task {
+                                    await vm.rollOneCharacter()
+                                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
+                                        isAnimating.toggle()
+                                    }
+                                }
+                            }, text: "Roll x 1")
+                            
+                            ButtonBig(function: {
+                                Task {
+                                    await vm.rollTenCharacters()
+                                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
+                                        isAnimating.toggle()
+                                    }
+                                }
+                            }, text: "Roll x 10")
+                        }.offset(x: -width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                    }
                 }
             }
-        }
-        .onAppear {
-            vm.apiManager = apiAuthManager
-            vm.user = userManager.user
+            .onAppear {
+                vm.apiManager = apiAuthManager
+                vm.user = userManager.user
+            }
+            .disabled(vm.successfullyRolled)
+            
+            
+            if vm.successfullyRolled {
+                GachaDialog(functionOk: {
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
+                        isAnimating.toggle()
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.small, execute: {
+                        Task {
+                            do {
+                                try await userManager.getUser()
+                                vm.user = userManager.user
+                                vm.userManager = userManager
+                            } catch let error {
+                                print("Error loading user: \(error)")
+                            }
+                            
+                            vm.rolledCharacters = []
+                            vm.successfullyRolled = false
+                        }
+                    })
+                }, title: "Congratulations, you got:", text: "\(vm.rolledCharacters.joined(separator: "\n"))")
+                .opacity(isAnimating ? 1 : 0)
+            }
         }
     }
 }

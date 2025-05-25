@@ -162,11 +162,11 @@ struct ShopView: View {
                             })
                         }
                     }, functionNo: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
+                        withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.small)) {
                             isAnimating.toggle()
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.small, execute: {
                             whichItem = 0
                             buyTitle = ""
                             buyText = ""
