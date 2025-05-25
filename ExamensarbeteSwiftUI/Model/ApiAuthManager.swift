@@ -118,6 +118,18 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
+    func updateStamina(userId: Int, stamina: Int) async throws -> GeneralUpdateResponse {
+        let updateStaminaRequest = UpdateStaminaRequest(stamina: stamina)
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-stamina?id=\(userId)",
+            body: updateStaminaRequest,
+            token: token
+        )
+        
+        return response
+    }
+    
     func getRandomPlayer(user: User) async throws -> GetRandomPlayerReponse {
         let getRandomPlayer = GetRandomPlayerDefense(user: user)
         

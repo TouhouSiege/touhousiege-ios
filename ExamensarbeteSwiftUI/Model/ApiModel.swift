@@ -83,6 +83,11 @@ struct UpdateDiamondsRequest: Codable {
     var diamonds: Int
 }
 
+/// PUT, update stamina
+struct UpdateStaminaRequest: Codable {
+    var stamina: Int
+}
+
 /// PUT, update rankings pvm win
 struct UpdateEndOfGameRequest: Codable {
     var caseGame: Int

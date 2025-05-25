@@ -34,4 +34,27 @@ class ShopViewModel {
             print("Error loading user: \(error)")
         }
     }
+    
+    /// Stamina purchase function
+    func purchaseStamina(amount: Int) async {
+        do {
+            guard let userId = user?.id else {
+                print("No user id found.")
+                return
+            }
+            
+            let response = try await apiManager?.updateStamina(userId: userId, stamina: amount)
+            print("Stamina updated successfully: \(String(describing: response))")
+        } catch let error {
+            print("Error updating Stamina: \(error)")
+        }
+        
+        do {
+            guard let userManager = userManager else { return }
+            
+            try await userManager.getUser()
+        } catch let error {
+            print("Error loading user: \(error)")
+        }
+    }
 }
