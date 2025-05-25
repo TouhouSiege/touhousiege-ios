@@ -56,6 +56,7 @@ public class TouhouSiegeStyle {
         static let Large = CGFloat(0.6)
         static let xLarge = CGFloat(0.7)
         static let xxLarge = CGFloat(0.8)
+        static let xxxLarge = CGFloat(0.9)
     }
     
     struct Colors {

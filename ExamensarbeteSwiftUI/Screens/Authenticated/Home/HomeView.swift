@@ -26,25 +26,25 @@ struct HomeView: View {
             VStack {
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .play)
-                }, text: "Play").offset(x: width * 0.15)
+                }, text: "Play").offset(x: width * 0.25)
                     .disabled(!hasCharacters)
                     .opacity(hasCharacters ? 1 : 0.5)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .gacha)
-                }, text: "Gacha").offset(x: width * 0.12)
+                }, text: "Gacha").offset(x: width * 0.22)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .shop)
-                }, text: "Shop").offset(x: width * 0.12)
+                }, text: "Shop").offset(x: width * 0.22)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .characters)
-                }, text: "Characters").offset(x: width * 0.15)
+                }, text: "Characters").offset(x: width * 0.25)
                 
                 ButtonBig(function: {
                     navigationManager.navigateTo(screen: .about)
-                }, text: "About").offset(x: width * 0.18)
+                }, text: "About").offset(x: width * 0.28)
             }.offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {

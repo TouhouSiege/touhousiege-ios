@@ -20,13 +20,13 @@ struct ButtonBig: View {
             function()
         }, label: {
             Text(text)
-                .font(TouhouSiegeStyle.FontSize.large)
+                .font(TouhouSiegeStyle.FontSize.large.bold())
                 .foregroundStyle(.thinMaterial)
-                .frame(maxWidth: width * 0.2, maxHeight: height * 0.1)
+                .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xSmall, maxHeight: height * TouhouSiegeStyle.BigDecimals.xxSmall)
                 .background {
                     RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                        .fill(Color(TouhouSiegeStyle.Colors.peachRed))
-                        .stroke(.thinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.small)
+                        .fill(Color.brown.opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
+                        .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
                 }
         })
     }

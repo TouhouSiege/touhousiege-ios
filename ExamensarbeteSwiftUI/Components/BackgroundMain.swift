@@ -16,7 +16,7 @@ struct BackgroundMain: View {
         ZStack {
             Color.black
 
-            Image(TouhouSiegeStyle.Images.bg_general).opacity(TouhouSiegeStyle.BigDecimals.Large)
+            Image(TouhouSiegeStyle.Images.bg_general).opacity(TouhouSiegeStyle.BigDecimals.xLarge)
         }
         .frame(maxWidth: width, maxHeight: height)
         .scaledToFill()
