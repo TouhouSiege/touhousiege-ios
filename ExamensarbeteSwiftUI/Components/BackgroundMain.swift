@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct BackgroundMain: View {
+    /// .inifinity breaks the bounds and puts the background on top of the zlayer for some reason
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
     var body: some View {
-        VStack {
-            
+        ZStack {
+            Color.black
+
+            Image(TouhouSiegeStyle.Images.bg_general).opacity(TouhouSiegeStyle.BigDecimals.Large)
         }
         .frame(maxWidth: width, maxHeight: height)
         .scaledToFill()
-        .background(Color.red.opacity(0.2))
         .edgesIgnoringSafeArea(.all)
+    
     }
 }
 

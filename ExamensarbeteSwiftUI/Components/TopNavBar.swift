@@ -20,7 +20,7 @@ struct TopNavBar: View {
     var body: some View {
         ZStack {
             VStack {
-                Color.black.opacity(0.8)
+                Color.black.opacity(TouhouSiegeStyle.BigDecimals.xMedium)
                     .frame(width: width, height: UIScreen.main.bounds.height * 0.15)
                     .border(.thinMaterial, width: 2)
                 Spacer()
