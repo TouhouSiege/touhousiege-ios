@@ -36,7 +36,7 @@ struct TopNavBar: View {
                                 Image(systemName: "house")
                                     .resizable()
                                     .frame(width: height * 0.07, height: height * 0.07)
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(.white).opacity(0.7)
                             }
                         }
                         .padding(.horizontal, width * 0.08)
@@ -73,7 +73,7 @@ struct TopNavBar: View {
                                 Image(systemName: "gear")
                                     .resizable()
                                     .frame(width: height * 0.07, height: height * 0.07)
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(.white).opacity(0.7)
                             }
                         }
                         .padding(.horizontal, -width * 0.17)
