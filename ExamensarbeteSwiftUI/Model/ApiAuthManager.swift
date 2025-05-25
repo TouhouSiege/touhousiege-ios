@@ -106,6 +106,18 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
+    func updateDiamonds(userId: Int, diamonds: Int) async throws -> GeneralUpdateResponse {
+        let updateDiamondsRequest = UpdateDiamondsRequest(diamonds: diamonds)
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-diamonds?id=\(userId)",
+            body: updateDiamondsRequest,
+            token: token
+        )
+        
+        return response
+    }
+    
     func getRandomPlayer(user: User) async throws -> GetRandomPlayerReponse {
         let getRandomPlayer = GetRandomPlayerDefense(user: user)
         

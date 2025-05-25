@@ -78,6 +78,11 @@ struct UpdateDefenseRequest: Codable {
     var defense: [CharacterData?]
 }
 
+/// PUT, update diamonds
+struct UpdateDiamondsRequest: Codable {
+    var diamonds: Int
+}
+
 /// PUT, update rankings pvm win
 struct UpdateEndOfGameRequest: Codable {
     var caseGame: Int
