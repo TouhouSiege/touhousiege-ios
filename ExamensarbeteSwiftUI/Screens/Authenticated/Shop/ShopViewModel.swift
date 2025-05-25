@@ -10,6 +10,7 @@ import Foundation
 class ShopViewModel {
     var apiManager: ApiAuthManager?
     var user: User?
+    var userManager: UserManager?
     
     /// Diamond purchase function
     func purchaseDiamonds(amount: Int) async {
@@ -23,6 +24,14 @@ class ShopViewModel {
             print("Amount of Diamonds updated successfully: \(String(describing: response))")
         } catch let error {
             print("Error updating amount of diamonds: \(error)")
+        }
+        
+        do {
+            guard let userManager = userManager else { return }
+            
+            try await userManager.getUser()
+        } catch let error {
+            print("Error loading user: \(error)")
         }
     }
 }

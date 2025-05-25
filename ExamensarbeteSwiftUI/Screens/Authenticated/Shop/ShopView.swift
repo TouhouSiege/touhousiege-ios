@@ -165,6 +165,7 @@ struct ShopView: View {
         .onAppear {
             vm.apiManager = apiAuthManager
             vm.user = userManager.user
+            vm.userManager = userManager
         }
     }
 }
