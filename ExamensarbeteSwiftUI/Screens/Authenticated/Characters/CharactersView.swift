@@ -22,14 +22,10 @@ struct CharactersView: View {
     @State var selectedCharacter: GameCharacter? = nil
     @State var selectedCharacterId: Int? = nil
     @State var tapAnimation: Bool = false
-    @State var isAnimatingCharacterEnter = false
-    @State var isAnimatingCharacterExit = false
     @State var characterOutsideOfScreen: CGFloat = UIScreen.main.bounds.width
     @State var characterStatsOutsideOfScreenOne: CGFloat = -UIScreen.main.bounds.width
     @State var characterStatsOutsideOfScreenTwoX: CGFloat = -UIScreen.main.bounds.width
     @State var characterStatsOutsideOfScreenTwoY: CGFloat = -UIScreen.main.bounds.height
-    @State var characterStatsOutsideOfScreenThreeX: CGFloat = -UIScreen.main.bounds.width
-    @State var characterStatsOutsideOfScreenThreeY: CGFloat = UIScreen.main.bounds.height
     
     
     var body: some View {
