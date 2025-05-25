@@ -57,4 +57,27 @@ class ShopViewModel {
             print("Error loading user: \(error)")
         }
     }
+    
+    /// Gold purchase function
+    func purchaseGold(amount: Int) async {
+        do {
+            guard let userId = user?.id else {
+                print("No user id found.")
+                return
+            }
+            
+            let response = try await apiManager?.updateGold(userId: userId, gold: amount)
+            print("Amount of Gold updated successfully: \(String(describing: response))")
+        } catch let error {
+            print("Error updating amount of Gold: \(error)")
+        }
+        
+        do {
+            guard let userManager = userManager else { return }
+            
+            try await userManager.getUser()
+        } catch let error {
+            print("Error loading user: \(error)")
+        }
+    }
 }
