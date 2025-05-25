@@ -23,6 +23,7 @@ struct GachaView: View {
         ZStack {
             ZStack {
                 BackgroundMain(title: "Gacha")
+                GachaBanner(title: "Gensokyo Beginner", text: "\nTry your luck at rolling a brand new character. \n\nMay or may not inflict serious injury on your wallet!", image: Image(TouhouSiegeStyle.Images.koishiKomeijiProfileLarge))
                 TopNavBar()
                 
                 VStack {
