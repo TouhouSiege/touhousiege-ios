@@ -7,9 +7,11 @@
 
 import Foundation
 
-class GachaViewModel {
+class GachaViewModel: ObservableObject {
     var apiManager: ApiAuthManager?
     var user: User?
+    
+    @Published var rolledCharacters: [String] = []
     
     /// Single Gacha roll plus check for diamonds before roll
     func rollOneCharacter() async {
@@ -22,9 +24,12 @@ class GachaViewModel {
                 return
             }
             
-            let response = try await apiManager?.gachaRollOne(userId: userId, character: [
-                Characters.allCharacters[0]
-            ])
+            let randomCharacter = Characters.allCharacters.prefix(Characters.allCharacters.count / 2).randomElement()!
+            
+            let response = try await apiManager?.gachaRollOne(userId: userId, character: [randomCharacter])
+            
+            rolledCharacters.append(randomCharacter.name)
+            
             print("Characters updated successfully: \(String(describing: response))")
         } catch let error {
             print("Error updating characters: \(error)")
@@ -41,14 +46,13 @@ class GachaViewModel {
                 print("No user id found.")
                 return
             }
+
+            let randomCharacters = (0..<10).map { _ in Characters.allCharacters.prefix(Characters.allCharacters.count / 2).randomElement()! }
             
-            let response = try await apiManager?.gachaRollTen(userId: userId, characters: [
-                Characters.allCharacters[0],
-                Characters.allCharacters[1],
-                Characters.allCharacters[2],
-                Characters.allCharacters[3],
-                Characters.allCharacters[4]
-            ])
+            let response = try await apiManager?.gachaRollTen(userId: userId, characters: randomCharacters)
+            
+            rolledCharacters.append(contentsOf: randomCharacters.map { $0.name } )
+            
             print("Characters updated successfully: \(String(describing: response))")
         } catch let error {
             print("Error updating characters: \(error)")
