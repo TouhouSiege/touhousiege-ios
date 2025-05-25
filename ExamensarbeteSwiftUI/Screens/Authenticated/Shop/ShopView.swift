@@ -20,6 +20,22 @@ struct ShopView: View {
             TopNavBar()
             
             VStack {
+                HStack {
+                    ShopItemLister(function: {
+                        
+                    }, titel: "Diamondpack 1", text: "400 Diamonds")
+                    
+                    ShopItemLister(function: {
+                        
+                    }, titel: "Diamondpack 2", text: "900 Diamonds")
+                    
+                    ShopItemLister(function: {
+                        
+                    }, titel: "Diamondpack 3", text: "2000 Diamonds")
+                }
+            }
+            
+            VStack {
                 Spacer()
                 
                 HStack {

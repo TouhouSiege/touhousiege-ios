@@ -25,7 +25,7 @@ struct ButtonBig: View {
                 .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xSmall, maxHeight: height * TouhouSiegeStyle.BigDecimals.xxSmall)
                 .background {
                     RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.large)
-                        .fill(Color.brown.opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
+                        .fill(Color.generalBrown.opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
                         .stroke(.ultraThinMaterial, lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
                 }
         })
