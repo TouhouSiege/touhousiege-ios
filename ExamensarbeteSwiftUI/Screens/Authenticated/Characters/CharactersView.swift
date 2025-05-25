@@ -22,6 +22,15 @@ struct CharactersView: View {
     @State var selectedCharacter: GameCharacter? = nil
     @State var selectedCharacterId: Int? = nil
     @State var tapAnimation: Bool = false
+    @State var isAnimatingCharacterEnter = false
+    @State var isAnimatingCharacterExit = false
+    @State var characterOutsideOfScreen: CGFloat = UIScreen.main.bounds.width
+    @State var characterStatsOutsideOfScreenOne: CGFloat = -UIScreen.main.bounds.width
+    @State var characterStatsOutsideOfScreenTwoX: CGFloat = -UIScreen.main.bounds.width
+    @State var characterStatsOutsideOfScreenTwoY: CGFloat = -UIScreen.main.bounds.height
+    @State var characterStatsOutsideOfScreenThreeX: CGFloat = -UIScreen.main.bounds.width
+    @State var characterStatsOutsideOfScreenThreeY: CGFloat = UIScreen.main.bounds.height
+    
     
     var body: some View {
         ZStack {
@@ -42,7 +51,12 @@ struct CharactersView: View {
                             .scaledToFit()
                             .edgesIgnoringSafeArea(.all)
                             .frame(height: heightFullCover)
-                        
+                            .offset(x: characterOutsideOfScreen)
+                            .onAppear {
+                                withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                    characterOutsideOfScreen = 0
+                                }
+                            }
                     }
                 }
             }
@@ -50,17 +64,33 @@ struct CharactersView: View {
             VStack {
                 if let selectedCharacter = selectedCharacter {
                     CharacterStatsBanner(statType: "Attack", text: String(selectedCharacter.stats.attack))
-                        .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
+                        .offset(x: characterStatsOutsideOfScreenTwoX, y: characterStatsOutsideOfScreenTwoY)
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                characterStatsOutsideOfScreenTwoX = width * TouhouSiegeStyle.Decimals.xxLarge
+                                characterStatsOutsideOfScreenTwoY = 0
+                            }
+                        }
+                    
                     CharacterStatsBanner(statType: "Level", text: String(selectedCharacter.stats.level))
-                        .offset(x: width * TouhouSiegeStyle.Decimals.medium)
+                        .offset(x: characterStatsOutsideOfScreenOne)
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                characterStatsOutsideOfScreenOne = width * TouhouSiegeStyle.Decimals.medium
+                            }
+                        }
+                    
                     CharacterStatsBanner(statType: "Class", text: selectedCharacter.stats.classType.rawValue)
-                        .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
+                        .offset(x: characterStatsOutsideOfScreenTwoX, y: characterStatsOutsideOfScreenTwoY)
+                    
                     CharacterStatsBanner(statType: "Defense", text: String(selectedCharacter.stats.defense))
-                        .offset(x: width * TouhouSiegeStyle.Decimals.large)
+                        .offset(x: characterStatsOutsideOfScreenOne)
+                    
                     CharacterStatsBanner(statType: "Health", text: String(selectedCharacter.stats.maxHp))
-                        .offset(x: width * TouhouSiegeStyle.Decimals.xxLarge)
+                        .offset(x: characterStatsOutsideOfScreenTwoX, y: characterStatsOutsideOfScreenTwoY)
+                    
                     CharacterStatsBanner(statType: "Speed", text: String(selectedCharacter.stats.speed))
-                        .offset(x: width * TouhouSiegeStyle.Decimals.medium)
+                        .offset(x: characterStatsOutsideOfScreenOne)
                 }
             }.offset(x: 0, y: width * TouhouSiegeStyle.Decimals.xSmall)
             
