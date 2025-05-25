@@ -118,6 +118,18 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
+    func updateDiamondsSubtract(userId: Int, diamonds: Int) async throws -> GeneralUpdateResponse {
+        let updateDiamondsRequest = UpdateDiamondsRequest(diamonds: diamonds)
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-diamonds-subtract?id=\(userId)",
+            body: updateDiamondsRequest,
+            token: token
+        )
+        
+        return response
+    }
+    
     func updateStamina(userId: Int, stamina: Int) async throws -> GeneralUpdateResponse {
         let updateStaminaRequest = UpdateStaminaRequest(stamina: stamina)
         
@@ -135,6 +147,18 @@ class ApiAuthManager: ObservableObject {
         
         let response: GeneralUpdateResponse = try await api.put(
             url: "\(BASE_URL)/update-gold?id=\(userId)",
+            body: updateGoldRequest,
+            token: token
+        )
+        
+        return response
+    }
+    
+    func updateGoldSubtract(userId: Int, gold: Int) async throws -> GeneralUpdateResponse {
+        let updateGoldRequest = UpdateGoldRequest(gold: gold)
+        
+        let response: GeneralUpdateResponse = try await api.put(
+            url: "\(BASE_URL)/update-gold-subtract?id=\(userId)",
             body: updateGoldRequest,
             token: token
         )

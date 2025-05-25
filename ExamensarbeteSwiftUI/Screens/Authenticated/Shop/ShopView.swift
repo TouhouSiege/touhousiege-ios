@@ -133,8 +133,8 @@ struct ShopView: View {
                             case 2: await vm.purchaseDiamonds(amount: 900)
                             case 3: await vm.purchaseDiamonds(amount: 2000)
                             case 101: await vm.purchaseStamina(amount: 120, cost: 750)
-                            case 102: await vm.purchaseGold(amount: 400)
-                            case 103: await vm.purchaseGold(amount: 1000)
+                            case 102: await vm.purchaseGold(amount: 400, cost: 100)
+                            case 103: await vm.purchaseGold(amount: 1000, cost: 200)
                             default: print("Error purchasing item!")
                             }
                             
@@ -143,10 +143,20 @@ struct ShopView: View {
                             }
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                                whichItem = 0
-                                buyTitle = ""
-                                buyText = ""
-                                confirmDialog = false
+                                Task {
+                                    do {
+                                        try await userManager.getUser()
+                                        vm.user = userManager.user
+                                        vm.userManager = userManager
+                                    } catch let error {
+                                        print("Error loading user: \(error)")
+                                    }
+                                    
+                                    whichItem = 0
+                                    buyTitle = ""
+                                    buyText = ""
+                                    confirmDialog = false
+                                }
                             })
                         }
                     }, functionNo: {

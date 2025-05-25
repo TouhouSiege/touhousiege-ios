@@ -26,15 +26,6 @@ class ShopViewModel {
         } catch let error {
             print("Error updating amount of diamonds: \(error)")
         }
-        
-        /// Updates user
-        do {
-            guard let userManager = userManager else { return }
-            
-            try await userManager.getUser()
-        } catch let error {
-            print("Error loading user: \(error)")
-        }
     }
     
     /// Stamina purchase function
@@ -62,19 +53,10 @@ class ShopViewModel {
                 return
             }
             
-            let response = try await apiManager?.updateGold(userId: userId, gold: cost)
+            let response = try await apiManager?.updateGoldSubtract(userId: userId, gold: cost)
             print("Gold updated successfully: \(String(describing: response))")
         } catch let error {
             print("Error updating Gold: \(error)")
-        }
-        
-        /// Updates user
-        do {
-            guard let userManager = userManager else { return }
-            
-            try await userManager.getUser()
-        } catch let error {
-            print("Error loading user: \(error)")
         }
     }
     
@@ -103,19 +85,10 @@ class ShopViewModel {
                 return
             }
             
-            let response = try await apiManager?.updateDiamonds(userId: userId, diamonds: cost)
+            let response = try await apiManager?.updateDiamondsSubtract(userId: userId, diamonds: cost)
             print("Amount of Diamonds updated successfully: \(String(describing: response))")
         } catch let error {
             print("Error updating amount of diamonds: \(error)")
-        }
-        
-        /// Updates user
-        do {
-            guard let userManager = userManager else { return }
-            
-            try await userManager.getUser()
-        } catch let error {
-            print("Error loading user: \(error)")
         }
     }
 }
