@@ -14,8 +14,8 @@ struct LoginView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
-    @State var email: String = ""
-    @State var password: String = ""
+    @State var email: String = "harlaown2@gmail.com"
+    @State var password: String = "123"
     @State var isLoading = false
     @State var isAnimating: Bool = false
     

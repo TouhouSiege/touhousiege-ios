@@ -45,7 +45,11 @@ struct RankingList: View {
                         Text(user.username)
                         Text("\(user.pvpWins)")
                         Text("\(user.pvpLosses)")
-                        Text("\(Int(Double(user.pvpWins) / Double(user.pvpWins + user.pvpLosses) * 100))%")
+                        if user.pvpWins + user.pvpLosses == 0 {
+                            Text("0%")
+                        } else {
+                            Text("\((user.pvpWins) / (user.pvpWins + user.pvpLosses) * 100)%")
+                        }
                     }
                     .font(TouhouSiegeStyle.FontSize.medium)
                     .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
