@@ -15,6 +15,8 @@ struct AboutView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    @State var isAnimatingBack: Bool = false
+    
     var body: some View {
         ZStack {
             BackgroundMain(title: "About")
@@ -28,13 +30,29 @@ struct AboutView: View {
                 
                 HStack {
                     ButtonBig(function: {
-                        navigationManager.navigateTo(screen: .home)
+                        withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                            isAnimatingBack = true
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                            navigationManager.navigateTo(screen: .home)
+                        })
                     }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                     
                     Spacer()
                 }
             }
+            .opacity(isAnimatingBack ? 0 : 1)
         }
+        .onAppear {
+            isAnimatingBack = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimatingBack = false
+            })
+        }
+        
+        .disabled(isAnimatingBack)
     }
 }
 

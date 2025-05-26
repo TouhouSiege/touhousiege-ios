@@ -15,6 +15,8 @@ struct SettingsView: View {
     let width: CGFloat = UIScreen.main.bounds.width
     let height: CGFloat = UIScreen.main.bounds.height
     
+    @State var isAnimatingBack: Bool = false
+    
     var body: some View {
         ZStack {
             BackgroundMain(title: "Settings")
@@ -22,16 +24,38 @@ struct SettingsView: View {
             
             VStack {
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .home)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimatingBack = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .home)
+                    })
                 }, text: "Back")
                 
                 ButtonBig(function: {
                     userManager.user = nil
                     apiAuthManager.logoutUser()
-                    navigationManager.navigateTo(screen: .landing)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimatingBack = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .landing)
+                    })
                 }, text: "Log Out")
             }
+            .opacity(isAnimatingBack ? 0 : 1)
         }
+        .onAppear {
+            isAnimatingBack = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimatingBack = false
+            })
+        }
+        
+        .disabled(isAnimatingBack)
     }
 }
 

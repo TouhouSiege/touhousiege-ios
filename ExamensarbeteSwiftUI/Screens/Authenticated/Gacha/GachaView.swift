@@ -18,12 +18,15 @@ struct GachaView: View {
     @StateObject var vm = GachaViewModel()
     
     @State var isAnimating = false
+    @State var isAnimatingBack = false
     
     var body: some View {
         ZStack {
             ZStack {
                 BackgroundMain(title: "Gacha")
                 GachaBanner(title: "Gensokyo Beginner", text: "\nTry your luck at rolling a brand new character. \n\nMay or may not inflict serious injury on your wallet!", image: Image(TouhouSiegeStyle.Images.koishiKomeijiProfileLarge))
+                    .opacity(isAnimatingBack ? 0 : 1)
+                
                 TopNavBar()
                 
                 VStack {
@@ -31,7 +34,13 @@ struct GachaView: View {
                     
                     HStack {
                         ButtonBig(function: {
-                            navigationManager.navigateTo(screen: .home)
+                            withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                isAnimatingBack = true
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                                navigationManager.navigateTo(screen: .home)
+                            })
                         }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                         
                         Spacer()
@@ -54,9 +63,11 @@ struct GachaView: View {
                                     }
                                 }
                             }, text: "Roll x 10")
-                        }.offset(x: -width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
+                        }
+                        .offset(x: -width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                     }
                 }
+                .opacity(isAnimatingBack ? 0 : 1)
             }
             .onAppear {
                 vm.apiManager = apiAuthManager
@@ -100,7 +111,16 @@ struct GachaView: View {
             vm.apiManager = apiAuthManager
             vm.user = userManager.user
             vm.userManager = userManager
+            
+            isAnimatingBack = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimatingBack = false
+            })
         }
+        
+        .disabled(isAnimatingBack)
+        
     }
 }
 

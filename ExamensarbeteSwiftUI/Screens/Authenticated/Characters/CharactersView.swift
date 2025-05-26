@@ -26,7 +26,7 @@ struct CharactersView: View {
     @State var characterStatsOutsideOfScreenOne: CGFloat = -UIScreen.main.bounds.width
     @State var characterStatsOutsideOfScreenTwoX: CGFloat = -UIScreen.main.bounds.width
     @State var characterStatsOutsideOfScreenTwoY: CGFloat = -UIScreen.main.bounds.height
-    
+    @State var isAnimatingBack: Bool = false
     
     var body: some View {
         ZStack {
@@ -56,6 +56,7 @@ struct CharactersView: View {
                     }
                 }
             }
+            .opacity(isAnimatingBack ? 0 : 1)
             
             VStack {
                 if let selectedCharacter = selectedCharacter {
@@ -89,6 +90,7 @@ struct CharactersView: View {
                         .offset(x: characterStatsOutsideOfScreenOne)
                 }
             }.offset(x: 0, y: width * TouhouSiegeStyle.Decimals.xSmall)
+                .opacity(isAnimatingBack ? 0.5 : 1)
             
             TopNavBar()
             
@@ -131,19 +133,36 @@ struct CharactersView: View {
                 
                 Spacer()
             }
+            .opacity(isAnimatingBack ? 0 : 1)
             
             VStack {
                 Spacer()
                 
                 HStack {
                     ButtonBig(function: {
-                        navigationManager.navigateTo(screen: .home)
+                        withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                            isAnimatingBack = true
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                            navigationManager.navigateTo(screen: .home)
+                        })
                     }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                     
                     Spacer()
                 }
             }
+            .opacity(isAnimatingBack ? 0 : 1)
         }
+        .onAppear {
+            isAnimatingBack = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimatingBack = false
+            })
+        }
+        
+        .disabled(isAnimatingBack)
     }
 }
 

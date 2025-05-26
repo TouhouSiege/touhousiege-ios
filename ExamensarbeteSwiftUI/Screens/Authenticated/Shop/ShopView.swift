@@ -23,6 +23,7 @@ struct ShopView: View {
     @State var whichItem: Int = 0
     @State var confirmDialog: Bool = false
     @State var isAnimating = false
+    @State var isAnimatingBack = false
     
     var body: some View {
         ZStack {
@@ -111,18 +112,26 @@ struct ShopView: View {
                         }
                     }
                 }
+                .opacity(isAnimatingBack ? 0 : 1)
                 
                 VStack {
                     Spacer()
                     
                     HStack {
                         ButtonBig(function: {
-                            navigationManager.navigateTo(screen: .home)
+                            withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                isAnimatingBack = true
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                                navigationManager.navigateTo(screen: .home)
+                            })
                         }, text: "Back").offset(x: width * TouhouSiegeStyle.Decimals.medium, y: -width * TouhouSiegeStyle.Decimals.xSmall)
                         
                         Spacer()
                     }
                 }
+                .opacity(isAnimatingBack ? 0 : 1)
             }
             .disabled(confirmDialog)
             .disabled(vm.confirmDialogError)
@@ -187,6 +196,14 @@ struct ShopView: View {
             vm.apiManager = apiAuthManager
             vm.user = userManager.user
             vm.userManager = userManager
+            
+            isAnimatingBack = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimatingBack = false
+            })
         }
+        
+        .disabled(isAnimatingBack)
     }
 }

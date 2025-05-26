@@ -15,6 +15,7 @@ struct RegisterView: View {
     @State var password: String = ""
     @State var repeatPassword: String = ""
     @State var isLoading = false
+    @State var isAnimating: Bool = false
     
     let vm = RegisterViewModel()
     
@@ -39,7 +40,13 @@ struct RegisterView: View {
                             isLoading = true
                             do {
                                 let _ = try await apiAuthManager.register(email: email, username: username, password: password)
-                                navigationManager.navigateTo(screen: .landing)
+                                withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                    isAnimating = true
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                                    navigationManager.navigateTo(screen: .landing)
+                                })
                             } catch let error {
                                 print("Error on registering: \(error)")
                             }
@@ -48,11 +55,26 @@ struct RegisterView: View {
                     }, text: isLoading ? "Registering..." : "Confirm")
                     
                     ButtonBig(function: {
-                        navigationManager.navigateTo(screen: .landing)
+                        withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                            isAnimating = true
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                            navigationManager.navigateTo(screen: .landing)
+                        })
                     }, text: "Cancel")
                 }
             }
+            .opacity(isAnimating ? 0 : 1)
         }
+        .onAppear {
+                isAnimating = true
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                    isAnimating = false
+                })
+        }
+        .disabled(isAnimating)
     }
 }
 

@@ -16,6 +16,7 @@ struct PlayView: View {
     let height: CGFloat = UIScreen.main.bounds.height
     
     @State var isDefenseSet: Bool = false
+    @State var isAnimatingBack: Bool = false
     
     var body: some View {
         ZStack {
@@ -45,9 +46,17 @@ struct PlayView: View {
                 }, text: "Defense").offset(x: -width * 0.2)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .home)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimatingBack = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .home)
+                    })
                 }, text: "Back").offset(x: -width * 0.23)
-            }.offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
+            }
+                .offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
+                .opacity(isAnimatingBack ? 0 : 1)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
                 do {
@@ -70,6 +79,16 @@ struct PlayView: View {
                 navigationManager.navigateTo(screen: .landing)
             }
         }
+        
+        .onAppear {
+            isAnimatingBack = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimatingBack = false
+            })
+        }
+        
+        .disabled(isAnimatingBack)
     }
 }
 

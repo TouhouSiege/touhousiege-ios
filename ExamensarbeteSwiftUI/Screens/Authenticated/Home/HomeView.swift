@@ -17,35 +17,68 @@ struct HomeView: View {
     
     @State var testText = "Not loaded yet..."
     @State var hasCharacters = false
+    @State var isAnimating: Bool = false
     
     var body: some View {
         ZStack {
-            BackgroundMain(title: "Home")
+            BackgroundMain(title: "Touhou Siege")
             TopNavBar()
             
             VStack {
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .play)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimating = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .play)
+                    })
                 }, text: "Play").offset(x: width * 0.25)
                     .disabled(!hasCharacters)
                     .opacity(hasCharacters ? 1 : 0.5)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .gacha)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xxLarge)) {
+                        isAnimating = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .gacha)
+                    })
                 }, text: "Gacha").offset(x: width * 0.22)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .shop)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimating = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .shop)
+                    })
                 }, text: "Shop").offset(x: width * 0.22)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .characters)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimating = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .characters)
+                    })
                 }, text: "Characters").offset(x: width * 0.25)
                 
                 ButtonBig(function: {
-                    navigationManager.navigateTo(screen: .about)
+                    withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                        isAnimating = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                        navigationManager.navigateTo(screen: .about)
+                    })
+                    
                 }, text: "About").offset(x: width * 0.28)
             }.offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
+                .opacity(isAnimating ? 0 : 1)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
                 do {
@@ -68,6 +101,16 @@ struct HomeView: View {
                 navigationManager.navigateTo(screen: .landing)
             }
         }
+        
+        .onAppear {
+            isAnimating = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                isAnimating = false
+            })
+        }
+        
+        .disabled(isAnimating)
     }
 }
 

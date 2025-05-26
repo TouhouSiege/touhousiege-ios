@@ -13,6 +13,7 @@ struct LoginView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var isLoading = false
+    @State var isAnimating: Bool = false
     
     var body: some View {
         ZStack {
@@ -31,7 +32,13 @@ struct LoginView: View {
                             isLoading = true
                             do {
                                 let _ = try await apiAuthManager.loginUser(email: email, password: password)
-                                navigationManager.navigateTo(screen: .landing)
+                                withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                                    isAnimating = true
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                                    navigationManager.navigateTo(screen: .landing)
+                                })
                             } catch let error {
                                 print("Error on login: \(error)")
                             }
@@ -39,11 +46,26 @@ struct LoginView: View {
                         }
                     }, text: isLoading ? "Logging in..." : "Confirm")
                     ButtonBig(function: {
-                        navigationManager.navigateTo(screen: .landing)
+                        withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
+                            isAnimating = true
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.BigDecimals.xSmall, execute: {
+                            navigationManager.navigateTo(screen: .landing)
+                        })
                     }, text: "Cancel")
                 }
             }
+            .opacity(isAnimating ? 0 : 1)
         }
+        .onAppear {
+                isAnimating = true
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + TouhouSiegeStyle.Decimals.xSmall, execute: {
+                    isAnimating = false
+                })
+        }
+        .disabled(isAnimating)
     }
 }
 
