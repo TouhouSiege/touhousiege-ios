@@ -10,6 +10,10 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var apiAuthManager: ApiAuthManager
+    
+    let width: CGFloat = UIScreen.main.bounds.width
+    let height: CGFloat = UIScreen.main.bounds.height
+    
     @State var email: String = ""
     @State var password: String = ""
     @State var isLoading = false
@@ -19,7 +23,7 @@ struct LoginView: View {
         ZStack {
             BackgroundMain(title: "Login")
             
-            HStack {
+            VStack {
                 VStack {
                     CustomTextField(label: "Email", text: $email, fieldStyle: "TextField")
                     
@@ -27,7 +31,7 @@ struct LoginView: View {
                 }
                 
                 VStack {
-                    ButtonBig(function: {
+                    ButtonMedium(function: {
                         Task {
                             isLoading = true
                             do {
@@ -45,7 +49,8 @@ struct LoginView: View {
                             isLoading = false
                         }
                     }, text: isLoading ? "Logging in..." : "Confirm")
-                    ButtonBig(function: {
+                    
+                    ButtonMedium(function: {
                         withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
                             isAnimating = true
                         }
@@ -55,6 +60,7 @@ struct LoginView: View {
                         })
                     }, text: "Cancel")
                 }
+                .offset(y: width * TouhouSiegeStyle.Decimals.medium)
             }
             .opacity(isAnimating ? 0 : 1)
         }

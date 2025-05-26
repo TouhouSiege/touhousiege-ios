@@ -10,6 +10,10 @@ import SwiftUI
 struct RegisterView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var apiAuthManager: ApiAuthManager
+    
+    let width: CGFloat = UIScreen.main.bounds.width
+    let height: CGFloat = UIScreen.main.bounds.height
+    
     @State var email: String = ""
     @State var username: String = ""
     @State var password: String = ""
@@ -23,7 +27,7 @@ struct RegisterView: View {
         ZStack {
             BackgroundMain(title: "Register")
             
-            HStack {
+            VStack {
                 VStack {
                     CustomTextField(label: "Email", text: $email, fieldStyle: "TextField")
                     
@@ -35,7 +39,7 @@ struct RegisterView: View {
                 }
                 
                 VStack {
-                    ButtonBig(function: {
+                    ButtonMedium(function: {
                         Task {
                             isLoading = true
                             do {
@@ -54,7 +58,7 @@ struct RegisterView: View {
                         }
                     }, text: isLoading ? "Registering..." : "Confirm")
                     
-                    ButtonBig(function: {
+                    ButtonMedium(function: {
                         withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
                             isAnimating = true
                         }
@@ -64,6 +68,7 @@ struct RegisterView: View {
                         })
                     }, text: "Cancel")
                 }
+                .offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
             }
             .opacity(isAnimating ? 0 : 1)
         }

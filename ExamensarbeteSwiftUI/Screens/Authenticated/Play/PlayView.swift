@@ -60,6 +60,7 @@ struct PlayView: View {
             
             RankingList()
                 .position(x: width - (width / 3), y: height / 2)
+                .opacity(isAnimatingBack ? 0 : 1)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
                 do {

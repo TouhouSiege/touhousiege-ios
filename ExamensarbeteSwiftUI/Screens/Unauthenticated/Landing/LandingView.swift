@@ -4,6 +4,9 @@ struct LandingView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var apiAuthManager: ApiAuthManager
     
+    let width: CGFloat = UIScreen.main.bounds.width
+    let height: CGFloat = UIScreen.main.bounds.height
+    
     @State var isAnimating: Bool = false
 
     var body: some View {
@@ -11,7 +14,9 @@ struct LandingView: View {
             BackgroundMain(title: "Welcome to \nTouhou Siege")
             
             VStack {
-                ButtonBig(function: {
+                Spacer()
+                
+                ButtonMedium(function: {
                     withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
                         isAnimating = true
                     }
@@ -21,7 +26,7 @@ struct LandingView: View {
                     })
                 }, text: "Login")
                 
-                ButtonBig(function: {
+                ButtonMedium(function: {
                     withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
                         isAnimating = true
                     }
@@ -31,7 +36,7 @@ struct LandingView: View {
                     })
                 }, text: "Register")
                 
-                ButtonBig(function: {
+                ButtonMedium(function: {
                     withAnimation(.easeInOut(duration: TouhouSiegeStyle.BigDecimals.xSmall)) {
                         isAnimating = true
                     }
@@ -41,6 +46,7 @@ struct LandingView: View {
                     })
                 }, text: "About")
             }
+            .offset(y: -width * TouhouSiegeStyle.Decimals.medium)
             .opacity(isAnimating ? 0 : 1)
         }.onAppear {
                 isAnimating = true
