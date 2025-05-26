@@ -26,6 +26,19 @@ struct AboutView: View {
             }
             
             VStack {
+                Text("Touhou Siege is a strategized turn based project which has taken inspiration from the games created by the renowned ZUN from Team Shanghai Alice. The game is a work in progress and is not yet completely finished but is currently done with the MVP in mind. \n\n All credits go to ZUN and Team Shanghai Alice for creating the original games and for creating the universe known as Touhou")
+                    .font(TouhouSiegeStyle.FontSize.small.bold())
+                    .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
+                    .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.medium, maxHeight: height * TouhouSiegeStyle.BigDecimals.xMedium)
+            }
+            .frame(maxWidth: width * TouhouSiegeStyle.BigDecimals.xMedium, maxHeight: height * TouhouSiegeStyle.BigDecimals.Large)
+            .background {
+                RoundedRectangle(cornerRadius: TouhouSiegeStyle.CornerRadius.small)
+                    .fill(Color(TouhouSiegeStyle.Colors.brownGeneral).opacity(TouhouSiegeStyle.BigDecimals.xxxLarge))
+                    .stroke(Color(TouhouSiegeStyle.Colors.brownLight), lineWidth: TouhouSiegeStyle.StrokeWidth.xSmall)
+            }
+            
+            VStack {
                 Spacer()
                 
                 HStack {

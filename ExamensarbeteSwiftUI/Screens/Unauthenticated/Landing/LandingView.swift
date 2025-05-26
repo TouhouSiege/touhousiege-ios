@@ -11,7 +11,11 @@ struct LandingView: View {
 
     var body: some View {
         ZStack {
-            BackgroundMain(title: "Welcome to \nTouhou Siege")
+            BackgroundMain(title: "")
+            Text("Welcome to Touhou Siege")
+                .font(TouhouSiegeStyle.FontSize.ultra.bold())
+                .foregroundStyle(.ultraThinMaterial)
+                .offset(y: -width * TouhouSiegeStyle.Decimals.xLarge)
             
             VStack {
                 Spacer()
