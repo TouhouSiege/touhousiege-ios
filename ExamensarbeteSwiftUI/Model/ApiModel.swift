@@ -115,6 +115,12 @@ struct GeneralUpdateResponse: Decodable {
     let message: String
 }
 
+struct GetAllPlayersResponse: Decodable {
+    let success: Bool
+    let user: [User]
+    let message: String
+}
+
 struct GetRandomPlayerReponse: Decodable {
     let success: Bool
     let user: User?

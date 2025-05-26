@@ -57,6 +57,9 @@ struct PlayView: View {
             }
                 .offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
                 .opacity(isAnimatingBack ? 0 : 1)
+            
+            RankingList()
+                .position(x: width - (width / 3), y: height / 2)
         }.task {
             if apiAuthManager.token != nil && apiAuthManager.username != nil {
                 do {

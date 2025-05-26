@@ -166,6 +166,15 @@ class ApiAuthManager: ObservableObject {
         return response
     }
     
+    func getAllPlayers() async throws -> GetAllPlayersResponse {
+        let response: GetAllPlayersResponse = try await api.get(
+            url: BASE_URL,
+            token: token
+        )
+        
+        return response
+    }
+    
     func getRandomPlayer(user: User) async throws -> GetRandomPlayerReponse {
         let getRandomPlayer = GetRandomPlayerDefense(user: user)
         
