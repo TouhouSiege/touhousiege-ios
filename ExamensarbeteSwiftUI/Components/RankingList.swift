@@ -25,18 +25,32 @@ struct RankingList: View {
                     .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
                     .offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
                 
+                HStack {
+                    Text("Name")
+                    Text("Wins")
+                    Text("Losses")
+                    Text("Win %")
+                }
+                .font(TouhouSiegeStyle.FontSize.small.bold())
+                .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
+                .offset(y: width * TouhouSiegeStyle.Decimals.xSmall)
+                
                 Spacer()
                 
-                ForEach(users, id: \.id) { user in
+                ForEach(users.sorted {
+                    Double($0.pvpWins) / Double($0.pvpWins + $0.pvpLosses) >
+                    Double($1.pvpWins) / Double($1.pvpWins + $1.pvpLosses)
+                }, id: \.id) { user in
                     HStack {
                         Text(user.username)
                         Text("\(user.pvpWins)")
                         Text("\(user.pvpLosses)")
-                        Text("\(Double(user.pvpWins) / Double(user.pvpWins + user.pvpLosses) * 100, specifier: "%.2f%%")")
+                        Text("\(Int(Double(user.pvpWins) / Double(user.pvpWins + user.pvpLosses) * 100))%")
                     }
                     .font(TouhouSiegeStyle.FontSize.medium)
                     .foregroundStyle(Color(TouhouSiegeStyle.Colors.brownLight))
                 }
+
 
                 Spacer()
             }
