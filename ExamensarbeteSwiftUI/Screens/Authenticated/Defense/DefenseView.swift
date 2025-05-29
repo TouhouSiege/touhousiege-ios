@@ -41,6 +41,7 @@ struct DefenseView: View {
                         ButtonSmall(function: {
                             Task {
                                 await vm.updateDefense(defense: gameScene.playerPlacementArray)
+                                navigationManager.navigateTo(screen: .play)
                             }
                         }, text: "Save")
                         .offset(x: -width * TouhouSiegeStyle.Decimals.xSmall)
